@@ -3,70 +3,57 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,user-scalable=no">
-<title>🐐 بز ماجراجو</title>
+<title>🐐 بز که می‌پره</title>
 <style>
 *{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent}
-body{overflow:hidden;font-family:Tahoma,sans-serif;background:#000;touch-action:none;user-select:none}
+body{overflow:hidden;font-family:Tahoma,sans-serif;background:#87ceeb;touch-action:none;user-select:none}
 canvas{display:block;width:100vw;height:100vh;position:fixed;top:0;left:0}
-#ui{position:fixed;top:0;left:0;right:0;padding:14px 18px;display:flex;justify-content:space-between;color:#fff;font-weight:700;font-size:15px;text-shadow:0 2px 6px rgba(0,0,0,.7);pointer-events:none;z-index:5;padding-top:calc(14px + env(safe-area-inset-top))}
-#world{position:fixed;top:48px;left:0;right:0;text-align:center;color:#fff;font-size:13px;text-shadow:0 2px 6px rgba(0,0,0,.7);pointer-events:none;z-index:5}
-#hint{position:fixed;bottom:60px;left:0;right:0;text-align:center;color:#fff;font-size:13px;text-shadow:0 2px 6px rgba(0,0,0,.8);pointer-events:none;opacity:.9;z-index:5}
-#over{position:fixed;inset:0;background:rgba(0,0,0,.85);display:none;flex-direction:column;align-items:center;justify-content:center;color:#fff;z-index:20;padding:24px;text-align:center}
+#hud{position:fixed;top:0;left:0;right:0;padding:14px 20px;display:flex;justify-content:space-between;color:#fff;font-weight:700;font-size:20px;text-shadow:0 2px 6px rgba(0,0,0,.4);pointer-events:none;z-index:5;padding-top:calc(14px + env(safe-area-inset-top))}
+#hint{position:fixed;bottom:80px;left:0;right:0;text-align:center;color:#fff;font-size:14px;text-shadow:0 2px 6px rgba(0,0,0,.5);pointer-events:none;opacity:.95;z-index:5}
+#over{position:fixed;inset:0;background:rgba(15,23,42,.9);display:none;flex-direction:column;align-items:center;justify-content:center;color:#fff;z-index:20;padding:24px;text-align:center}
 #over.on{display:flex}
-#over h1{font-size:28px;margin-bottom:16px}
-#over p{font-size:16px;margin:6px 0;color:#cbd5e1}
-#over .big{font-size:26px;color:#f59e0b;font-weight:800;margin:12px 0}
-#over button{margin-top:24px;padding:14px 44px;border:none;border-radius:14px;background:linear-gradient(135deg,#10b981,#059669);color:#fff;font-family:inherit;font-size:16px;font-weight:700;cursor:pointer;box-shadow:0 8px 24px rgba(16,185,129,.4)}
+#over h1{font-size:32px;margin-bottom:16px}
+#over .big{font-size:48px;font-weight:800;color:#fbbf24;margin:12px 0}
+#over p{font-size:15px;color:#cbd5e1;margin:4px 0}
+#over button{margin-top:28px;padding:16px 48px;border:none;border-radius:16px;background:linear-gradient(135deg,#10b981,#059669);color:#fff;font-family:inherit;font-size:17px;font-weight:700;cursor:pointer;box-shadow:0 8px 24px rgba(16,185,129,.5)}
 #over button:active{transform:scale(.95)}
 </style>
 </head>
 <body>
 <canvas id="c"></canvas>
-<div id="ui">
-<div>🐐 <span id="sc">۰</span> م</div>
-<div>🏆 <span id="bs">۰</span></div>
+<div id="hud">
+<div>🏆 <span id="sc">۰</span></div>
 </div>
-<div id="world">🌾 دشت سرسبز</div>
-<div id="hint">برای پریدن لمس کن</div>
+<div id="hint">👆 لمس کن تا بز بپره</div>
 <div id="over">
-<h1>💀 بازی تمام</h1>
-<p>امتیاز این دور:</p>
-<div class="big"><span id="fs">۰</span> متر</div>
-<p>بهترین رکورد: <b id="fb">۰</b></p>
-<button onclick="start()">🔄 بازی دوباره</button>
+<h1>🎯 بازی تمام</h1>
+<div class="big"><span id="fs">۰</span></div>
+<p>امتیاز این دور</p>
+<p style="margin-top:16px">بهترین: <b id="fb" style="color:#fbbf24">۰</b></p>
+<button onclick="start()">🔄 دوباره</button>
 </div>
 
 <script>
 var c=document.getElementById('c'),x=c.getContext('2d');
-var W,H,gy,goat,obs,parts,dist,speed,run,time,world,worldStart,best,jumps;
-var best=parseInt(localStorage.getItem('goatBest')||'0');
-
-var WORLDS=[
-{n:'🌾 دشت سرسبز',c1:'#87ceeb',c2:'#c8e6f5',g:'#4a9c5c',g2:'#3d8550',o:['rock','bush','grass'],e:['🐺','🐰'],bad:['wolf'],len:300},
-{n:'🌲 جنگل انبوه',c1:'#4a7c59',c2:'#8fb996',g:'#3d6b47',g2:'#2c5035',o:['log','bush','rock'],e:['🐻','🦊'],bad:['bear'],len:600},
-{n:'🏜 بیابان داغ',c1:'#f4a460',c2:'#ffe4b5',g:'#d2b48c',g2:'#a0845c',o:['cactus','rock','skull'],e:['🦂','🐍'],bad:['snake'],len:900},
-{n:'🏙 شهر شلوغ',c1:'#ff9a56',c2:'#ffc3a0',g:'#3a3a42',g2:'#5a5a62',o:['car','cone','hydrant'],e:['🐕','🚗'],bad:['dog'],len:1200},
-{n:'🌌 فضا',c1:'#0a0a1a',c2:'#1a0a2a',g:'#1a0a2a',g2:'#2a1040',o:['asteroid','star','ufo'],e:['👽','🛸'],bad:['alien'],len:1500},
-{n:'🌋 آتشفشان',c1:'#4a1c1c',c2:'#8b3a3a',g:'#3a2020',g2:'#5a3030',o:['lava','rock','smoke'],e:['🔥','💨'],bad:['fire'],len:1800}
-];
+var W,H,gy,goat,obs,dist,speed,run,time,tick;
+var best=parseInt(localStorage.getItem('goatBest2')||'0');
 
 function init(){
-W=c.width=innerWidth;H=c.height=innerHeight;gy=H*0.78;
-goat={y:gy-30,vy:0,onG:true,jump:0,fl:0};
-obs=[];parts=[];
-dist=0;speed=4;time=0;world=0;worldStart=0;jumps=0;
+W=c.width=innerWidth;H=c.height=innerHeight;gy=H*0.75;
+goat={y:gy-40,vy:0,onG:true};
+obs=[];
+dist=0;speed=5;time=0;tick=0;
 document.getElementById('over').classList.remove('on');
 document.getElementById('hint').style.display='block';
-setTimeout(function(){document.getElementById('hint').style.display='none'},3000);
+setTimeout(function(){document.getElementById('hint').style.display='none'},3500);
 run=true;
 }
 
-function start(){init();loop();}
+function start(){init();loop()}
 
 function jump(){
 if(!run)return;
-if(goat.onG){goat.vy=-13;goat.onG=false;goat.jump=1;jumps++}
-else if(goat.jump===1){goat.vy=-11;goat.jump=2;jumps++}
+if(goat.onG){goat.vy=-14;goat.onG=false}
 }
 
 c.addEventListener('touchstart',function(e){e.preventDefault();jump()});
@@ -80,292 +67,160 @@ requestAnimationFrame(loop);
 
 function upd(){
 time++;
-var w=WORLDS[world];
-// تغییر دنیا
-if(dist-worldStart>w.len&&world<WORLDS.length-1){
-world++;worldStart=dist;
-}
-if(dist-worldStart>w.len&&world===WORLDS.length-1){
-// چرخه: برگرد به اول
-world=0;worldStart=dist;
-}
-var cw=WORLDS[world];
-speed=4+world*0.6+Math.min(time/2400,3);
+speed=5+Math.min(time/300,3);
 dist+=speed*0.1;
-// فیزیک بز
-goat.vy+=0.75;goat.y+=goat.vy;
-if(goat.y>=gy-30){goat.y=gy-30;goat.vy=0;goat.onG=true;goat.jump=0}
-if(goat.fl>0)goat.fl--;
+goat.vy+=0.8;
+goat.y+=goat.vy;
+if(goat.y>=gy-40){goat.y=gy-40;goat.vy=0;goat.onG=true}
 // تولید موانع
-if(Math.random()<0.018+world*0.003){
-spawnObs(cw);
+tick--;
+if(tick<=0){
+tick=Math.max(70-time/40,40)+Math.random()*30;
+spawn();
 }
 // حرکت موانع
-obs.forEach(function(o){o.x-=speed+(o.sp||0)});
+obs.forEach(function(o){o.x-=speed});
 obs=obs.filter(function(o){return o.x+o.w>-50});
 // برخورد
-var bx=70,by=goat.y,bw=40,bh=30;
-if(goat.fl<=0){
+var bx=70,by=goat.y,bw=44,bh=36;
 for(var i=0;i<obs.length;i++){
 var o=obs[i];
-if(bx+bw>o.x+6&&bx<o.x+o.w-6&&by+bh>o.y+6&&by<o.y+o.h-6){
+if(bx+bw-8>o.x&&bx+8<o.x+o.w&&by+bh-6>o.y&&by+6<o.y+o.h){
 gameOver();return;
 }
 }
-}
-// ذرات
-parts.forEach(function(p){p.x+=p.vx;p.y+=p.vy;p.vy+=0.3;p.life--});
-parts=parts.filter(function(p){return p.life>0});
-// نمایش
 document.getElementById('sc').textContent=Math.floor(dist).toLocaleString('fa-IR');
-document.getElementById('bs').textContent=best.toLocaleString('fa-IR');
-document.getElementById('world').textContent=WORLDS[world].n;
 }
 
-function spawnObs(w){
-var type=w.o[Math.floor(Math.random()*w.o.length)];
-var sizes={rock:[36,26],bush:[44,30],grass:[28,32],log:[60,24],cactus:[32,44],skull:[30,30],car:[70,34],cone:[24,28],hydrant:[20,34],asteroid:[36,36],star:[30,30],ufo:[50,30],lava:[44,26],smoke:[50,50]};
-var s=sizes[type]||[30,30];
-var air=['asteroid','star','ufo','smoke'].indexOf(type)>=0;
-var y=air?gy-50-Math.random()*60:gy-s[1];
-var enemy=(Math.random()<0.3);
-var o={x:W+40,y:y,w:s[1]?s[0]:30,h:s[1]?s[1]:30,t:type,enemy:enemy};
-if(enemy&&w.bad.length){
-o.emoji=w.e[Math.floor(Math.random()*w.e.length)];
-o.w=40;o.h=40;o.y=gy-40;
-o.type='enemy';
-}
-obs.push(o);
+function spawn(){
+var types=['🌵','🪨','🌳','🚧'];
+var t=types[Math.floor(Math.random()*types.length)];
+var h=45+Math.random()*30;
+var w=40+Math.random()*20;
+obs.push({x:W+30,y:gy-h,w:w,h:h,t:t});
 }
 
 function gameOver(){
 run=false;
-if(dist>best){best=Math.floor(dist);localStorage.setItem('goatBest',best);}
+if(dist>best){best=Math.floor(dist);localStorage.setItem('goatBest2',best)}
 document.getElementById('fs').textContent=Math.floor(dist).toLocaleString('fa-IR');
 document.getElementById('fb').textContent=best.toLocaleString('fa-IR');
 document.getElementById('over').classList.add('on');
 }
 
 function draw(){
-var w=WORLDS[world];
 // آسمان
 var g=x.createLinearGradient(0,0,0,gy);
-g.addColorStop(0,w.c1);g.addColorStop(1,w.c2);
+g.addColorStop(0,'#87ceeb');
+g.addColorStop(1,'#c8e6f5');
 x.fillStyle=g;x.fillRect(0,0,W,gy);
-// خورشید / ستاره
-if(world===4){
-// فضا: ستاره
-for(var i=0;i<80;i++){
-var sx=(i*53.7+time*0.1)%W;
-var sy=(i*37.3)%gy;
-x.fillStyle='rgba(255,255,255,'+(0.4+(i%5)*0.1)+')';
-x.beginPath();x.arc(sx,sy,1+(i%3)*0.5,0,7);x.fill();
-}
-// سیاره
-x.fillStyle='rgba(150,80,200,.4)';
-x.beginPath();x.arc(W*0.8,120,50,0,7);x.fill();
-x.fillStyle='rgba(80,150,255,.3)';
-x.beginPath();x.arc(W*0.2,180,35,0,7);x.fill();
-}else if(world===5){
-// آتشفشان
-x.fillStyle='rgba(255,80,30,.3)';
-for(var j=0;j<3;j++){
-var cx=W*0.3+j*150;
-x.beginPath();x.arc(cx,120,40,0,7);x.fill();
-}
-}else{
 // خورشید
 x.fillStyle='#ffd93b';
-x.shadowColor='#ffd93b';x.shadowBlur=30;
-x.beginPath();x.arc(W*0.8,90,36,0,7);x.fill();
+x.shadowColor='#ffd93b';x.shadowBlur=40;
+x.beginPath();x.arc(W*0.85,90,40,0,7);x.fill();
 x.shadowBlur=0;
 // ابر
-if(world<2){
-x.fillStyle='rgba(255,255,255,.7)';
-for(var k=0;k<3;k++){
-var cx=((k*280+time*0.3)%(W+200))-100;
-var cy=60+k*40;
-x.beginPath();x.arc(cx,cy,26,0,7);x.arc(cx+30,cy-8,22,0,7);x.arc(cx-28,cy-4,20,0,7);x.fill();
+x.fillStyle='rgba(255,255,255,.85)';
+for(var k=0;k<4;k++){
+var cx=((k*280+time*0.5)%(W+200))-100;
+var cy=80+k*50;
+x.beginPath();
+x.arc(cx,cy,28,0,7);
+x.arc(cx+32,cy-8,24,0,7);
+x.arc(cx-30,cy-4,22,0,7);
+x.arc(cx+10,cy-22,18,0,7);
+x.fill();
 }
+// کوه دور
+x.fillStyle='#8fa8b8';
+x.beginPath();x.moveTo(0,gy);
+for(var m=0;m<=W;m+=40){
+x.lineTo(m,gy-60-Math.sin(m*0.008)*30);
 }
-}
-// زمین
-x.fillStyle=w.g;
+x.lineTo(W,gy);x.closePath();x.fill();
+// زمین سبز
+x.fillStyle='#4a9c5c';
 x.fillRect(0,gy,W,H-gy);
-x.fillStyle=w.g2;
-x.fillRect(0,gy,W,4);
+x.fillStyle='#3d8550';
+x.fillRect(0,gy,W,5);
+// علف‌های تزئینی
+x.strokeStyle='#3d8550';
+x.lineWidth=2;
+for(var i=0;i<30;i++){
+var gx=(i*47-time*speed*0.1)%(W+40)-20;
+x.beginPath();
+x.moveTo(gx,gy+10);
+x.lineTo(gx+2,gy+2);
+x.stroke();
+}
 // موانع
 obs.forEach(function(o){
-if(o.type==='enemy'){
-// دشمن (ایموجی)
-x.font='36px Tahoma';
-x.textAlign='center';x.textBaseline='middle';
-x.fillText(o.emoji,o.x+o.w/2,o.y+o.h/2);
-return;
-}
-drawObs(o);
+x.font='40px Tahoma';
+x.textAlign='center';
+x.textBaseline='middle';
+x.fillText(o.t,o.x+o.w/2,o.y+o.h/2);
 });
-// ذرات
-parts.forEach(function(p){
-x.fillStyle='#f59e0b';
-x.globalAlpha=p.life/30;
-x.beginPath();x.arc(p.x,p.y,3,0,7);x.fill();
-x.globalAlpha=1;
-});
+// سایه بز
+x.fillStyle='rgba(0,0,0,.15)';
+x.beginPath();
+x.ellipse(92,gy+3,24,4,0,0,7);x.fill();
 // بز
-if(!(goat.fl>0&&Math.floor(goat.fl/3)%2===0)){
 drawGoat(70,goat.y);
-}
-}
-
-function drawObs(o){
-x.save();
-var px=o.x,py=o.y,w=o.w,h=o.h;
-if(o.t==='rock'||o.t==='asteroid'){
-x.fillStyle='#7a7a8a';
-x.beginPath();
-x.moveTo(px,py+h);
-x.lineTo(px+w*0.3,py+4);
-x.lineTo(px+w*0.6,py);
-x.lineTo(px+w,py+h);
-x.closePath();x.fill();
-x.fillStyle='#9a9aaa';
-x.beginPath();
-x.arc(px+w*0.4,py+h*0.5,3,0,7);x.fill();
-}else if(o.t==='bush'||o.t==='grass'){
-x.fillStyle='#2d7a3d';
-x.beginPath();
-x.arc(px+w*0.3,py+h-10,12,0,7);
-x.arc(px+w*0.7,py+h-10,12,0,7);
-x.arc(px+w*0.5,py+8,14,0,7);
-x.fill();
-x.fillStyle='#3d9a4d';
-x.beginPath();
-x.arc(px+w*0.4,py+12,8,0,7);x.fill();
-}else if(o.t==='log'){
-x.fillStyle='#8b6f47';
-x.fillRect(px,py+h*0.3,w,h*0.7);
-x.fillStyle='#6b4f2f';
-x.fillRect(px+w/2-2,py+h*0.4,4,h*0.5);
-}else if(o.t==='cactus'){
-x.fillStyle='#2d7a3d';
-x.fillRect(px+w/2-6,py,12,h);
-x.fillRect(px+w/2-16,py+h*0.3,10,5);
-x.fillRect(px+w/2+6,py+h*0.5,10,5);
-}else if(o.t==='skull'){
-x.fillStyle='#e8e0d0';
-x.beginPath();x.arc(px+w/2,py+h*0.4,w*0.4,0,7);x.fill();
-x.fillStyle='#333';
-x.beginPath();
-x.arc(px+w*0.35,py+h*0.4,3,0,7);
-x.arc(px+w*0.65,py+h*0.4,3,0,7);x.fill();
-}else if(o.t==='car'){
-x.fillStyle='#e74c3c';
-x.fillRect(px,py+10,w,h-10);
-x.fillStyle='#87ceeb';
-x.fillRect(px+10,py+15,w-20,8);
-x.fillStyle='#1a1a1a';
-x.beginPath();
-x.arc(px+15,py+h-4,7,0,7);
-x.arc(px+w-15,py+h-4,7,0,7);x.fill();
-}else if(o.t==='cone'){
-x.fillStyle='#ff6b35';
-x.beginPath();
-x.moveTo(px+w/2,py);
-x.lineTo(px+w,py+h);
-x.lineTo(px,py+h);
-x.closePath();x.fill();
-x.fillStyle='#fff';
-x.fillRect(px+3,py+h*0.55,w-6,5);
-}else if(o.t==='hydrant'){
-x.fillStyle='#e74c3c';
-x.fillRect(px+4,py+6,w-8,h-6);
-x.fillRect(px,py,w,10);
-}else if(o.t==='star'){
-x.fillStyle='#ffe66d';
-x.shadowColor='#ffe66d';x.shadowBlur=15;
-x.font='30px Tahoma';
-x.textAlign='center';x.textBaseline='middle';
-x.fillText('⭐',px+w/2,py+h/2);
-x.shadowBlur=0;
-}else if(o.t==='ufo'){
-x.fillStyle='#a0a0c0';
-x.beginPath();
-x.ellipse(px+w/2,py+h*0.7,w/2,h*0.4,0,0,7);x.fill();
-x.fillStyle='rgba(100,255,200,.7)';
-x.beginPath();
-x.arc(px+w/2,py+h*0.5,w*0.3,Math.PI,0);x.fill();
-}else if(o.t==='lava'){
-x.fillStyle='#ff5500';
-x.beginPath();
-x.ellipse(px+w/2,py+h*0.6,w/2,h*0.4,0,0,7);x.fill();
-x.fillStyle='#ffcc00';
-x.beginPath();
-x.ellipse(px+w/2,py+h*0.5,w*0.3,h*0.2,0,0,7);x.fill();
-}else if(o.t==='smoke'){
-x.fillStyle='rgba(120,120,120,.6)';
-x.beginPath();
-x.arc(px+w/2,py+h/2,w/2,0,7);x.fill();
-}
-x.restore();
 }
 
 function drawGoat(px,py){
-// سایه
-x.fillStyle='rgba(0,0,0,.15)';
-x.beginPath();
-x.ellipse(px+20,gy+3,22,3,0,0,7);x.fill();
 x.save();
 x.translate(px,py);
 // بدن
-x.fillStyle='#d0d0d0';
+x.fillStyle='#ffffff';
 x.beginPath();
-x.ellipse(20,16,18,11,0,0,7);x.fill();
+x.ellipse(22,18,22,14,0,0,7);x.fill();
 // پاها
-x.fillStyle='#a0a0a0';
-var lo=goat.onG?Math.sin(time*0.4)*3:0;
-x.fillRect(8,24,4,12+lo);
-x.fillRect(16,24,4,12-lo);
-x.fillRect(26,24,4,12-lo);
-x.fillRect(34,24,4,12+lo);
+x.fillStyle='#dddddd';
+var lo=goat.onG?Math.sin(time*0.5)*4:0;
+x.fillRect(8,28,5,14+lo);
+x.fillRect(18,28,5,14-lo);
+x.fillRect(28,28,5,14-lo);
+x.fillRect(38,28,5,14+lo);
 // سر
-x.fillStyle='#e0e0e0';
+x.fillStyle='#f5f5f5';
 x.beginPath();
-x.ellipse(40,12,8,7,0,0,7);x.fill();
+x.ellipse(48,14,10,9,0,0,7);x.fill();
 // شاخ
-x.fillStyle='#666';
+x.fillStyle='#7a5c3a';
 x.beginPath();
-x.moveTo(37,6);x.lineTo(38,0);x.lineTo(40,6);
+x.moveTo(44,6);x.lineTo(45,-2);x.lineTo(48,6);
 x.closePath();x.fill();
 x.beginPath();
-x.moveTo(43,6);x.lineTo(44,0);x.lineTo(46,6);
+x.moveTo(52,6);x.lineTo(53,-2);x.lineTo(56,6);
 x.closePath();x.fill();
 // گوش
-x.fillStyle='#a0a0a0';
+x.fillStyle='#dddddd';
 x.beginPath();
-x.ellipse(35,9,2.5,3.5,0,0,7);x.fill();
+x.ellipse(42,10,3,4.5,-0.4,0,7);x.fill();
 // چشم
-x.fillStyle='#fff';
-x.beginPath();
-x.arc(42,11,2,0,7);x.fill();
 x.fillStyle='#000';
-x.beginPath();
-x.arc(42.5,11,1.2,0,7);x.fill();
+x.beginPath();x.arc(50,13,2.2,0,7);x.fill();
+x.fillStyle='#fff';
+x.beginPath();x.arc(50.6,12.4,0.8,0,7);x.fill();
+// پوزه
+x.fillStyle='#ffb8b8';
+x.beginPath();x.arc(56,17,2,0,7);x.fill();
 // دم
-x.strokeStyle='#d0d0d0';
-x.lineWidth=3;x.lineCap='round';
+x.strokeStyle='#ffffff';
+x.lineWidth=4;x.lineCap='round';
 x.beginPath();
-x.moveTo(4,14);
-x.quadraticCurveTo(-3,10,0,18);
+x.moveTo(2,16);
+x.quadraticCurveTo(-6,12,-2,22);
 x.stroke();
 x.restore();
 }
 
 window.addEventListener('resize',function(){
-W=c.width=innerWidth;H=c.height=innerHeight;gy=H*0.78;
+W=c.width=innerWidth;H=c.height=innerHeight;gy=H*0.75;
 });
 
 init();
 </script>
 </body>
-  </html>
+</html>
