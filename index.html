@@ -24,14 +24,14 @@ body{font-family:Tahoma,sans-serif;background:linear-gradient(160deg,var(--bg1),
 .ibtn{background:none;border:none;font-size:20px;cursor:pointer;width:42px;height:42px;border-radius:12px;color:var(--text);display:flex;align-items:center;justify-content:center;position:relative;flex-shrink:0;transition:transform .15s}
 .ibtn:active{background:var(--bd);transform:scale(.9)}
 .wrap{padding:16px 14px 90px;max-width:600px;margin:0 auto}
-.poemBox{background:var(--card);border-radius:var(--rad);padding:22px 18px;box-shadow:var(--sd);margin-bottom:18px;border:1px solid var(--bd);text-align:center;position:relative;overflow:hidden}
+.poemBox{background:var(--card);border-radius:var(--rad);padding:22px 18px;box-shadow:var(--sd);margin-bottom:18px;border:1px solid var(--bd);text-align:center;position:relative;overflow:hidden;min-height:120px;display:flex;flex-direction:column;justify-content:center}
 .poemBox::before{content:'❝';position:absolute;top:6px;right:14px;font-size:36px;color:var(--pr);opacity:.12}
 .poemBox::after{content:'❞';position:absolute;bottom:6px;left:14px;font-size:36px;color:var(--pr);opacity:.12}
 .poemTxt{font-size:15px;font-weight:500;line-height:2;color:var(--text);margin-bottom:12px;white-space:pre-line;position:relative;z-index:1}
 .poemBy{font-size:12px;color:var(--pr);font-weight:700;position:relative;z-index:1}
 .poemBy::before{content:'— '}
 .homeGrid{display:grid;grid-template-columns:1fr 1fr;gap:14px}
-.card{background:var(--card);border:1px solid var(--bd);border-radius:var(--rad);padding:22px 12px;cursor:pointer;box-shadow:var(--sd);display:flex;flex-direction:column;align-items:center;gap:10px;color:var(--text);font-family:inherit;transition:transform .15s}
+.card{background:var(--card);border:1px solid var(--bd);border-radius:var(--rad);padding:22px 12px;cursor:pointer;box-shadow:var(--sd);display:flex;flex-direction:column;align-items:center;gap:10px;color:var(--text);font-family:inherit;transition:transform .15s;-webkit-user-select:none;user-select:none}
 .card:active{transform:scale(.94)}
 .card .ic{width:64px;height:64px;border-radius:20px;display:flex;align-items:center;justify-content:center;font-size:32px;box-shadow:0 8px 20px rgba(0,0,0,.15)}
 .card .nm{font-weight:700;font-size:14px;color:var(--text)}
@@ -145,7 +145,7 @@ li input[type=checkbox]:checked::after{content:'✓';position:absolute;inset:0;d
 <div id="vh" class="view active">
 <div class="hdr">
 <button class="ibtn" onclick="sndNav();openSet()">☰</button>
-<div class="hdr-mid"><h1>اپ من</h1></div>
+<div class="hdr-mid"></div>
 <button class="ibtn" onclick="sndNav();openAch()">🏅</button>
 </div>
 <div class="wrap" style="padding-top:16px">
@@ -161,26 +161,26 @@ li input[type=checkbox]:checked::after{content:'✓';position:absolute;inset:0;d
 <div class="poemBy" id="poemBy">—</div>
 </div>
 <div class="homeGrid">
-<button class="card" onclick="sndCard('plan');setTimeout(function(){showView('vm')},180)">
+<div class="card" onclick="goPage('plan')">
 <div class="ic" style="background:linear-gradient(135deg,#6366f1,#8b5cf6);color:#fff">📋</div>
 <div class="nm">برنامه روزانه</div>
 <div class="sb">کارها و عادت‌ها</div>
-</button>
-<button class="card" onclick="sndCard('calc');setTimeout(function(){location.href='calc.html'},180)">
+</div>
+<div class="card" onclick="goPage('calc')">
 <div class="ic" style="background:linear-gradient(135deg,#10b981,#06b6d4);color:#fff">🧮</div>
 <div class="nm">ماشین حساب</div>
 <div class="sb">محاسبات سریع</div>
-</button>
-<button class="card" onclick="sndCard('cal');setTimeout(function(){location.href='calendar.html'},180)">
+</div>
+<div class="card" onclick="goPage('cal')">
 <div class="ic" style="background:linear-gradient(135deg,#f59e0b,#ef4444);color:#fff">🗓</div>
 <div class="nm">تقویم</div>
 <div class="sb">تقویم شمسی</div>
-</button>
-<button class="card" onclick="sndCard('time');setTimeout(function(){location.href='stopwatch.html'},180)">
+</div>
+<div class="card" onclick="goPage('time')">
 <div class="ic" style="background:linear-gradient(135deg,#ec4899,#8b5cf6);color:#fff">⏱</div>
 <div class="nm">کرنومتر</div>
 <div class="sb">شمارش زمان</div>
-</button>
+</div>
 </div>
 </div>
 </div>
@@ -290,4 +290,9 @@ li input[type=checkbox]:checked::after{content:'✓';position:absolute;inset:0;d
 <div class="slbl">🎯 هدف روزانه</div>
 <div class="goalBox">
 <input type="number" id="goalIn" min="0" max="100" value="70" onchange="setGoal(this.value)">
-<span style="color:var(--t2);font-size
+<span style="color:var(--t2);font-size:13px">٪</span>
+</div>
+</div>
+<div class="srow-flat">
+<div class="slbl">🏅 دستاوردها</div>
+<button class="mini" onclick="sndNav();openAch()
