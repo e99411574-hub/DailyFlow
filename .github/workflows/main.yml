@@ -19,16 +19,21 @@ jobs:
         java-version: '17'
         distribution: 'temurin'
 
-    - name: Unzip Project
-      run: unzip DailyFlow-AndroidStudio.zip
+    - name: Install unzip
+      run: sudo apt-get update && sudo apt-get install -y unzip
 
-    - name: Grant execute permission for gradlew
+    - name: Unzip Project
+      run: |
+        ls -la
+        unzip -o DailyFlow-AndroidStudio.zip
+        ls -la
+
+    - name: Find gradlew and make executable
       run: find . -name "gradlew" -type f -exec chmod +x {} \;
 
     - name: Build Debug APK
       run: |
-        PROJECT_DIR=$(find . -name "gradlew" -type f -exec dirname {} \; | head -n 1)
-        cd $PROJECT_DIR
+        cd $(find . -name "gradlew" -type f -exec dirname {} \; | head -n 1)
         ./gradlew assembleDebug
 
     - name: Upload APK
