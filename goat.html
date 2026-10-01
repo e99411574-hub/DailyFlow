@@ -8,7 +8,10 @@
 *{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent}
 body{overflow:hidden;font-family:Tahoma,sans-serif;background:#87ceeb;touch-action:none;user-select:none}
 canvas{display:block;width:100vw;height:100vh;position:fixed;top:0;left:0}
-#hud{position:fixed;top:0;left:0;right:0;padding:14px 20px;display:flex;justify-content:space-between;color:#fff;font-weight:700;font-size:20px;text-shadow:0 2px 6px rgba(0,0,0,.4);pointer-events:none;z-index:5;padding-top:calc(14px + env(safe-area-inset-top))}
+#hud{position:fixed;top:0;left:0;right:0;padding:14px 20px;display:flex;justify-content:space-between;align-items:center;color:#fff;font-weight:700;font-size:20px;text-shadow:0 2px 6px rgba(0,0,0,.4);z-index:5;padding-top:calc(14px + env(safe-area-inset-top))}
+#hud .left{display:flex;align-items:center;gap:12px}
+#mute{background:rgba(0,0,0,.25);border:none;color:#fff;font-size:18px;width:40px;height:40px;border-radius:50%;cursor:pointer;display:flex;align-items:center;justify-content:center}
+#mute:active{transform:scale(.9)}
 #hint{position:fixed;bottom:80px;left:0;right:0;text-align:center;color:#fff;font-size:14px;text-shadow:0 2px 6px rgba(0,0,0,.5);pointer-events:none;opacity:.95;z-index:5}
 #over{position:fixed;inset:0;background:rgba(15,23,42,.9);display:none;flex-direction:column;align-items:center;justify-content:center;color:#fff;z-index:20;padding:24px;text-align:center}
 #over.on{display:flex}
@@ -22,7 +25,10 @@ canvas{display:block;width:100vw;height:100vh;position:fixed;top:0;left:0}
 <body>
 <canvas id="c"></canvas>
 <div id="hud">
+<div class="left">
+<button id="mute" onclick="toggleMute()">🔊</button>
 <div>🏆 <span id="sc">۰</span></div>
+</div>
 </div>
 <div id="hint">👆 لمس کن تا بز بپره</div>
 <div id="over">
@@ -38,22 +44,60 @@ var c=document.getElementById('c'),x=c.getContext('2d');
 var W,H,gy,goat,obs,dist,speed,run,time,tick;
 var best=parseInt(localStorage.getItem('goatBest2')||'0');
 
+// ===== صدا =====
+var audioCtx=null;
+var soundOn=localStorage.getItem('goatSound')!=='off';
+function initAudio(){try{if(!audioCtx)audioCtx=new(window.AudioContext||window.webkitAudioContext)()}catch(e){}}
+function beep(freq,dur,type,vol){
+if(!soundOn)return;
+try{
+initAudio();if(!audioCtx)return;
+var o=audioCtx.createOscillator(),g=audioCtx.createGain();
+o.connect(g);g.connect(audioCtx.destination);
+o.type=type||'sine';
+var now=audioCtx.currentTime;
+o.frequency.setValueAtTime(freq,now);
+g.gain.setValueAtTime(vol||0.08,now);
+g.gain.exponentialRampToValueAtTime(0.001,now+dur);
+o.start(now);o.stop(now+dur);
+}catch(e){}
+}
+function sndJump(){beep(600,0.12,'sine',0.1)}
+function sndDouble(){beep(900,0.15,'sine',0.1)}
+function sndHit(){beep(180,0.35,'sawtooth',0.15)}
+function sndScore(){beep(880,0.1,'sine',0.1);setTimeout(function(){beep(1320,0.15,'sine',0.1)},80)}
+function sndStart(){beep(523,0.1,'sine',0.08);setTimeout(function(){beep(784,0.15,'sine',0.08)},100)}
+
+function toggleMute(){
+soundOn=!soundOn;
+localStorage.setItem('goatSound',soundOn?'on':'off');
+document.getElementById('mute').textContent=soundOn?'🔊':'🔇';
+if(soundOn)beep(880,0.1,'sine',0.1);
+}
+
 function init(){
 W=c.width=innerWidth;H=c.height=innerHeight;gy=H*0.75;
-goat={y:gy-40,vy:0,onG:true};
+goat={y:gy-40,vy:0,onG:true,jumps:0};
 obs=[];
 dist=0;speed=5;time=0;tick=0;
 document.getElementById('over').classList.remove('on');
 document.getElementById('hint').style.display='block';
 setTimeout(function(){document.getElementById('hint').style.display='none'},3500);
+document.getElementById('sc').textContent='۰';
 run=true;
 }
 
-function start(){init();loop()}
+function start(){initAudio();init();loop()}
 
 function jump(){
 if(!run)return;
-if(goat.onG){goat.vy=-14;goat.onG=false}
+if(goat.onG){
+goat.vy=-14;goat.onG=false;goat.jumps=1;
+sndJump();
+}else if(goat.jumps===1){
+goat.vy=-11;goat.jumps=2;
+sndDouble();
+}
 }
 
 c.addEventListener('touchstart',function(e){e.preventDefault();jump()});
@@ -65,13 +109,14 @@ upd();draw();
 requestAnimationFrame(loop);
 }
 
+var lastScore=0;
 function upd(){
 time++;
 speed=5+Math.min(time/300,3);
 dist+=speed*0.1;
 goat.vy+=0.8;
 goat.y+=goat.vy;
-if(goat.y>=gy-40){goat.y=gy-40;goat.vy=0;goat.onG=true}
+if(goat.y>=gy-40){goat.y=gy-40;goat.vy=0;goat.onG=true;goat.jumps=0}
 // تولید موانع
 tick--;
 if(tick<=0){
@@ -89,6 +134,9 @@ if(bx+bw-8>o.x&&bx+8<o.x+o.w&&by+bh-6>o.y&&by+6<o.y+o.h){
 gameOver();return;
 }
 }
+// امتیاز هر ۱۰۰ متر صدا
+var cur100=Math.floor(dist/100);
+if(cur100>lastScore){lastScore=cur100;sndScore()}
 document.getElementById('sc').textContent=Math.floor(dist).toLocaleString('fa-IR');
 }
 
@@ -102,14 +150,15 @@ obs.push({x:W+30,y:gy-h,w:w,h:h,t:t});
 
 function gameOver(){
 run=false;
+sndHit();
 if(dist>best){best=Math.floor(dist);localStorage.setItem('goatBest2',best)}
 document.getElementById('fs').textContent=Math.floor(dist).toLocaleString('fa-IR');
 document.getElementById('fb').textContent=best.toLocaleString('fa-IR');
 document.getElementById('over').classList.add('on');
+lastScore=0;
 }
 
 function draw(){
-// آسمان
 var g=x.createLinearGradient(0,0,0,gy);
 g.addColorStop(0,'#87ceeb');
 g.addColorStop(1,'#c8e6f5');
@@ -131,19 +180,19 @@ x.arc(cx-30,cy-4,22,0,7);
 x.arc(cx+10,cy-22,18,0,7);
 x.fill();
 }
-// کوه دور
+// کوه
 x.fillStyle='#8fa8b8';
 x.beginPath();x.moveTo(0,gy);
 for(var m=0;m<=W;m+=40){
 x.lineTo(m,gy-60-Math.sin(m*0.008)*30);
 }
 x.lineTo(W,gy);x.closePath();x.fill();
-// زمین سبز
+// زمین
 x.fillStyle='#4a9c5c';
 x.fillRect(0,gy,W,H-gy);
 x.fillStyle='#3d8550';
 x.fillRect(0,gy,W,5);
-// علف‌های تزئینی
+// علف
 x.strokeStyle='#3d8550';
 x.lineWidth=2;
 for(var i=0;i<30;i++){
@@ -164,7 +213,6 @@ x.fillText(o.t,o.x+o.w/2,o.y+o.h/2);
 x.fillStyle='rgba(0,0,0,.15)';
 x.beginPath();
 x.ellipse(92,gy+3,24,4,0,0,7);x.fill();
-// بز
 drawGoat(70,goat.y);
 }
 
@@ -220,7 +268,12 @@ window.addEventListener('resize',function(){
 W=c.width=innerWidth;H=c.height=innerHeight;gy=H*0.75;
 });
 
+// تنظیم دکمه صدا
+document.getElementById('mute').textContent=soundOn?'🔊':'🔇';
+
+// شروع
 init();
+loop();
 </script>
 </body>
 </html>
