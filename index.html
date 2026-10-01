@@ -83,7 +83,6 @@ li input[type=checkbox]:checked::after{content:'✓';position:absolute;inset:0;d
 .mchart{display:flex;align-items:flex-end;gap:3px;height:120px;margin-top:10px;padding:6px 0}
 .mcbar{flex:1;background:linear-gradient(180deg,var(--pr),var(--pr2));border-radius:4px 4px 0 0;min-height:3px;transition:height .5s;position:relative}
 .mcbar.full{background:linear-gradient(180deg,#10b981,#059669)}
-.mcbar:hover::after{content:attr(data-d);position:absolute;bottom:100%;left:50%;transform:translateX(-50%);background:#000;color:#fff;padding:2px 6px;border-radius:4px;font-size:9px;white-space:nowrap}
 .ovl{position:fixed;inset:0;background:rgba(0,0,0,.5);display:flex;align-items:center;justify-content:center;z-index:200;padding:20px}
 .mdl{background:var(--card);border-radius:20px;padding:20px;width:100%;max-width:400px;box-shadow:0 20px 50px rgba(0,0,0,.3);max-height:85vh;overflow-y:auto}
 .mdl h3{margin:0 0 14px;font-size:15px;color:var(--text);font-weight:700}
@@ -123,11 +122,33 @@ li input[type=checkbox]:checked::after{content:'✓';position:absolute;inset:0;d
 </head>
 <body>
 
-<div id="vm" class="view active">
+<div id="vh" class="view active">
+<div class="wrap" style="padding-top:40px;padding-bottom:40px">
+<div style="text-align:center;margin-bottom:40px">
+<div style="font-size:64px;margin-bottom:8px">🌿</div>
+<h1 style="font-size:26px;font-weight:700;background:linear-gradient(135deg,var(--pr),var(--pr2));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;margin-bottom:6px">برنامه من</h1>
+<p style="color:var(--t2);font-size:13px">یک اپ، چند ابزار</p>
+</div>
+<div style="display:grid;grid-template-columns:1fr 1fr;gap:14px">
+<button onclick="showView('vm')" style="background:var(--card);border:1px solid var(--bd);border-radius:var(--rad);padding:26px 14px;cursor:pointer;box-shadow:var(--sd);display:flex;flex-direction:column;align-items:center;gap:12px;color:var(--text);font-family:inherit">
+<div style="width:72px;height:72px;border-radius:22px;background:linear-gradient(135deg,#6366f1,#8b5cf6);display:flex;align-items:center;justify-content:center;font-size:36px;box-shadow:0 10px 24px rgba(99,102,241,.4)">📋</div>
+<div style="font-weight:700;font-size:15px">برنامه روزانه</div>
+<div style="font-size:11px;color:var(--t2)">کارها و عادت‌ها</div>
+</button>
+<button onclick="location.href='calc.html'" style="background:var(--card);border:1px solid var(--bd);border-radius:var(--rad);padding:26px 14px;cursor:pointer;box-shadow:var(--sd);display:flex;flex-direction:column;align-items:center;gap:12px;color:var(--text);font-family:inherit">
+<div style="width:72px;height:72px;border-radius:22px;background:linear-gradient(135deg,#10b981,#06b6d4);display:flex;align-items:center;justify-content:center;font-size:36px;box-shadow:0 10px 24px rgba(16,185,129,.4)">🧮</div>
+<div style="font-weight:700;font-size:15px">ماشین حساب</div>
+<div style="font-size:11px;color:var(--t2)">محاسبات سریع</div>
+</button>
+</div>
+</div>
+</div>
+
+<div id="vm" class="view">
 <div class="hdr">
-<button class="ibtn" onclick="openSet()">⚙️</button>
+<button class="ibtn" onclick="showView('vh')">🏠</button>
 <div class="hdr-mid"><h1>برنامه روزانه</h1><div class="date" id="todayDate"></div></div>
-<button class="ibtn" onclick="openAch()">🏅</button>
+<button class="ibtn" onclick="openSet()">⚙️</button>
 </div>
 <div class="wrap">
 <div class="ring">
@@ -217,7 +238,7 @@ li input[type=checkbox]:checked::after{content:'✓';position:absolute;inset:0;d
 <button class="mini" onclick="clearAll()" style="color:#ef4444;opacity:1;font-size:12px;font-weight:600">پاک کردن</button>
 </div>
 </div>
-<p style="text-align:center;color:var(--t3);font-size:11px;margin-top:24px">نسخهٔ ۹.۰</p>
+<p style="text-align:center;color:var(--t3);font-size:11px;margin-top:24px">نسخهٔ ۱۰.۰</p>
 </div>
 </div>
 
@@ -253,12 +274,12 @@ li input[type=checkbox]:checked::after{content:'✓';position:absolute;inset:0;d
 <div id="toast" class="toast"></div>
 
 <script>
-var KP='plan_v14',KT='theme_v14',KD='date_v14',KS='stats_v14',KSND='sound_v14',KAUTO='auto_v14',KNOT='notif_v14';
+var KP='plan_v15',KT='theme_v15',KD='date_v15',KS='stats_v15',KSND='sound_v15',KAUTO='auto_v15',KNOT='notif_v15';
 var THEMES=[{id:'light',nm:'روشن',c1:'#ffffff',c2:'#6366f1'},{id:'dark',nm:'تاریک',c1:'#1a1f32',c2:'#818cf8'},{id:'mint',nm:'نعنایی',c1:'#f0fdf4',c2:'#10b981'},{id:'ocean',nm:'اقیانوس',c1:'#eff6ff',c2:'#3b82f6'},{id:'purple',nm:'بنفش',c1:'#faf5ff',c2:'#a855f7'},{id:'rose',nm:'رز',c1:'#fff1f2',c2:'#e11d48'},{id:'midnight',nm:'نیمه‌شب',c1:'#0f172a',c2:'#38bdf8'}];
 var SCOLORS=['#6366f1','#10b981','#f59e0b','#ef4444','#ec4899','#3b82f6','#8b5cf6','#06b6d4','#84cc16','#f97316'];
 var SICONS=['🌅','🌙','⭐','📚','🏫','🌤️','🍽️','🪥','💧','🏃','🚿','😴','📖','✍️','💪','🎯','🧘','🎵','🎨','💻','📱','🔬','🧪','🌿','🐐','🐱','🦁','🌸','⚡','🔥','🎁','✨'];
 var DEF=[{title:"🌅 صبح",items:["بیدار شدن","۱ لیوان آب","مسواک صبح","شستن صورت","صبحانه"]},{title:"🏫 مدرسه",items:["مدرسه / کلاس‌ها","ناهار","مسواک ظهر","خواب ظهر ۳۰ دقیقه"]},{title:"📚 مطالعه",items:["ریاضی","هندسه","فیزیک","شیمی"]},{title:"🌤️ عصر و ورزش",items:["میان‌وعده عصر","ورزش ۳۰–۶۰ دقیقه","حمام / بهداشت","سیبیل / موهای زائد"]},{title:"🌙 شب",items:["شام","مرور درس‌ها","حل تمرین و تست","هوای آزاد","تکمیل ۶–۸ لیوان آب","کنار گذاشتن گوشی","مسواک شب","شستن صورت شب","خواب شب"]}];
-var ACHS=[{id:'first',ic:'🥉',t:'اولین قدم',s:'یک کار انجام بده',ch:function(st){return st.totalDone>=1}},{id:'half',ic:'🥈',t:'نیمه راه',s:'۵۰٪ یک روز',ch:function(st){return st.bestPct>=50}},{id:'full',ic:'🥇',t:'کامل!',s:'۱۰۰٪ یک روز',ch:function(st){return st.bestPct>=100}},{id:'s3',ic:'🔥',t:'سه روز پیوسته',s:'۳ روز پشت‌سرهم',ch:function(st){return st.maxStreak>=3}},{id:'s7',ic:'⚡',t:'یک هفته قهرمان',s:'۷ روز',ch:function(st){return st.maxStreak>=7}},{id:'s30',ic:'👑',t:'افسانه',s:'۳۰ روز',ch:function(st){return st.maxStreak>=30}},{id:'d100',ic:'💯',t:'صدتایی',s:'۱۰۰ کار',ch:function(st){return st.totalDone>=100}},{id:'d500',ic:'🌟',t:'پانصدتایی',s:'۵۰۰ کار',ch:function(st){return st.totalDone>=500}},{id:'th5',ic:'🎨',t:'رنگ‌باز',s:'همه تم‌ها',ch:function(st){return (st.themesUsed||[]).length>=5}},{id:'cus',ic:'✏️',t:'شخصی‌سازی',s:'کار شخصی',ch:function(st){return st.customTasks>=1}},{id:'note',ic:'📝',t:'یادداشت‌بردار',s:'۵ نُت',ch:function(st){return (st.notesCount||0)>=5}},{id:'backup',ic:'💾',t:'محافظ',s:'پشتیبان',ch:function(st){return st.backups>=1}},{id:'notif',ic:'🔔',t:'زنگ‌زن',s:'یادآور روشن',ch:function(st){return st.notifOn}},{id:'share',ic:'📤',t:'سخاوتمند',s:'اشتراک',ch:function(st){return st.shared>=1}},{id:'img',ic:'📸',t:'عکاس',s:'اشتراک تصویری',ch:function(st){return st.imgShared>=1}},{id:'icon',ic:'🎭',t:'آیکن‌باز',s:'آیکن بخش عوض کن',ch:function(st){return (st.iconsChanged||0)>=1}}];
+  var ACHS=[{id:'first',ic:'🥉',t:'اولین قدم',s:'یک کار انجام بده',ch:function(st){return st.totalDone>=1}},{id:'half',ic:'🥈',t:'نیمه راه',s:'۵۰٪ یک روز',ch:function(st){return st.bestPct>=50}},{id:'full',ic:'🥇',t:'کامل!',s:'۱۰۰٪ یک روز',ch:function(st){return st.bestPct>=100}},{id:'s3',ic:'🔥',t:'سه روز پیوسته',s:'۳ روز پشت‌سرهم',ch:function(st){return st.maxStreak>=3}},{id:'s7',ic:'⚡',t:'یک هفته قهرمان',s:'۷ روز',ch:function(st){return st.maxStreak>=7}},{id:'s30',ic:'👑',t:'افسانه',s:'۳۰ روز',ch:function(st){return st.maxStreak>=30}},{id:'d100',ic:'💯',t:'صدتایی',s:'۱۰۰ کار',ch:function(st){return st.totalDone>=100}},{id:'d500',ic:'🌟',t:'پانصدتایی',s:'۵۰۰ کار',ch:function(st){return st.totalDone>=500}},{id:'th5',ic:'🎨',t:'رنگ‌باز',s:'همه تم‌ها',ch:function(st){return (st.themesUsed||[]).length>=5}},{id:'cus',ic:'✏️',t:'شخصی‌سازی',s:'کار شخصی',ch:function(st){return st.customTasks>=1}},{id:'note',ic:'📝',t:'یادداشت‌بردار',s:'۵ نُت',ch:function(st){return (st.notesCount||0)>=5}},{id:'backup',ic:'💾',t:'محافظ',s:'پشتیبان',ch:function(st){return st.backups>=1}},{id:'notif',ic:'🔔',t:'زنگ‌زن',s:'یادآور روشن',ch:function(st){return st.notifOn}},{id:'share',ic:'📤',t:'سخاوتمند',s:'اشتراک',ch:function(st){return st.shared>=1}},{id:'img',ic:'📸',t:'عکاس',s:'اشتراک تصویری',ch:function(st){return st.imgShared>=1}},{id:'icon',ic:'🎭',t:'آیکن‌باز',s:'آیکن بخش عوض کن',ch:function(st){return (st.iconsChanged||0)>=1}}];
 var faN=['۰','۱','۲','۳','۴','۵','۶','۷','۸','۹'];
 function fa(n){return String(n).split('').map(function(c){return faN[+c]||c}).join('')}
 function toFa(n){return n.toLocaleString('fa-IR')}
@@ -382,7 +403,7 @@ function renderAch(){var l=document.getElementById('achList');l.innerHTML='';for
 function showToast(m){var t=document.getElementById('toast');t.textContent=m;t.classList.add('on');if(window._tt)clearTimeout(window._tt);window._tt=setTimeout(function(){t.classList.remove('on')},2000)}
 function resetAll(){if(confirm('همه تیک‌ها پاک شود؟')){for(var i=0;i<plan.length;i++)for(var j=0;j<plan[i].tasks.length;j++)plan[i].tasks[j].done=false;save();render();showToast('🔄 روز جدید شروع شد')}}
 function clearAll(){if(confirm('همه داده‌ها پاک شود؟')){try{localStorage.removeItem(KP);localStorage.removeItem(KD);localStorage.removeItem(KS)}catch(e){}location.reload()}}
-function backup(){try{var data={plan:plan,stats:stats,version:'9.0',date:new Date().toISOString()};var blob=new Blob([JSON.stringify(data,null,2)],{type:'application/json'});var url=URL.createObjectURL(blob);var a=document.createElement('a');a.href=url;var d=new Date();a.download='barnameh-'+d.getFullYear()+'-'+(d.getMonth()+1)+'-'+d.getDate()+'.json';a.click();URL.revokeObjectURL(url);stats.backups=(stats.backups||0)+1;saveStats();checkAch();showToast('💾 پشتیبان ذخیره شد')}catch(e){showToast('خطا')}}
+function backup(){try{var data={plan:plan,stats:stats,version:'10.0',date:new Date().toISOString()};var blob=new Blob([JSON.stringify(data,null,2)],{type:'application/json'});var url=URL.createObjectURL(blob);var a=document.createElement('a');a.href=url;var d=new Date();a.download='barnameh-'+d.getFullYear()+'-'+(d.getMonth()+1)+'-'+d.getDate()+'.json';a.click();URL.revokeObjectURL(url);stats.backups=(stats.backups||0)+1;saveStats();checkAch();showToast('💾 پشتیبان ذخیره شد')}catch(e){showToast('خطا')}}
 function restore(e){var f=e.target.files[0];if(!f)return;var r=new FileReader();r.onload=function(ev){try{var data=JSON.parse(ev.target.result);if(!data.plan)throw new Error('invalid');if(!confirm('داده‌های فعلی جایگزین شوند؟'))return;plan=data.plan;stats=data.stats||stats;save();saveStats();location.reload()}catch(err){showToast('❌ فایل نامعتبر')}};r.readAsText(f)}
 function sharePlan(){var txt='📋 برنامهٔ روزانهٔ من\n\n';for(var i=0;i<plan.length;i++){txt+=plan[i].title+'\n';for(var j=0;j<plan[i].tasks.length;j++){var t=plan[i].tasks[j];txt+='  • '+t.text+(t.time?' ('+t.time+')':'')+'\n'}txt+='\n'}txt+='\n📱 اپ: https://e99411574-hub.github.io/DailyFlow/';if(navigator.share){navigator.share({title:'برنامهٔ روزانه',text:txt}).then(function(){stats.shared++;saveStats();checkAch()}).catch(function(){})}else{navigator.clipboard.writeText(txt).then(function(){stats.shared++;saveStats();checkAch();showToast('📋 کپی شد!')}).catch(function(){showToast('❌ کپی نشد')})}}
 function shareImage(){
@@ -485,22 +506,23 @@ if(addMode){
 if(addMode.task){plan[addMode.si].tasks.push({id:'t'+Date.now(),text:v,time:t,note:n,done:false,imp:false,color:plan[addMode.si].color||SCOLORS[0]});stats.customTasks++;if(n)stats.notesCount=(stats.notesCount||0)+1;saveStats();sndAdd();showToast('✅ اضافه شد')}
 else if(addMode.section){plan.push({id:'s'+Date.now(),title:selIcon+' '+v,tasks:[],color:selColor||SCOLORS[0]});stats.iconsChanged=(stats.iconsChanged||0)+1;saveStats();sndAdd();showToast('✅ بخش اضافه شد')}
 }else if(editKey){
-if(editKey.section){
-var oldIcon=icon(plan[editKey.si].title);
-plan[editKey.si].title=selIcon+' '+v;
-if(oldIcon!==selIcon)stats.iconsChanged=(stats.iconsChanged||0)+1;
-if(selColor)plan[editKey.si].color=selColor;
-saveStats();
-}else{var old=plan[editKey.si].tasks[editKey.ti];if(!old.note&&n)stats.notesCount=(stats.notesCount||0)+1;old.text=v;old.time=t;old.note=n}
+if(editKey.section){var oldIcon=icon(plan[editKey.si].title);plan[editKey.si].title=selIcon+' '+v;if(oldIcon!==selIcon)stats.iconsChanged=(stats.iconsChanged||0)+1;if(selColor)plan[editKey.si].color=selColor;saveStats();}
+else{var old=plan[editKey.si].tasks[editKey.ti];if(!old.note&&n)stats.notesCount=(stats.notesCount||0)+1;old.text=v;old.time=t;old.note=n}
 showToast('💾 ذخیره شد');
 }
 save();closeEdt();render();
 }
 function delItem(){if(!editKey)return;if(editKey.section){if(!confirm('این بخش حذف شود؟'))return;plan.splice(editKey.si,1)}else{if(!confirm('این کار حذف شود؟'))return;plan[editKey.si].tasks.splice(editKey.ti,1)}save();closeEdt();render();sndDel();showToast('🗑 حذف شد')}
-function openSet(){document.getElementById('vm').classList.remove('active');document.getElementById('vs').classList.add('active');updateWeek();updateMonth();updateChart();updateToggles()}
-function closeSet(){document.getElementById('vs').classList.remove('active');document.getElementById('vm').classList.add('active')}
-function openAch(){renderAch();document.getElementById('vm').classList.remove('active');document.getElementById('va').classList.add('active')}
-function closeAch(){document.getElementById('va').classList.remove('active');document.getElementById('vm').classList.add('active')}
+function openSet(){showView('vs');updateWeek();updateMonth();updateChart();updateToggles()}
+function closeSet(){showView('vm')}
+function openAch(){renderAch();showView('va')}
+function closeAch(){showView('vm')}
+function showView(id){
+document.querySelectorAll('.view').forEach(function(v){v.classList.remove('active')});
+document.getElementById(id).classList.add('active');
+if(id==='vm'){render();updateWeek();updateMonth();updateChart()}
+window.scrollTo(0,0);
+}
 applyTheme();render();updateToggles();
 setInterval(function(){if(autoOn)applyTheme()},60000);
 setInterval(checkNotifications,30000);
