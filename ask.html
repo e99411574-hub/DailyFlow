@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>پرسش و پاسخ</title>
+<style>
+*{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+body{font-family:Tahoma,sans-serif;background:#0f172a;color:#f1f5f9;min-height:100vh}
+.hdr{display:flex;align-items:center;justify-content:space-between;padding:14px 18px;background:#1e293b;border-bottom:1px solid rgba(255,255,255,.08);position:sticky;top:0;z-index:10;padding-top:calc(14px + env(safe-area-inset-top))}
+.hdr h1{font-size:17px;font-weight:700}
+.ibtn{background:none;border:none;color:#f1f5f9;font-size:20px;cursor:pointer;width:42px;height:42px;border-radius:12px;display:flex;align-items:center;justify-content:center}
+.ibtn:active{background:rgba(255,255,255,.08)}
+.wrap{padding:16px;max-width:600px;margin:0 auto}
+.search{width:100%;padding:13px 16px;font-size:14px;font-family:inherit;background:#1e293b;color:#f1f5f9;border:2px solid rgba(255,255,255,.08);border-radius:14px;outline:none;margin-bottom:14px}
+.search:focus{border-color:#818cf8}
+.cat-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:12px}
+.cat-card{background:#1e293b;border-radius:16px;padding:18px 14px;cursor:pointer;border:1px solid rgba(255,255,255,.08);display:flex;flex-direction:column;align-items:center;gap:10px;transition:.2s}
+.cat-card:active{transform:scale(.96);background:rgba(99,102,241,.15)}
+.cat-card .ic{width:56px;height:56px;border-radius:18px;display:flex;align-items:center;justify-content:center;font-size:28px}
+.cat-card .nm{font-size:13px;font-weight:700;text-align:center;line-height:1.4}
+.cat-card .ct{font-size:10px;color:#94a3b8}
+.cat-hdr{display:flex;align-items:center;gap:12px;margin-bottom:16px;background:#1e293b;padding:14px 16px;border-radius:16px;border:1px solid rgba(255,255,255,.08)}
+.cat-hdr .ic{width:48px;height:48px;border-radius:15px;display:flex;align-items:center;justify-content:center;font-size:24px;flex-shrink:0}
+.cat-hdr .info{flex:1}
+.cat-hdr .nm{font-size:15px;font-weight:700}
+.cat-hdr .ct{font-size:11px;color:#94a3b8;margin-top:2px}
+.q{background:#1e293b;border-radius:14px;margin-bottom:10px;border:1px solid rgba(255,255,255,.08);overflow:hidden}
+.q-head{padding:15px 16px;display:flex;align-items:center;gap:10px;cursor:pointer}
+.q-head:active{background:rgba(255,255,255,.03)}
+.q-icon{width:34px;height:34px;border-radius:10px;background:linear-gradient(135deg,#6366f1,#8b5cf6);display:flex;align-items:center;justify-content:center;font-size:16px;flex-shrink:0}
+.q-title{flex:1;font-size:13.5px;font-weight:600;line-height:1.5}
+.q-arrow{font-size:13px;color:#64748b;transition:transform .3s}
+.q.open .q-arrow{transform:rotate(180deg)}
+.q-body{max-height:0;overflow:hidden;transition:max-height .5s ease;background:rgba(0,0,0,.15)}
+.q.open .q-body{max-height:2000px}
+.q-answer{padding:14px 16px 16px;font-size:13px;line-height:2;color:#cbd5e1;border-top:1px solid rgba(255,255,255,.05);white-space:pre-line}
+.q-answer b{color:#a5b4fc}
+.back-btn{background:none;border:none;color:#818cf8;font-size:13px;font-weight:600;font-family:inherit;padding:8px 0;margin-bottom:8px;cursor:pointer}
+.empty{text-align:center;padding:40px 20px;color:#64748b;font-size:13px}
+.empty .ic{font-size:48px;margin-bottom:12px;opacity:.5}
+</style>
+</head>
+<body>
+
+<div class="hdr">
+<button class="ibtn" onclick="goBack()">←</button>
+<h1 id="hdrTitle">📚 دایرة‌المعارف</h1>
+<div style="width:42px"></div>
+</div>
+
+<div class="wrap">
+<input class="search hidden" id="search" placeholder="🔍 جستجو..." oninput="render()">
+<div id="content"></div>
+</div>
+
+<script src="qa1.js"></script>
+<script src="qa2.js"></script>
+<script src="qa3.js"></script>
+<script src="qa4.js"></script>
+<script src="qa5.js"></script>
+
+<script>
+var curCat=null;
+var CATS=window.CATS||[];
+var QA=window.QA||[];
+document.getElementById('search').classList.add('hidden');
+
+function goBack(){
+if(curCat){
+curCat=null;
+document.getElementById('hdrTitle').textContent='📚 دایرة‌المعارف';
+document.getElementById('search').classList.add('hidden');
+document.getElementById('search').value='';
+render();
+}else{
+location.href='index.html';
+}
+}
+
+function render(){
+var content=document.getElementById('content');
+content.innerHTML='';
+if(curCat){
+var cat=CATS.find(function(c){return c.id===curCat});
+if(!cat)return;
+var q=document.getElementById('search').value.trim();
+var hdr=document.createElement('div');hdr.className='cat-hdr';
+var ic=document.createElement('div');ic.className='ic';ic.style.background=cat.g;ic.textContent=cat.ic;
+var info=document.createElement('div');info.className='info';
+var nm=document.createElement('div');nm.className='nm';nm.textContent=cat.nm;
+var ct=document.createElement('div');ct.className='ct';
+var items=QA.filter(function(x){return x.c===curCat});
+ct.textContent=items.length+' پرسش';
+info.appendChild(nm);info.appendChild(ct);
+hdr.appendChild(ic);hdr.appendChild(info);
+content.appendChild(hdr);
+
+var bb=document.createElement('button');bb.className='back-btn';bb.textContent='← بازگشت به دسته‌ها';bb.onclick=goBack;
+content.appendChild(bb);
+
+var filtered=items.filter(function(x){
+if(!q)return true;
+return x.q.indexOf(q)>=0||x.a.indexOf(q)>=0;
+});
+if(filtered.length===0){
+content.innerHTML+='<div class="empty"><div class="ic">🔍</div><div>سوالی پیدا نشد</div></div>';
+return;
+}
+filtered.forEach(function(item){
+var d=document.createElement('div');d.className='q';
+var h=document.createElement('div');h.className='q-head';
+var ico=document.createElement('div');ico.className='q-icon';ico.textContent=item.ic||cat.ic;
+var ti=document.createElement('div');ti.className='q-title';ti.textContent=item.q;
+var ar=document.createElement('div');ar.className='q-arrow';ar.textContent='▼';
+h.appendChild(ico);h.appendChild(ti);h.appendChild(ar);
+var b=document.createElement('div');b.className='q-body';
+var a=document.createElement('div');a.className='q-answer';a.innerHTML=item.a;
+b.appendChild(a);
+d.appendChild(h);d.appendChild(b);
+h.onclick=function(){d.classList.toggle('open')};
+content.appendChild(d);
+});
+}else{
+var q=document.getElementById('search').value.trim();
+if(q){
+document.getElementById('search').classList.remove('hidden');
+var all=QA.filter(function(x){return x.q.indexOf(q)>=0||x.a.indexOf(q)>=0});
+if(all.length===0){
+content.innerHTML='<div class="empty"><div class="ic">🔍</div><div>چیزی پیدا نشد</div></div>';
+return;
+}
+all.forEach(function(item){
+var cat=CATS.find(function(c){return c.id===item.c})||{ic:'📌',nm:''};
+var d=document.createElement('div');d.className='q';
+var h=document.createElement('div');h.className='q-head';
+var ico=document.createElement('div');ico.className='q-icon';ico.textContent=item.ic||cat.ic;
+var ti=document.createElement('div');ti.className='q-title';ti.textContent=item.q;
+var ar=document.createElement('div');ar.className='q-arrow';ar.textContent='▼';
+h.appendChild(ico);h.appendChild(ti);h.appendChild(ar);
+var b=document.createElement('div');b.className='q-body';
+var a=document.createElement('div');a.className='q-answer';a.innerHTML=item.a;
+b.appendChild(a);
+d.appendChild(h);d.appendChild(b);
+h.onclick=function(){d.classList.toggle('open')};
+content.appendChild(d);
+});
+return;
+}
+document.getElementById('search').classList.add('hidden');
+var grid=document.createElement('div');grid.className='cat-grid';
+CATS.forEach(function(cat){
+var items=QA.filter(function(x){return x.c===cat.id});
+var card=document.createElement('div');card.className='cat-card';
+var ic=document.createElement('div');ic.className='ic';ic.style.background=cat.g;ic.textContent=cat.ic;
+var nm=document.createElement('div');nm.className='nm';nm.textContent=cat.nm;
+var ct=document.createElement('div');ct.className='ct';ct.textContent=items.length+' پرسش';
+card.appendChild(ic);card.appendChild(nm);card.appendChild(ct);
+card.onclick=function(){curCat=cat.id;document.getElementById('hdrTitle').textContent=cat.ic+' '+cat.nm;document.getElementById('search').classList.remove('hidden');render()};
+grid.appendChild(card);
+});
+content.appendChild(grid);
+}
+}
+render();
+</script>
+</body>
+  </html>
