@@ -6,7 +6,7 @@
 <title>اپ من</title>
 <link rel="manifest" href="manifest.json">
 <style>
-:root{--bg1:#f8f9fc;--bg2:#eef1f8;--card:#fff;--text:#1a1f36;--t2:#6b7280;--t3:#9ca3af;--pr:#6366f1;--pr2:#8b5cf6;--bd:rgba(0,0,0,.06);--rad:18px;--sd:0 4px 20px rgba(99,102,241,.08);--gold:#f59e0b;--zoom:1}
+:root{--bg1:#f8f9fc;--bg2:#eef1f8;--card:#fff;--text:#1a1f36;--t2:#6b7280;--t3:#9ca3af;--pr:#6366f1;--pr2:#8b5cf6;--bd:rgba(0,0,0,.06);--rad:18px;--sd:0 4px 20px rgba(99,102,241,.08);--gold:#f59e0b}
 body[data-t=dark]{--bg1:#0a0e1a;--bg2:#0f1424;--card:#1a1f32;--text:#f1f5f9;--t2:#94a3b8;--t3:#64748b;--pr:#818cf8;--pr2:#a78bfa;--bd:rgba(255,255,255,.06);--sd:0 4px 20px rgba(0,0,0,.4)}
 body[data-t=mint]{--bg1:#f0fdf4;--bg2:#dcfce7;--card:#fff;--text:#064e3b;--t2:#059669;--t3:#34d399;--pr:#10b981;--pr2:#14b8a6;--bd:rgba(16,185,129,.1)}
 body[data-t=ocean]{--bg1:#eff6ff;--bg2:#dbeafe;--card:#fff;--text:#1e3a8a;--t2:#3b82f6;--t3:#60a5fa;--pr:#3b82f6;--pr2:#2563eb;--bd:rgba(59,130,246,.1)}
@@ -16,9 +16,8 @@ body[data-t=midnight]{--bg1:#0f172a;--bg2:#1e293b;--card:#1e293b;--text:#f1f5f9;
 *{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
 html,body{overscroll-behavior:none}
 body{font-family:Tahoma,sans-serif;background:linear-gradient(160deg,var(--bg1),var(--bg2));background-attachment:fixed;color:var(--text);min-height:100vh;transition:background .3s,color .3s;font-size:14px}
-.view{display:none;font-size:var(--zoom);}
+.view{display:none}
 .view.active{display:block}
-.view.active .wrap{padding:16px 14px 90px;max-width:600px;margin:0 auto}
 .hdr{display:flex;align-items:center;justify-content:space-between;padding:12px 16px;background:var(--card);box-shadow:var(--sd);position:sticky;top:0;z-index:10;padding-top:calc(12px + env(safe-area-inset-top))}
 .hdr-mid{text-align:center;flex:1;padding:0 8px;min-width:0}
 .hdr h1{font-size:16px;font-weight:700;background:linear-gradient(135deg,var(--pr),var(--pr2));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
@@ -129,9 +128,6 @@ li input[type=checkbox]:checked::after{content:'✓';position:absolute;inset:0;d
 .tg.on{background:var(--pr)}
 .tg::after{content:'';position:absolute;top:3px;right:3px;width:20px;height:20px;background:#fff;border-radius:50%;transition:transform .3s;box-shadow:0 2px 4px rgba(0,0,0,.2)}
 .tg.on::after{transform:translateX(-20px)}
-.segment{display:flex;gap:6px;background:var(--bg1);padding:4px;border-radius:12px;border:1px solid var(--bd)}
-.segment button{flex:1;padding:8px;border:none;border-radius:9px;background:transparent;color:var(--t2);font-family:inherit;font-size:12px;cursor:pointer;font-weight:600}
-.segment button.on{background:var(--pr);color:#fff;box-shadow:0 2px 8px rgba(99,102,241,.3)}
 .goalBox{display:flex;align-items:center;gap:10px}
 .goalBox input{width:80px;padding:8px 12px;text-align:center;font-size:14px;border:2px solid var(--bd);border-radius:10px;background:var(--bg1);color:var(--text);outline:none}
 .userHdr{display:flex;align-items:center;gap:8px;padding:14px 16px;background:linear-gradient(135deg,var(--pr),var(--pr2));color:#fff;border-radius:var(--rad);margin-bottom:14px;box-shadow:0 8px 20px rgba(99,102,241,.25)}
@@ -181,6 +177,16 @@ li input[type=checkbox]:checked::after{content:'✓';position:absolute;inset:0;d
 <div class="ic" style="background:linear-gradient(135deg,#ec4899,#8b5cf6);color:#fff">⏱</div>
 <div class="nm">کرنومتر</div>
 <div class="sb">شمارش زمان</div>
+</div>
+<div class="card" onclick="goPage('ask')">
+<div class="ic" style="background:linear-gradient(135deg,#06b6d4,#3b82f6);color:#fff">💬</div>
+<div class="nm">پرسش</div>
+<div class="sb">دایرة‌المعارف</div>
+</div>
+<div class="card" onclick="goPage('games')">
+<div class="ic" style="background:linear-gradient(135deg,#f97316,#ec4899);color:#fff">🎮</div>
+<div class="nm">سرگرمی</div>
+<div class="sb">بازی‌ها</div>
 </div>
 </div>
 </div>
@@ -239,23 +245,10 @@ li input[type=checkbox]:checked::after{content:'✓';position:absolute;inset:0;d
 <div class="slbl">🌙 حالت خودکار شب/روز</div>
 <div class="tg" id="autoTg" onclick="toggleAuto()"></div>
 </div>
-<div class="srow">
-<div class="slbl">🔤 اندازهٔ فونت</div>
-<div class="segment" id="fsSeg">
-<button onclick="setFs(12)">کوچک</button>
-<button onclick="setFs(14)">متوسط</button>
-<button onclick="setFs(16)">بزرگ</button>
-<button onclick="setFs(18)">خیلی بزرگ</button>
-</div>
-</div>
 </div>
 
 <div class="sec-hdr">🔔 اعلان‌ها</div>
 <div class="slist">
-<div class="srow-flat">
-<div class="slbl">⏰ یادآور ساعت‌دار</div>
-<div class="tg" id="notifTg" onclick="toggleNotif()"></div>
-</div>
 <div class="srow-flat">
 <div class="slbl">🔊 صدا</div>
 <div class="tg" id="sndTg" onclick="toggleSound()"></div>
@@ -382,7 +375,7 @@ li input[type=checkbox]:checked::after{content:'✓';position:absolute;inset:0;d
 <div id="toast" class="toast"></div>
 
 <script>
-var KP='plan_v20',KT='theme_v20',KD='date_v20',KS='stats_v20',KSND='sound_v20',KAUTO='auto_v20',KNOT='notif_v20',KVIB='vib_v20',KU='user_v20',KF='fs_v20',KG='goal_v20';
+var KP='plan_v20',KT='theme_v20',KD='date_v20',KS='stats_v20',KSND='sound_v20',KAUTO='auto_v20',KVIB='vib_v20',KU='user_v20',KG='goal_v20';
 
 var THEMES=[{id:'light',nm:'روشن',c1:'#ffffff',c2:'#6366f1'},{id:'dark',nm:'تاریک',c1:'#1a1f32',c2:'#818cf8'},{id:'mint',nm:'نعنایی',c1:'#f0fdf4',c2:'#10b981'},{id:'ocean',nm:'اقیانوس',c1:'#eff6ff',c2:'#3b82f6'},{id:'purple',nm:'بنفش',c1:'#faf5ff',c2:'#a855f7'},{id:'rose',nm:'رز',c1:'#fff1f2',c2:'#e11d48'},{id:'midnight',nm:'نیمه‌شب',c1:'#0f172a',c2:'#38bdf8'}];
 var SCOLORS=['#6366f1','#10b981','#f59e0b','#ef4444','#ec4899','#3b82f6','#8b5cf6','#06b6d4','#84cc16','#f97316'];
@@ -423,7 +416,7 @@ var POEMS=[
 
 var DEF=[{title:"🌅 صبح",items:["بیدار شدن","۱ لیوان آب","مسواک صبح","شستن صورت","صبحانه"]},{title:"🏫 مدرسه",items:["مدرسه / کلاس‌ها","ناهار","مسواک ظهر","خواب ظهر ۳۰ دقیقه"]},{title:"📚 مطالعه",items:["ریاضی","هندسه","فیزیک","شیمی"]},{title:"🌤️ عصر و ورزش",items:["میان‌وعده عصر","ورزش ۳۰–۶۰ دقیقه","حمام / بهداشت","سیبیل / موهای زائد"]},{title:"🌙 شب",items:["شام","مرور درس‌ها","حل تمرین و تست","هوای آزاد","تکمیل ۶–۸ لیوان آب","کنار گذاشتن گوشی","مسواک شب","شستن صورت شب","خواب شب"]}];
 
-var ACHS=[{id:'first',ic:'🥉',t:'اولین قدم',s:'یک کار انجام بده',ch:function(st){return st.totalDone>=1}},{id:'half',ic:'🥈',t:'نیمه راه',s:'۵۰٪ یک روز',ch:function(st){return st.bestPct>=50}},{id:'full',ic:'🥇',t:'کامل!',s:'۱۰۰٪ یک روز',ch:function(st){return st.bestPct>=100}},{id:'s3',ic:'🔥',t:'سه روز پیوسته',s:'۳ روز پشت‌سرهم',ch:function(st){return st.maxStreak>=3}},{id:'s7',ic:'⚡',t:'یک هفته قهرمان',s:'۷ روز',ch:function(st){return st.maxStreak>=7}},{id:'s30',ic:'👑',t:'افسانه',s:'۳۰ روز',ch:function(st){return st.maxStreak>=30}},{id:'d100',ic:'💯',t:'صدتایی',s:'۱۰۰ کار',ch:function(st){return st.totalDone>=100}},{id:'d500',ic:'🌟',t:'پانصدتایی',s:'۵۰۰ کار',ch:function(st){return st.totalDone>=500}},{id:'th5',ic:'🎨',t:'رنگ‌باز',s:'همه تم‌ها',ch:function(st){return (st.themesUsed||[]).length>=5}},{id:'cus',ic:'✏️',t:'شخصی‌سازی',s:'کار شخصی',ch:function(st){return st.customTasks>=1}},{id:'note',ic:'📝',t:'یادداشت‌بردار',s:'۵ نُت',ch:function(st){return (st.notesCount||0)>=5}},{id:'backup',ic:'💾',t:'محافظ',s:'پشتیبان',ch:function(st){return st.backups>=1}},{id:'notif',ic:'🔔',t:'زنگ‌زن',s:'یادآور روشن',ch:function(st){return st.notifOn}},{id:'share',ic:'📤',t:'سخاوتمند',s:'اشتراک',ch:function(st){return st.shared>=1}},{id:'img',ic:'📸',t:'عکاس',s:'اشتراک تصویری',ch:function(st){return st.imgShared>=1}},{id:'icon',ic:'🎭',t:'آیکن‌باز',s:'آیکن بخش عوض کن',ch:function(st){return (st.iconsChanged||0)>=1}}];
+var ACHS=[{id:'first',ic:'🥉',t:'اولین قدم',s:'یک کار انجام بده',ch:function(st){return st.totalDone>=1}},{id:'half',ic:'🥈',t:'نیمه راه',s:'۵۰٪ یک روز',ch:function(st){return st.bestPct>=50}},{id:'full',ic:'🥇',t:'کامل!',s:'۱۰۰٪ یک روز',ch:function(st){return st.bestPct>=100}},{id:'s3',ic:'🔥',t:'سه روز پیوسته',s:'۳ روز پشت‌سرهم',ch:function(st){return st.maxStreak>=3}},{id:'s7',ic:'⚡',t:'یک هفته قهرمان',s:'۷ روز',ch:function(st){return st.maxStreak>=7}},{id:'s30',ic:'👑',t:'افسانه',s:'۳۰ روز',ch:function(st){return st.maxStreak>=30}},{id:'d100',ic:'💯',t:'صدتایی',s:'۱۰۰ کار',ch:function(st){return st.totalDone>=100}},{id:'d500',ic:'🌟',t:'پانصدتایی',s:'۵۰۰ کار',ch:function(st){return st.totalDone>=500}},{id:'th5',ic:'🎨',t:'رنگ‌باز',s:'همه تم‌ها',ch:function(st){return (st.themesUsed||[]).length>=5}},{id:'cus',ic:'✏️',t:'شخصی‌سازی',s:'کار شخصی',ch:function(st){return st.customTasks>=1}},{id:'note',ic:'📝',t:'یادداشت‌بردار',s:'۵ نُت',ch:function(st){return (st.notesCount||0)>=5}},{id:'backup',ic:'💾',t:'محافظ',s:'پشتیبان',ch:function(st){return st.backups>=1}},{id:'share',ic:'📤',t:'سخاوتمند',s:'اشتراک',ch:function(st){return st.shared>=1}},{id:'img',ic:'📸',t:'عکاس',s:'اشتراک تصویری',ch:function(st){return st.imgShared>=1}},{id:'icon',ic:'🎭',t:'آیکن‌باز',s:'آیکن بخش عوض کن',ch:function(st){return (st.iconsChanged||0)>=1}}];
 
 var faN=['۰','۱','۲','۳','۴','۵','۶','۷','۸','۹'];
 function fa(n){return String(n).split('').map(function(c){return faN[+c]||c}).join('')}
@@ -433,7 +426,7 @@ var TODAY=new Date().toLocaleDateString('fa-IR');
 document.getElementById('todayDate').textContent=new Date().toLocaleDateString('fa-IR',{weekday:'long',day:'numeric',month:'long'});
 
 var plan=[];
-var stats={history:{},totalDone:0,bestPct:0,maxStreak:0,streak:0,lastDone:'',themesUsed:[],customTasks:0,notesCount:0,backups:0,shared:0,imgShared:0,iconsChanged:0,notifOn:false,achievements:[]};
+var stats={history:{},totalDone:0,bestPct:0,maxStreak:0,streak:0,lastDone:'',themesUsed:[],customTasks:0,notesCount:0,backups:0,shared:0,imgShared:0,iconsChanged:0,achievements:[]};
 
 try{var s=localStorage.getItem(KP);if(s)plan=JSON.parse(s)}catch(e){plan=[]}
 try{var st=localStorage.getItem(KS);if(st){var o=JSON.parse(st);for(var k in o)stats[k]=o[k]}}catch(e){}
@@ -455,17 +448,15 @@ try{localStorage.setItem(KP,JSON.stringify(plan));localStorage.setItem(KD,TODAY)
 var editKey=null,addMode=null,selColor=null,selIcon='📌';
 var soundOn=localStorage.getItem(KSND)!=='off';
 var autoOn=localStorage.getItem(KAUTO)==='on';
-var notifOn=localStorage.getItem(KNOT)==='on';
 var vibOn=localStorage.getItem(KVIB)==='on';
 var goal=parseInt(localStorage.getItem(KG)||'70');
-stats.notifOn=notifOn;
 
 var userName=localStorage.getItem(KU)||'';
 var startDate=localStorage.getItem(KU+'_start')||'';
 if(!startDate){startDate=TODAY;localStorage.setItem(KU+'_start',TODAY)}
 document.getElementById('startDate').textContent=startDate;
 
-var audioCtx=null,notifiedToday={};
+var audioCtx=null;
 
 function initAudio(){try{if(!audioCtx)audioCtx=new(window.AudioContext||window.webkitAudioContext)()}catch(e){}}
 function vibrate(ms){if(vibOn&&navigator.vibrate)try{navigator.vibrate(ms)}catch(e){}}
@@ -496,6 +487,8 @@ if(type==='plan'){beep(523,0.1,'sine',0.1);setTimeout(function(){beep(659,0.15,'
 else if(type==='calc'){beep(440,0.08,'square',0.06);setTimeout(function(){beep(880,0.1,'square',0.06)},60);vibrate(25)}
 else if(type==='cal'){beep(587,0.1,'triangle',0.1);setTimeout(function(){beep(784,0.15,'triangle',0.1)},70);vibrate(25)}
 else if(type==='time'){beep(660,0.08,'sine',0.1);setTimeout(function(){beep(990,0.12,'sine',0.1)},60);vibrate(25)}
+else if(type==='ask'){beep(494,0.1,'sine',0.1);setTimeout(function(){beep(740,0.15,'sine',0.1)},70);vibrate(25)}
+else if(type==='games'){beep(587,0.1,'square',0.08);setTimeout(function(){beep(880,0.12,'square',0.08)},60);vibrate(25)}
 else{vibrate(20)}
 }catch(e){}
 }
@@ -507,6 +500,8 @@ if(p==='plan')showView('vm');
 else if(p==='calc')location.href='calc.html';
 else if(p==='cal')location.href='calendar.html';
 else if(p==='time')location.href='stopwatch.html';
+else if(p==='ask')location.href='ask.html';
+else if(p==='games')location.href='games.html';
 },80);
 }
 
@@ -525,44 +520,11 @@ function setTheme(t){try{localStorage.setItem(KT,t)}catch(e){};applyTheme();sndA
 function toggleAuto(){autoOn=!autoOn;localStorage.setItem(KAUTO,autoOn?'on':'off');updateToggles();applyTheme();sndAdd();showToast(autoOn?'🌙 حالت خودکار روشن':'خاموش')}
 function toggleSound(){soundOn=!soundOn;localStorage.setItem(KSND,soundOn?'on':'off');updateToggles();if(soundOn)beep(880,0.1,'sine',0.1);showToast(soundOn?'🔔 صدا روشن':'🔕 صدا خاموش')}
 function toggleVib(){vibOn=!vibOn;localStorage.setItem(KVIB,vibOn?'on':'off');updateToggles();vibrate(50);showToast(vibOn?'📳 لرزش روشن':'لرزش خاموش')}
-
-function toggleNotif(){
-if(notifOn){
-notifOn=false;localStorage.setItem(KNOT,'off');stats.notifOn=false;saveStats();updateToggles();showToast('🔕 یادآور خاموش');
-return;
-}
-notifOn=true;localStorage.setItem(KNOT,'on');stats.notifOn=true;saveStats();updateToggles();sndAdd();checkAch();
-if(!('Notification' in window)){showToast('🔔 یادآور روشن (فقط داخل اپ)');return}
-try{
-Notification.requestPermission().then(function(p){
-if(p==='granted'){showToast('🔔 یادآور روشن')}
-else{showToast('🔔 یادآور روشن (بدون نوتیف)')}
-}).catch(function(){showToast('🔔 یادآور روشن')});
-}catch(e){showToast('🔔 یادآور روشن')}
-}
-
 function updateToggles(){
 var t1=document.getElementById('autoTg');if(t1)t1.classList.toggle('on',autoOn);
 var t2=document.getElementById('sndTg');if(t2)t2.classList.toggle('on',soundOn);
-var t3=document.getElementById('notifTg');if(t3)t3.classList.toggle('on',notifOn);
 var t4=document.getElementById('vibTg');if(t4)t4.classList.toggle('on',vibOn);
 var g=document.getElementById('goalIn');if(g)g.value=goal;
-renderFsBtns();
-}
-function setFs(v){
-v=parseInt(v)||14;
-localStorage.setItem(KF,v);
-document.documentElement.style.setProperty('--zoom',(v/14));
-renderFsBtns();
-sndAdd();
-var names={12:'کوچک',14:'متوسط',16:'بزرگ',18:'خیلی بزرگ'};
-showToast('🔤 اندازهٔ فونت: '+names[v]);
-}
-function renderFsBtns(){
-var cur=parseInt(localStorage.getItem(KF)||'14');
-var b=document.querySelectorAll('#fsSeg button');
-var vals=[12,14,16,18];
-for(var i=0;i<b.length;i++){b[i].classList.toggle('on',vals[i]===cur)}
 }
 function setGoal(v){v=Math.max(0,Math.min(100,parseInt(v)||70));goal=v;localStorage.setItem(KG,v);sndAdd();showToast('🎯 هدف روزانه: '+fa(v)+'٪')}
 
@@ -724,26 +686,6 @@ showToast('📸 تصویر ذخیره شد');
 },'image/png');
 }
 
-function checkNotifications(){
-if(!notifOn)return;
-if(!('Notification' in window))return;
-if(Notification.permission!=='granted')return;
-var now=new Date();
-var hh=String(now.getHours()).padStart(2,'0');
-var mm=String(now.getMinutes()).padStart(2,'0');
-var nowT=hh+':'+mm;
-var dk=now.toISOString().slice(0,10);
-for(var i=0;i<plan.length;i++)for(var j=0;j<plan[i].tasks.length;j++){
-var t=plan[i].tasks[j];
-if(t.time===nowT&&!t.done){
-var nk=dk+'_'+t.id;
-if(notifiedToday[nk])continue;
-notifiedToday[nk]=true;
-try{var n=new Notification('🔔 وقت کاره!',{body:t.text+' - '+plan[i].title.replace(/^\S+\s*/,''),icon:'icon.svg',tag:nk});setTimeout(function(){n.close()},10000);vibrate(200);beep(880,0.3,'sine',0.15)}catch(e){}
-}
-}
-}
-
 function openEdt(si,ti){editKey={si:si,ti:ti};addMode=null;document.getElementById('emTitle').textContent='✏️ ویرایش کار';document.getElementById('ei').value=plan[si].tasks[ti].text;document.getElementById('et').value=plan[si].tasks[ti].time||'';document.getElementById('en').value=plan[si].tasks[ti].note||'';document.getElementById('et').style.display='block';document.getElementById('en').style.display='block';document.getElementById('colBox').style.display='none';document.getElementById('delBtn').style.display='block';document.getElementById('em').style.display='flex'}
 function editSection(si){addMode=null;editKey={si:si,section:true};document.getElementById('emTitle').textContent='✏️ ویرایش بخش';document.getElementById('ei').value=titleText(plan[si].title);document.getElementById('et').value='';document.getElementById('en').value='';document.getElementById('et').style.display='none';document.getElementById('en').style.display='none';document.getElementById('colBox').style.display='block';selColor=plan[si].color||SCOLORS[0];selIcon=icon(plan[si].title);renderColors();renderIcons();document.getElementById('delBtn').style.display='block';document.getElementById('em').style.display='flex'}
 function addTask(si){addMode={si:si,task:true};editKey=null;document.getElementById('emTitle').textContent='➕ افزودن کار';document.getElementById('ei').value='';document.getElementById('et').value='';document.getElementById('en').value='';document.getElementById('et').style.display='block';document.getElementById('en').style.display='block';document.getElementById('colBox').style.display='none';document.getElementById('delBtn').style.display='none';document.getElementById('em').style.display='flex'}
@@ -809,12 +751,10 @@ document.getElementById('poemBy').textContent=p.p;
 }
 
 function showHelp(){
-alert('📖 راهنما\n\n🏠 صفحهٔ خانه: انتخاب ابزارها\n📋 برنامه روزانه: تیک زدن کارها\n🧮 ماشین حساب: محاسبات\n🗓 تقویم: تقویم شمسی\n⏱ کرنومتر: شمارش زمان\n\n☰ تنظیمات در بالای صفحه\n🏅 دستاوردها با زدن آیکن\n\n💡 نکته: روی نام کاربری بزن تا عوضش کنی');
+alert('📖 راهنما\n\n🏠 خانه: ابزارها\n📋 برنامه روزانه: تیک زدن کارها\n🧮 ماشین حساب: محاسبات\n🗓 تقویم: تقویم شمسی\n⏱ کرنومتر: شمارش زمان\n💬 پرسش: دایرة‌المعارف\n🎮 سرگرمی: بازی‌ها\n\n☰ تنظیمات بالا-چپ\n🏅 دستاوردها بالا-راست');
 }
 
 (function init(){
-var fs=parseInt(localStorage.getItem(KF)||'14');
-document.documentElement.style.setProperty('--zoom',(fs/14));
 updateUserHdr();
 applyTheme();
 render();
@@ -823,8 +763,6 @@ loadPoem();
 })();
 
 setInterval(function(){if(autoOn)applyTheme()},60000);
-setInterval(checkNotifications,30000);
-checkNotifications();
 
 document.getElementById('em').onclick=function(e){if(e.target.id==='em')closeEdt()};
 document.getElementById('nm').onclick=function(e){if(e.target.id==='nm')document.getElementById('nm').style.display='none'};
