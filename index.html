@@ -6,7 +6,7 @@
 <title>اپ من</title>
 <link rel="manifest" href="manifest.json">
 <style>
-:root{--bg1:#f8f9fc;--bg2:#eef1f8;--card:#fff;--text:#1a1f36;--t2:#6b7280;--t3:#9ca3af;--pr:#6366f1;--pr2:#8b5cf6;--bd:rgba(0,0,0,.06);--rad:18px;--sd:0 4px 20px rgba(99,102,241,.08);--gold:#f59e0b;--fs:14px}
+:root{--bg1:#f8f9fc;--bg2:#eef1f8;--card:#fff;--text:#1a1f36;--t2:#6b7280;--t3:#9ca3af;--pr:#6366f1;--pr2:#8b5cf6;--bd:rgba(0,0,0,.06);--rad:18px;--sd:0 4px 20px rgba(99,102,241,.08);--gold:#f59e0b;--zoom:1}
 body[data-t=dark]{--bg1:#0a0e1a;--bg2:#0f1424;--card:#1a1f32;--text:#f1f5f9;--t2:#94a3b8;--t3:#64748b;--pr:#818cf8;--pr2:#a78bfa;--bd:rgba(255,255,255,.06);--sd:0 4px 20px rgba(0,0,0,.4)}
 body[data-t=mint]{--bg1:#f0fdf4;--bg2:#dcfce7;--card:#fff;--text:#064e3b;--t2:#059669;--t3:#34d399;--pr:#10b981;--pr2:#14b8a6;--bd:rgba(16,185,129,.1)}
 body[data-t=ocean]{--bg1:#eff6ff;--bg2:#dbeafe;--card:#fff;--text:#1e3a8a;--t2:#3b82f6;--t3:#60a5fa;--pr:#3b82f6;--pr2:#2563eb;--bd:rgba(59,130,246,.1)}
@@ -15,16 +15,18 @@ body[data-t=rose]{--bg1:#fff1f2;--bg2:#ffe4e6;--card:#fff;--text:#881337;--t2:#e
 body[data-t=midnight]{--bg1:#0f172a;--bg2:#1e293b;--card:#1e293b;--text:#f1f5f9;--t2:#94a3b8;--t3:#64748b;--pr:#38bdf8;--pr2:#a78bfa;--bd:rgba(255,255,255,.06);--sd:0 4px 20px rgba(0,0,0,.5)}
 *{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
 html,body{overscroll-behavior:none}
-body{font-family:Tahoma,sans-serif;background:linear-gradient(160deg,var(--bg1),var(--bg2));background-attachment:fixed;color:var(--text);min-height:100vh;transition:background .3s,color .3s;font-size:var(--fs)}
-.view{display:none}.view.active{display:block}
+body{font-family:Tahoma,sans-serif;background:linear-gradient(160deg,var(--bg1),var(--bg2));background-attachment:fixed;color:var(--text);min-height:100vh;transition:background .3s,color .3s;font-size:14px}
+.view{display:none;font-size:var(--zoom);}
+.view.active{display:block}
+.view.active .wrap{padding:16px 14px 90px;max-width:600px;margin:0 auto}
 .hdr{display:flex;align-items:center;justify-content:space-between;padding:12px 16px;background:var(--card);box-shadow:var(--sd);position:sticky;top:0;z-index:10;padding-top:calc(12px + env(safe-area-inset-top))}
 .hdr-mid{text-align:center;flex:1;padding:0 8px;min-width:0}
 .hdr h1{font-size:16px;font-weight:700;background:linear-gradient(135deg,var(--pr),var(--pr2));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
 .hdr .date{font-size:11px;color:var(--t2);margin-top:2px;font-weight:500}
-.ibtn{background:none;border:none;font-size:20px;cursor:pointer;width:42px;height:42px;border-radius:12px;color:var(--text);display:flex;align-items:center;justify-content:center;position:relative;flex-shrink:0;transition:transform .15s}
+.ibtn{background:none;border:none;font-size:20px;cursor:pointer;width:42px;height:42px;border-radius:12px;color:var(--text);display:flex;align-items:center;justify-content:center;flex-shrink:0;transition:transform .15s}
 .ibtn:active{background:var(--bd);transform:scale(.9)}
 .wrap{padding:16px 14px 90px;max-width:600px;margin:0 auto}
-.poemBox{background:var(--card);border-radius:var(--rad);padding:22px 18px;box-shadow:var(--sd);margin-bottom:18px;border:1px solid var(--bd);text-align:center;position:relative;overflow:hidden;min-height:120px;display:flex;flex-direction:column;justify-content:center}
+.poemBox{background:var(--card);border-radius:var(--rad);padding:22px 18px;box-shadow:var(--sd);margin-bottom:18px;border:1px solid var(--bd);text-align:center;position:relative;overflow:hidden;min-height:110px;display:flex;flex-direction:column;justify-content:center}
 .poemBox::before{content:'❝';position:absolute;top:6px;right:14px;font-size:36px;color:var(--pr);opacity:.12}
 .poemBox::after{content:'❞';position:absolute;bottom:6px;left:14px;font-size:36px;color:var(--pr);opacity:.12}
 .poemTxt{font-size:15px;font-weight:500;line-height:2;color:var(--text);margin-bottom:12px;white-space:pre-line;position:relative;z-index:1}
@@ -141,7 +143,6 @@ li input[type=checkbox]:checked::after{content:'✓';position:absolute;inset:0;d
 </head>
 <body>
 
-<!-- صفحهٔ خانه -->
 <div id="vh" class="view active">
 <div class="hdr">
 <button class="ibtn" onclick="sndNav();openSet()">☰</button>
@@ -185,7 +186,6 @@ li input[type=checkbox]:checked::after{content:'✓';position:absolute;inset:0;d
 </div>
 </div>
 
-<!-- برنامه روزانه -->
 <div id="vm" class="view">
 <div class="hdr">
 <button class="ibtn" onclick="sndNav();showView('vh')">🏠</button>
@@ -209,7 +209,6 @@ li input[type=checkbox]:checked::after{content:'✓';position:absolute;inset:0;d
 <button class="fab" onclick="addSection()">＋</button>
 </div>
 
-<!-- تنظیمات -->
 <div id="vs" class="view">
 <div class="hdr">
 <button class="ibtn" onclick="sndNav();closeSet()">←</button>
@@ -383,7 +382,7 @@ li input[type=checkbox]:checked::after{content:'✓';position:absolute;inset:0;d
 <div id="toast" class="toast"></div>
 
 <script>
-var KP='plan_v19',KT='theme_v19',KD='date_v19',KS='stats_v19',KSND='sound_v19',KAUTO='auto_v19',KNOT='notif_v19',KVIB='vib_v19',KU='user_v19',KF='fs_v19',KG='goal_v19';
+var KP='plan_v20',KT='theme_v20',KD='date_v20',KS='stats_v20',KSND='sound_v20',KAUTO='auto_v20',KNOT='notif_v20',KVIB='vib_v20',KU='user_v20',KF='fs_v20',KG='goal_v20';
 
 var THEMES=[{id:'light',nm:'روشن',c1:'#ffffff',c2:'#6366f1'},{id:'dark',nm:'تاریک',c1:'#1a1f32',c2:'#818cf8'},{id:'mint',nm:'نعنایی',c1:'#f0fdf4',c2:'#10b981'},{id:'ocean',nm:'اقیانوس',c1:'#eff6ff',c2:'#3b82f6'},{id:'purple',nm:'بنفش',c1:'#faf5ff',c2:'#a855f7'},{id:'rose',nm:'رز',c1:'#fff1f2',c2:'#e11d48'},{id:'midnight',nm:'نیمه‌شب',c1:'#0f172a',c2:'#38bdf8'}];
 var SCOLORS=['#6366f1','#10b981','#f59e0b','#ef4444','#ec4899','#3b82f6','#8b5cf6','#06b6d4','#84cc16','#f97316'];
@@ -526,15 +525,22 @@ function setTheme(t){try{localStorage.setItem(KT,t)}catch(e){};applyTheme();sndA
 function toggleAuto(){autoOn=!autoOn;localStorage.setItem(KAUTO,autoOn?'on':'off');updateToggles();applyTheme();sndAdd();showToast(autoOn?'🌙 حالت خودکار روشن':'خاموش')}
 function toggleSound(){soundOn=!soundOn;localStorage.setItem(KSND,soundOn?'on':'off');updateToggles();if(soundOn)beep(880,0.1,'sine',0.1);showToast(soundOn?'🔔 صدا روشن':'🔕 صدا خاموش')}
 function toggleVib(){vibOn=!vibOn;localStorage.setItem(KVIB,vibOn?'on':'off');updateToggles();vibrate(50);showToast(vibOn?'📳 لرزش روشن':'لرزش خاموش')}
+
 function toggleNotif(){
-if(!notifOn){
-if(!('Notification' in window)){showToast('❌ پشتیبانی نمی‌کند');return}
-Notification.requestPermission().then(function(p){
-if(p==='granted'){notifOn=true;localStorage.setItem(KNOT,'on');stats.notifOn=true;saveStats();updateToggles();checkAch();sndAdd();showToast('🔔 یادآور روشن')}
-else{showToast('❌ اجازه داده نشد')}
-});
-}else{notifOn=false;localStorage.setItem(KNOT,'off');stats.notifOn=false;saveStats();updateToggles();showToast('🔕 یادآور خاموش')}
+if(notifOn){
+notifOn=false;localStorage.setItem(KNOT,'off');stats.notifOn=false;saveStats();updateToggles();showToast('🔕 یادآور خاموش');
+return;
 }
+notifOn=true;localStorage.setItem(KNOT,'on');stats.notifOn=true;saveStats();updateToggles();sndAdd();checkAch();
+if(!('Notification' in window)){showToast('🔔 یادآور روشن (فقط داخل اپ)');return}
+try{
+Notification.requestPermission().then(function(p){
+if(p==='granted'){showToast('🔔 یادآور روشن')}
+else{showToast('🔔 یادآور روشن (بدون نوتیف)')}
+}).catch(function(){showToast('🔔 یادآور روشن')});
+}catch(e){showToast('🔔 یادآور روشن')}
+}
+
 function updateToggles(){
 var t1=document.getElementById('autoTg');if(t1)t1.classList.toggle('on',autoOn);
 var t2=document.getElementById('sndTg');if(t2)t2.classList.toggle('on',soundOn);
@@ -543,7 +549,15 @@ var t4=document.getElementById('vibTg');if(t4)t4.classList.toggle('on',vibOn);
 var g=document.getElementById('goalIn');if(g)g.value=goal;
 renderFsBtns();
 }
-function setFs(v){localStorage.setItem(KF,v);document.documentElement.style.setProperty('--fs',v+'px');renderFsBtns();sndAdd();showToast('🔤 اندازهٔ فونت تغییر کرد')}
+function setFs(v){
+v=parseInt(v)||14;
+localStorage.setItem(KF,v);
+document.documentElement.style.setProperty('--zoom',(v/14));
+renderFsBtns();
+sndAdd();
+var names={12:'کوچک',14:'متوسط',16:'بزرگ',18:'خیلی بزرگ'};
+showToast('🔤 اندازهٔ فونت: '+names[v]);
+}
 function renderFsBtns(){
 var cur=parseInt(localStorage.getItem(KF)||'14');
 var b=document.querySelectorAll('#fsSeg button');
@@ -712,6 +726,7 @@ showToast('📸 تصویر ذخیره شد');
 
 function checkNotifications(){
 if(!notifOn)return;
+if(!('Notification' in window))return;
 if(Notification.permission!=='granted')return;
 var now=new Date();
 var hh=String(now.getHours()).padStart(2,'0');
@@ -798,8 +813,8 @@ alert('📖 راهنما\n\n🏠 صفحهٔ خانه: انتخاب ابزاره�
 }
 
 (function init(){
-var fs=localStorage.getItem(KF)||'14';
-document.documentElement.style.setProperty('--fs',fs+'px');
+var fs=parseInt(localStorage.getItem(KF)||'14');
+document.documentElement.style.setProperty('--zoom',(fs/14));
 updateUserHdr();
 applyTheme();
 render();
