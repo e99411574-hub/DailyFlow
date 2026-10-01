@@ -1,11 +1,11 @@
 {
-  "name": "برنامه روزانه من",
-  "short_name": "برنامه",
+  "name": "اپ من",
+  "short_name": "اپ من",
   "start_url": "./index.html",
-  "display": "standalone",
+  "display": "fullscreen",
   "orientation": "portrait",
-  "background_color": "#f4f6f8",
-  "theme_color": "#27ae60",
+  "background_color": "#0a0e1a",
+  "theme_color": "#6366f1",
   "lang": "fa",
   "dir": "rtl",
   "icons": [
@@ -13,7 +13,7 @@
       "src": "icon.svg",
       "sizes": "192x192 512x512",
       "type": "image/svg+xml",
-      "purpose": "any maskable"
+      "purpose": "any"
     }
   ]
 }
