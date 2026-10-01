@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,user-scalable=no">
+<title>🐐 ماجراجویی بز</title>
+<style>
+*{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+body{overflow:hidden;font-family:Tahoma,sans-serif;touch-action:none;background:#000;color:#fff;user-select:none}
+canvas{display:block;width:100vw;height:100vh;position:fixed;top:0;left:0}
+.screen{position:fixed;inset:0;display:none;flex-direction:column;align-items:center;justify-content:center;z-index:100;background:linear-gradient(135deg,#1a1a2e,#0f3460);padding:20px;text-align:center}
+.screen.on{display:flex}
+.screen h1{font-size:26px;margin-bottom:8px}
+.screen h2{font-size:20px;margin-bottom:14px;color:#ffd93b}
+.screen p{font-size:14px;margin:5px 0;opacity:.9;line-height:1.6}
+.btn{margin-top:14px;padding:14px 40px;border:none;border-radius:14px;background:linear-gradient(135deg,#27ae60,#2ecc71);color:#fff;font-size:16px;font-family:inherit;font-weight:bold;cursor:pointer;box-shadow:0 4px 15px rgba(46,204,113,.4)}
+.btn.alt{background:linear-gradient(135deg,#3498db,#2980b9);box-shadow:0 4px 15px rgba(52,152,219,.4)}
+.btn.dng{background:linear-gradient(135deg,#e74c3c,#c0392b);box-shadow:0 4px 15px rgba(231,76,60,.4)}
+.btn:active{transform:scale(.96)}
+.row{display:flex;gap:8px;margin-top:12px;flex-wrap:wrap;justify-content:center}
+.row .btn{margin-top:0;padding:12px 22px;font-size:14px}
+#hud{position:fixed;top:0;left:0;right:0;padding:12px 16px;display:flex;justify-content:space-between;align-items:center;font-weight:bold;font-size:15px;text-shadow:0 2px 6px rgba(0,0,0,.8);pointer-events:none;z-index:5}
+#hud .lft{display:flex;gap:12px;align-items:center}
+#hud .rgt{display:flex;gap:12px;align-items:center}
+#pw{position:fixed;bottom:90px;left:0;right:0;text-align:center;font-size:18px;font-weight:bold;text-shadow:0 2px 6px rgba(0,0,0,.8);pointer-events:none;z-index:5}
+#world{position:fixed;top:44px;left:0;right:0;text-align:center;font-size:14px;color:#fff;text-shadow:0 2px 6px rgba(0,0,0,.8);pointer-events:none;z-index:5;opacity:.9}
+#hint{position:fixed;bottom:30px;left:0;right:0;text-align:center;font-size:13px;text-shadow:0 2px 4px rgba(0,0,0,.8);pointer-events:none;opacity:.85;z-index:5}
+#pause{position:fixed;top:14px;left:50%;transform:translateX(-50%);background:rgba(0,0,0,.5);color:#fff;border:none;width:40px;height:40px;border-radius:50%;font-size:16px;cursor:pointer;z-index:10}
+.shop-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:10px;max-width:400px;width:100%;margin-top:16px}
+.shop-item{background:rgba(255,255,255,.08);border:2px solid rgba(255,255,255,.15);border-radius:14px;padding:12px;cursor:pointer;transition:.2s}
+.shop-item:active{transform:scale(.96)}
+.shop-item.owned{border-color:#27ae60;background:rgba(39,174,96,.15)}
+.shop-item.locked{opacity:.55}
+.shop-item .ic{font-size:32px;margin-bottom:6px}
+.shop-item .nm{font-size:13px;font-weight:bold;margin-bottom:4px}
+.shop-item .pr{font-size:11px;color:#ffd93b}
+.achv{background:rgba(255,255,255,.06);border-radius:12px;padding:10px 14px;margin:5px 0;display:flex;align-items:center;gap:10px;width:100%;max-width:400px;text-align:right}
+.achv.done{background:rgba(39,174,96,.2);border:1px solid #27ae60}
+.achv .ic{font-size:24px;opacity:.4}
+.achv.done .ic{opacity:1}
+.achv .tx{font-size:13px;flex:1}
+.achv .tx .tt{font-weight:bold;margin-bottom:2px}
+.achv .tx .sb{font-size:11px;opacity:.7}
+.stats{background:rgba(255,255,255,.06);border-radius:14px;padding:14px;margin-top:14px;width:100%;max-width:400px;font-size:14px}
+.stats div{margin:6px 0;display:flex;justify-content:space-between}
+.stats .v{color:#ffd93b;font-weight:bold}
+.scroll{overflow-y:auto;width:100%;max-width:440px;max-height:70vh;padding:4px}
+</style>
+</head>
+<body>
+
+<canvas id="c"></canvas>
+
+<div id="hud" style="display:none">
+<div class="lft">
+<div>💰 <span id="hCoin">۰</span></div>
+<div id="hLife">❤️❤️</div>
+</div>
+<div class="rgt">
+<div>🏆 <span id="hSc">۰</span></div>
+</div>
+</div>
+<div id="world" style="display:none"></div>
+<div id="pw" style="display:none"></div>
+<div id="hint" style="display:none">برای پریدن لمس کن</div>
+<button id="pause" style="display:none" onclick="gamePause()">⏸</button>
+
+<!-- MAIN MENU -->
+<div id="menu" class="screen on">
+<h1>🐐 ماجراجویی بز</h1>
+<p>یک بز کوچولو که از دست گرگ‌ها فرار می‌کنه</p>
+<div class="stats">
+<div><span>🏆 رکورد</span><span class="v" id="mRec">۰ m</span></div>
+<div><span>💰 سکه‌ها</span><span class="v" id="mCoin">۰</span></div>
+<div><span>🌍 بالاترین دنیا</span><span class="v" id="mWorld">۱</span></div>
+</div>
+<button class="btn" onclick="gameStart()">🎮 شروع بازی</button>
+<div class="row">
+<button class="btn alt" onclick="showScreen('shop')">🛒 فروشگاه</button>
+<button class="btn alt" onclick="showScreen('achv')">🏅 دستاوردها</button>
+</div>
+<button class="btn dng" onclick="location.href='index.html'" style="margin-top:20px;padding:10px 24px;font-size:13px">← بازگشت به برنامه</button>
+</div>
+
+<!-- SHOP -->
+<div id="shop" class="screen">
+<h2>🛒 فروشگاه</h2>
+<p>💰 سکه‌های تو: <span id="sCoin">۰</span></p>
+<div class="scroll">
+<div class="shop-grid" id="shopGrid"></div>
+</div>
+<button class="btn" onclick="showScreen('menu')">← بازگشت</button>
+</div>
+
+<!-- ACHIEVEMENTS -->
+<div id="achv" class="screen">
+<h2>🏅 دستاوردها</h2>
+<div class="scroll" id="achvList"></div>
+<button class="btn" onclick="showScreen('menu')">← بازگشت</button>
+</div>
+
+<!-- GAME OVER -->
+<div id="over" class="screen">
+<h1>💀 بازی تمام شد</h1>
+<p>امتیاز: <b id="oSc">۰</b> متر</p>
+<p>سکه‌ها: <b id="oCn">۰</b> 💰</p>
+<p id="oNew" style="color:#ffd93b;font-weight:bold"></p>
+<div class="row">
+<button class="btn" onclick="gameStart()">🔄 دوباره</button>
+<button class="btn alt" onclick="showScreen('menu')">🏠 منو</button>
+</div>
+</div>
+
+<!-- PAUSE -->
+<div id="pauseScr" class="screen">
+<h2>⏸ توقف</h2>
+<button class="btn" onclick="gameResume()">▶ ادامه</button>
+<button class="btn alt" onclick="gameStart()">🔄 شروع دوباره</button>
+<button class="btn dng" onclick="gameEnd()">🏠 منو</button>
+</div>
+
+<script src="game.js"></script>
+</body>
+</html>
