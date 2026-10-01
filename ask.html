@@ -15,7 +15,7 @@ body{font-family:Tahoma,sans-serif;background:#0f172a;color:#f1f5f9;min-height:1
 .search{width:100%;padding:13px 16px;font-size:14px;font-family:inherit;background:#1e293b;color:#f1f5f9;border:2px solid rgba(255,255,255,.08);border-radius:14px;outline:none;margin-bottom:14px}
 .search:focus{border-color:#818cf8}
 .cat-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:12px}
-.cat-card{background:#1e293b;border-radius:16px;padding:18px 14px;cursor:pointer;border:1px solid rgba(255,255,255,.08);display:flex;flex-direction:column;align-items:center;gap:10px;transition:.2s}
+.cat-card{background:#1e293b;border-radius:16px;padding:18px 14px;cursor:pointer;border:1px solid rgba(255,255,255,.08);display:flex;flex-direction:column;align-items:center;gap:10px}
 .cat-card:active{transform:scale(.96);background:rgba(99,102,241,.15)}
 .cat-card .ic{width:56px;height:56px;border-radius:18px;display:flex;align-items:center;justify-content:center;font-size:28px}
 .cat-card .nm{font-size:13px;font-weight:700;text-align:center;line-height:1.4}
@@ -38,7 +38,7 @@ body{font-family:Tahoma,sans-serif;background:#0f172a;color:#f1f5f9;min-height:1
 .q-answer b{color:#a5b4fc}
 .back-btn{background:none;border:none;color:#818cf8;font-size:13px;font-weight:600;font-family:inherit;padding:8px 0;margin-bottom:8px;cursor:pointer}
 .empty{text-align:center;padding:40px 20px;color:#64748b;font-size:13px}
-.empty .ic{font-size:48px;margin-bottom:12px;opacity:.5}
+.hidden{display:none}
 </style>
 </head>
 <body>
@@ -54,17 +54,115 @@ body{font-family:Tahoma,sans-serif;background:#0f172a;color:#f1f5f9;min-height:1
 <div id="content"></div>
 </div>
 
-<script src="qa1.js"></script>
-<script src="qa2.js"></script>
-  <script src="qa1b.js"></script>
-<script src="qa3.js"></script>
-<script src="qa4.js"></script>
-<script src="qa5.js"></script>
-
 <script>
+// ====== دسته‌بندی‌ها ======
+var CATS=[
+{id:'food',nm:'تغذیه و سلامت',ic:'🍎',g:'linear-gradient(135deg,#ef4444,#f59e0b)'},
+{id:'cloth',nm:'لباس و پوشاک',ic:'👕',g:'linear-gradient(135deg,#8b5cf6,#ec4899)'},
+{id:'weather',nm:'آب و هوا',ic:'🌤',g:'linear-gradient(135deg,#06b6d4,#3b82f6)'},
+{id:'sci',nm:'دانشمندان',ic:'🔬',g:'linear-gradient(135deg,#10b981,#059669)'},
+{id:'geo',nm:'جغرافیا',ic:'🌍',g:'linear-gradient(135deg,#3b82f6,#10b981)'},
+{id:'psy',nm:'روانشناسی',ic:'🧠',g:'linear-gradient(135deg,#8b5cf6,#6366f1)'},
+{id:'study',nm:'درس و مطالعه',ic:'📚',g:'linear-gradient(135deg,#f59e0b,#ef4444)'},
+{id:'sport',nm:'ورزش',ic:'💪',g:'linear-gradient(135deg,#10b981,#06b6d4)'}
+];
+
+// ====== پرسش و پاسخ‌ها ======
+// برای اضافه کردن سوال جدید، این الگو رو کپی کن:
+// {c:'شناسه دسته',ic:'ایموجی',q:'سوال؟',a:'جواب...'},
+var QA=[
+
+// ===== تغذیه =====
+{c:'food',ic:'🍊',q:'خواص پرتقال چیست؟',a:'• سرشار از ویتامین C\n• فیبر بالا\n• پتاسیم — تنظیم فشار خون\n• فولات — مفید بارداری\n• آنتی‌اکسیدان — ضد پیری\n• کمک به جذب آهن\n\n💡 روزانه یک عدد کافیه.'},
+{c:'food',ic:'🍎',q:'خواص سیب چیست؟',a:'• فیبر پکتین — کاهش کلسترول\n• آنتی‌اکسیدان\n• کمک به کاهش وزن\n• سلامت روده\n• کاهش خطر دیابت نوع ۲\n• سلامت دندان\n\n💡 با پوست بخور، خواصش بیشتره.'},
+{c:'food',ic:'🍌',q:'خواص موز چیست؟',a:'• پتاسیم — تقویت عضلات\n• انرژی سریع — قبل ورزش\n• تریپتوفان — بهبود خلق\n• ویتامین B6 — سلامت مغز\n• کمک به هضم\n• تنظیم فشار خون\n\n⚠️ دیابتی‌ها با احتیاط.'},
+{c:'food',ic:'🌰',q:'خواص خرما چیست؟',a:'• انرژی بالا\n• فیبر — کمک گوارش\n• آهن — مفید کم‌خونی\n• پتاسیم — سلامت قلب\n• قند طبیعی\n• آنتی‌اکسیدان\n\n💡 روزانه ۳ تا ۵ عدد.'},
+{c:'food',ic:'🍇',q:'خواص انار چیست؟',a:'• آنتی‌اکسیدان قوی\n• سلامت قلب\n• کاهش التهاب\n• تقویت حافظه\n• سلامت پوست\n• کاهش فشار خون\n\n💡 صبح ناشتا بهترین زمانه.'},
+{c:'food',ic:'🥬',q:'خواص اسفناج چیست؟',a:'• آهن بالا — رفع کم‌خونی\n• ویتامین K — سلامت استخوان\n• فولات — سلامت مغز\n• آنتی‌اکسیدان\n• ویتامین A — سلامت چشم\n\n⚠️ سنگ کلیه دارها با احتیاط.'},
+{c:'food',ic:'🥕',q:'خواص هویج چیست؟',a:'• بتاکاروتن — سلامت چشم\n• آنتی‌اکسیدان\n• فیبر — کاهش کلسترول\n• سلامت پوست\n• تقویت ایمنی\n\n💡 با چربی سالم بخور.'},
+{c:'food',ic:'🧄',q:'خواص سیر چیست؟',a:'• ضد باکتری و ویروس\n• کاهش فشار خون\n• کاهش کلسترول\n• تقویت ایمنی\n• ضد التهاب\n• سلامت قلب\n\n💡 ناشتا: یک حبه.'},
+{c:'food',ic:'💧',q:'چرا باید آب کافی بخوریم؟',a:'• سلامت پوست\n• کمک گوارش\n• دفع سموم\n• تنظیم دمای بدن\n• تقویت تمرکز\n• کاهش سردرد\n\n💡 روزانه ۶–۸ لیوان.'},
+{c:'food',ic:'🍯',q:'خواص عسل طبیعی چیست؟',a:'• ضد باکتری\n• تسکین گلودرد\n• رفع سرفه\n• تقویت ایمنی\n• بهبود زخم\n• انرژی‌بخش\n\n⚠️ زیر ۱ سال نباید بخورن.'},
+
+// ===== لباس =====
+{c:'cloth',ic:'🧵',q:'انواع پارچه کدامند؟',a:'🌿 <b>نخ</b> — خنک، تابستان\n🐑 <b>پشم</b> — گرم، زمستان\n🐛 <b>ابریشم</b> — براق، لوکس\n🌾 <b>کتان</b> — خنک، محکم\n\nمصنوعی:\n• پلی‌استر — ارزان\n• نایلون — ضد آب\n• اسپندکس — کشی\n\n💡 تابستان نخ، زمستان پشم.'},
+{c:'cloth',ic:'🧥',q:'لباس مناسب هر فصل؟',a:'بهار: مانتو سبک، کاپشن نازک\nتابستان: نخ، رنگ روشن، کلاه\nپاییز: کاپشن، پلیور\nزمستان: پالتو، شال، کلاه، دستکش\n\n💡 لایه‌لایه بهتره — کم و زیاد کن.'},
+{c:'cloth',ic:'👔',q:'انواع کراوات و گره؟',a:'انواع:\n• ساده — رسمی\n• راه‌راه — نیمه‌رسمی\n• پلاک‌دار — اسپرت\n\nگره‌ها:\n• Four-in-Hand — ساده\n• وینزر — رسمی\n• نیمه‌وینزر — پرکاربرد\n• پرات — قرینه\n\n💡 طول کراوات تا کمربند.'},
+{c:'cloth',ic:'👞',q:'انواع کفش مردانه؟',a:'👟 اسپرت — روزمره\n👞 آکسفورد — رسمی‌ترین\n👞 دربی — نیمه‌رسمی\n👞 لوفر — بدون بند\n🥾 بوت — چرمی/کارگری\n\n💡 جوراب هم‌رنگ شلوار، نه کفش.'},
+{c:'cloth',ic:'🧼',q:'چطور لباس‌ها رو بشوریم؟',a:'سرد (۳۰°): رنگی، ابریشم، پشم\nولرم (۴۰°): معمولی\nگرم (۶۰°+): حوله، ملافه\n\nنکات:\n• رنگی جدا از سفید\n• لباس نو اول جدا\n• جیب‌ها خالی\n• زیپ‌ها بسته\n\n💡 برچسب لباس رو بخون.'},
+{c:'cloth',ic:'👗',q:'انواع مانتو و استایل زنانه؟',a:'انواع:\n• کوتاه/بلند\n• تابستانه/زمستانه\n• مجلسی/اسپرت\n\nرنگ‌ها:\n• مشکی — همه‌کاره\n• سرمه‌ای — شیک\n• خاکی — روزمره\n\n💡 سادگی شیک‌تر از شلوغیه.'},
+{c:'cloth',ic:'🧦',q:'راهنمای سایز لباس؟',a:'👕 S — ۳۶-۳۸\n👕 M — ۳۸-۴۰\n👕 L — ۴۰-۴۲\n👕 XL — ۴۲-۴۴\n\n👖 شلوار:\n۲۸-۳۰ کوچیک\n۳۲-۳۴ متوسط\n۳۶-۳۸ بزرگ\n\n💡 همیشه اندازه بگیر.'},
+{c:'cloth',ic:'🎩',q:'انواع کلاه و کاربرد؟',a:'🎩 لبه‌دار — آفتاب\n🧢 کپ — اسپرت\n👒 حصیری — ساحلی\n🎿 بافتنی — زمستان\n👷 ایمنی — کارگاهی\n\n💡 برای آفتاب، روشن و لبه‌پهن.'},
+{c:'cloth',ic:'🧤',q:'چطور از لباس‌هام نگهداری کنم؟',a:'• چوب‌لباسی مناسب\n• کفش در جاکفشی\n• قالب کفش چرمی\n• لباس زمستانی در وکیوم\n• نعناع خشک برای موش\n\n💡 کمد رو هر فصل مرتب کن.'},
+{c:'cloth',ic:'🛍',q:'چطور لباس هوشمندانه بخریم؟',a:'• لیست بنویس\n• کیفیت مهم‌تر از قیمت\n• هماهنگی با لباس‌های موجود\n• فصل رو در نظر بگیر\n• سایز دقیق بپوش\n\n💡 مشکی و سرمه‌ای همیشه کاربرد دارن.'},
+
+// ===== آب و هوا =====
+{c:'weather',ic:'🌤',q:'انواع آب و هوا کدامند؟',a:'🌴 گرمسیری — باران زیاد\n🏜 بیابانی — خشک\n❄️ قطبی — برف همیشگی\n🌤 معتدل — چهار فصل\n🌊 مدیترانه‌ای — تابستان خشک\n\n💡 هر اقلیم، سبک زندگی خودش رو داره.'},
+{c:'weather',ic:'☁️',q:'انواع ابر کدامند؟',a:'☁️ کومولوس — پنبه‌ای، هوای خوب\n🌫 استراتوس — لایه‌ای، پوشیده\n☁️ سیروس — نازک، بلند\n⛈ کومولونیمبوس — طوفانی\n🌧 نیمبواستراتوس — باران ملایم\n\n💡 کومولونیمبوس نشانهٔ طوفانه.'},
+{c:'weather',ic:'🌧',q:'انواع بارش کدامند؟',a:'🌧 باران — قطرات آب\n❄️ برف — بلور یخ\n🌨 تگرگ — گلوله یخ\n🌫 باران‌ریز — قطرات ریز\n💧 شبنم — صبح زود\n🌫 مه — بخار معلق\n\n💡 بارش با میلی‌متر اندازه‌گیری می‌شه.'},
+{c:'weather',ic:'💨',q:'انواع باد کدامند؟',a:'جهانی:\n• موسمی — فصلی\n• تجارتی — شرق به غرب\n• غربی — عرض میانه\n\nمحلی:\n• شمال — سرد\n• جنوب — گرم\n• صبا — بهاری\n• سموم — سوزان\n\n💡 باد شدید منشأ طوفانه.'},
+{c:'weather',ic:'🌡',q:'چطور دما اندازه‌گیری می‌شه؟',a:'واحدها:\n• سلسیوس (°C) — ایران\n• فارنهایت (°F) — آمریکا\n• کلوین (K) — علمی\n\nتبدیل:\n°C × ۱.۸ + ۳۲ = °F\n\nنکات:\n• ۰°C = یخ\n• ۱۰۰°C = جوش\n• ۳۷°C = بدن'},
+{c:'weather',ic:'🌈',q:'رنگین‌کمان چطور ساخته می‌شه؟',a:'نور خورشید + قطرات باران = تجزیهٔ نور\n\nرنگ‌ها (بیرون به داخل):\n🔴 قرمز → 🟠 نارنجی → 🟡 زرد → 🟢 سبز → 🔵 آبی → 🟣 بنفش\n\nشرایط: باران + آفتاب همزمان'},
+{c:'weather',ic:'⛈',q:'چرا رعد و برق می‌زنه؟',a:'ترکیب ابرهای بارانی + باد = بار الکتریکی\n\n• صاعقه: ۳۰,۰۰۰°C\n• سرعت: ۱۰۰,۰۰۰ km/s\n\nایمنی:\n• داخل ساختمان برو\n• زیر درخت نایست\n• از آب دوری کن'},
+{c:'weather',ic:'❄️',q:'چرا برف سفیده؟',a:'بلورهای یخ، نور همهٔ رنگ‌ها رو بازتاب می‌دن → چشم سفید می‌بینه\n\nحقایق:\n• هیچ دو بلور شبیه هم نیستن\n• هر بلور ۶ ضلعی\n• بزرگ‌ترین دانه: ۳۸ سانتی‌متر'},
+{c:'weather',ic:'🌪',q:'طوفان‌ها چطور شکل می‌گیرن؟',a:'🌪 تورنادو — قیف چرخان، ۵۰۰ km/h\n🌀 هاریکن — مناطق گرمسیری، ۲۵۰ km/h\n🌊 سونامی — موج عظیم از زلزله\n\nمقیاس:\n• تورنادو: EF0 تا EF5\n• هاریکن: ۱ تا ۵'},
+{c:'weather',ic:'🔆',q:'چرا آسمان آبیه؟',a:'نور خورشید با مولکول‌های هوا برخورد می‌کنه و پراکنده می‌شه.\n\nرنگ آبی بیشتر پراکنده می‌شه (پراکندگی ریلی).\n\nغروب: نور مسیر طولانی‌تری طی می‌کنه → قرمز/نارنجی'},
+
+// ===== دانشمندان =====
+{c:'sci',ic:'🧪',q:'ابن‌سینا چه کارهایی کرد؟',a:'(۹۸۰-۱۰۳۷ م)\n\n👨‍⚕️ پزشک — کتاب «قانون»\n🧠 فیلسوف — کتاب «شفا»\n📚 حدود ۴۵۰ کتاب\n\n• در ۱۸ سالگی پزشک ماهر\n• «پدر پزشکی مدرن»'},
+{c:'sci',ic:'🔭',q:'خوارزمی چه کشفیاتی داشت؟',a:'(۷۸۰-۸۵۰ م)\n\n• بنیان‌گذار جبر\n• ابداع الگوریتم (از نامش)\n• معرفی اعداد هندی-عربی\n\n💡 کلمه «Algorithm» از نامش گرفته شده.'},
+{c:'sci',ic:'💡',q:'ادیسون چه اختراعاتی داشت؟',a:'(۱۸۴۷-۱۹۳۱)\n\n💡 لامپ برق\n🎙 گرامافون\n🎬 دوربین فیلم\n🔋 باتری\n\n• ۱,۰۹۳ اختراع ثبت‌شده\n• «نبوغ ۱٪ الهام و ۹۹٪ تلاش»'},
+{c:'sci',ic:'🌌',q:'انیشتین چه کشفیاتی داشت؟',a:'(۱۸۷۹-۱۹۵۵)\n\n⚡ نسبیت خاص — E=mc²\n🌌 نسبیت عام — جاذبه\n🏆 نوبل ۱۹۲۱\n\n💡 بدون انیشتین، GPS کار نمی‌کرد!'},
+{c:'sci',ic:'🍎',q:'نیوتن چه کشفیاتی داشت؟',a:'(۱۶۴۳-۱۷۲۷)\n\n🍎 قانون جاذبه\n📐 قوانین حرکت (۳ قانون)\n🔬 اپتیک — تجزیهٔ نور\n\n💡 «اگر دورتر رو دیدم، چون روی شانهٔ غول‌ها ایستادم.»'},
+{c:'sci',ic:'⚡',q:'تسلا چه کشفیاتی داشت؟',a:'(۱۸۵۶-۱۹۴۳)\n\n⚡ جریان متناوب (AC)\n📡 رادیو\n🌀 موتور القایی\n🔋 سیم‌پیچ تسلا\n\n• ۳۰۰+ اختراع\n• رقیب ادیسون'},
+{c:'sci',ic:'📚',q:'بزرگ‌ترین دانشمندان ایرانی؟',a:'🧮 خوارزمی — جبر\n🩺 ابن‌سینا — پزشکی\n🔬 رازی — شیمی\n🌍 بیرونی — نجوم\n📖 خیام — ریاضی\n🧪 جابر بن حیان — شیمی\n🎓 فارابی — فلسفه\n🌟 خواجه نصیر — نجوم'},
+{c:'sci',ic:'🧬',q:'ماری کوری چه کشفیاتی داشت؟',a:'(۱۸۶۷-۱۹۳۴)\n\n• کشف رادیوم و پولونیوم\n• دو بار برندهٔ نوبل (فیزیک و شیمی)\n• اولین زن استاد سوربن\n• پیشگام پرتودرمانی'},
+
+// ===== جغرافیا =====
+{c:'geo',ic:'🌍',q:'چند قاره داریم؟',a:'۱. آسیا — بزرگ‌ترین\n۲. آفریقا — گرم‌ترین\n۳. آمریکای شمالی\n۴. آمریکای جنوبی\n۵. اروپا\n۶. اقیانوسیه\n۷. جنوبگان\n\n💡 آسیا ۶۰٪ جمعیت جهان رو داره.'},
+{c:'geo',ic:'🌊',q:'اقیانوس‌های جهان کدامند؟',a:'۱. آرام — بزرگ‌ترین\n۲. اطلس — دومین\n۳. هند\n۴. منجمد شمالی\n۵. منجمد جنوبی\n\nعمیق‌ترین: گودال ماریانا — ۱۱,۰۳۴ متر\n\n💡 ۷۱٪ سطح زمین آب.'},
+{c:'geo',ic:'🏔',q:'بلندترین کوه‌های جهان؟',a:'۱. اورست — ۸,۸۴۸ م\n۲. K2 — ۸,۶۱۱ م\n۳. کانچنجونگا — ۸,۵۸۶ م\n\nایران:\n• دماوند — ۵,۶۱۰ م\n• علم‌کوه — ۴,۸۵۰ م\n• سبلان — ۴,۸۱۱ م\n\n💡 دماوند بلندترین خاورمیانه.'},
+{c:'geo',ic:'🏜',q:'بزرگ‌ترین بیابان‌های جهان؟',a:'۱. صحرای آفریقا\n۲. عربستان\n۳. گبی (چین)\n۴. کالاهاری\n۵. پاتاگونیا\n\nایران:\n• دشت لوت — گرم‌ترین نقطه زمین\n• دشت کویر\n\n💡 لوت: ۷۰.۷ درجه!'},
+{c:'geo',ic:'🌋',q:'آتشفشان‌های معروف جهان؟',a:'• وزوو (ایتالیا)\n• اتنا (سیسیل)\n• کلیمانجارو (تانزانیا)\n• فوجی (ژاپن)\n• پوپوکاتپتل (مکزیک)\n\nایران: دماوند، سبلان، تفتان'},
+{c:'geo',ic:'🏞',q:'بلندترین رودهای جهان؟',a:'۱. نیل — ۶,۶۵۰ km\n۲. آمازون — ۶,۴۰۰ km\n۳. یانگ‌تسه — ۶,۳۰۰ km\n۴. می‌سی‌سی‌پی — ۶,۲۷۵ km\n\nایران: کارون، سفیدرود، ارس\n\n💡 آمازون بیشترین آب.'},
+{c:'geo',ic:'🇮🇷',q:'استان‌های ایران چند تاست؟',a:'۳۱ استان\n\nبزرگ‌ترین: سیستان و بلوچستان\nکوچک‌ترین: البرز\n\nمساحت: ۱.۶۴۸ میلیون km²\n\nشامل: تهران، البرز، قم، اصفهان، فارس، خوزستان و...'},
+{c:'geo',ic:'🏝',q:'معروف‌ترین جزیره‌های ایران؟',a:'خلیج فارس:\n• کیش — گردشگری\n• قشم — بزرگ‌ترین\n• هرمز — خاک سرخ\n• لاوان، هنگام\n\nدریای عمان:\n• چابهار'},
+{c:'geo',ic:'🌐',q:'پرجمعیت‌ترین کشورهای جهان؟',a:'۱. هند — ۱.۴۳ میلیارد\n۲. چین — ۱.۴۱ میلیارد\n۳. آمریکا — ۳۳۵ میلیون\n۴. اندونزی — ۲۸۰ میلیون\n۵. پاکستان — ۲۴۰ میلیون\n...\nایران: ۸۶ میلیون'},
+{c:'geo',ic:'🌌',q:'عجایب هفتگانهٔ جدید جهان؟',a:'۱. دیوار بزرگ چین\n۲. پترا (اردن)\n۳. مسیح نجات‌دهنده (برزیل)\n۴. ماچوپیچو (پرو)\n۵. چیچن ایتزا (مکزیک)\n۶. کولوسئوم (روم)\n۷. تاج‌محل (هند)'},
+
+// ===== روانشناسی =====
+{c:'psy',ic:'😊',q:'چطور حال دلم رو بهتر کنم؟',a:'• یه کار خوب برای کسی\n• تماس با دوست قدیمی\n• موسیقی شاد\n• پیاده‌روی ۱۰ دقیقه\n• دوش آب گرم\n• سه نعمت رو بشمار\n\n⚠️ اگر ۲ هفته طول کشید، با متخصص حرف بزن.'},
+{c:'psy',ic:'😰',q:'چطور با اضطراب مقابله کنم؟',a:'تکنیک ۵-۴-۳-۲-۱:\n۵ چیز که می‌بینی\n۴ چیز که لمس می‌کنی\n۳ چیز که می‌شنوی\n۲ چیز که بو می‌کنی\n۱ چیز که می‌چشی\n\n+ تنفس عمیق، دوش گرم، پیاده‌روی'},
+{c:'psy',ic:'💭',q:'چطور مثبت فکر کنم؟',a:'۱. قدردانی روزانه — ۳ چیز بنویس\n۲. جایگزینی افکار منفی\n۳. ورزش\n۴. همراهی با مثبت‌ها\n۵. کمک به دیگران\n\n💡 مغز مثل عضله‌ست.'},
+{c:'psy',ic:'🎯',q:'چطور اعتماد به نفسم رو زیاد کنم؟',a:'۱. کارهای کوچیک تموم کن\n۲. از خودت مراقبت کن\n۳. مهارت یاد بگیر\n۴. با خودت مهربون باش\n۵. از اشتباه نترس\n۶. حرف بزن (حتی با خودت)\n۷. موفقیت‌هات رو یادداشت کن\n\n💡 اعتماد به نفس = «من می‌تونم، حتی اگه شکست بخورم».'},
+{c:'psy',ic:'😤',q:'چطور کمتر عصبانی شم؟',a:'قانون ۱۰ ثانیه: قبل حرف زدن ۱۰ ثانیه بشمار\n\nتکنیک‌ها:\n• نفس عمیق\n• از موقعیت دور شو\n• آب سرد به صورت\n• پیاده‌روی\n• یه لیوان آب\n\nبلندمدت: خواب، ورزش، دوری از محرک‌ها'},
+{c:'psy',ic:'😴',q:'چطور بهتر بخوابم؟',a:'• ساعت خواب ثابت\n• ۱ ساعت قبل موبایل کنار\n• اتاق تاریک و خنک\n• شام سبک ۳ ساعت قبل\n• بعد ۵ عصر چای نخور\n• تخت فقط برای خواب\n\nتکنیک ۴-۷-۸: ۴ ثانیه دم، ۷ نگه، ۸ بازدم'},
+{c:'psy',ic:'🧘',q:'چطور تمرین تنفس کنم؟',a:'۴-۷-۸ (آرامش):\n۴ ثانیه دم، ۷ نگه، ۸ بازدم\n۴ بار تکرار\n\n۴-۴-۴-۴ (تمرکز):\n۴ ثانیه دم، ۴ نگه، ۴ بازدم، ۴ صبر\n\n💡 فقط ۵ دقیقه در روز.'},
+{c:'psy',ic:'📱',q:'چطور کمتر با موبایل وقت بگذرونم؟',a:'۱. اپ‌های وقت‌گیر رو پاک کن\n۲. نوتیفیکیشن‌ها خاموش\n۳. موقع درس، اتاق دیگه\n۴. جایگزین پیدا کن\n۵. تایمر بذار (روزی ۳۰ دقیقه)\n\n💡 صبح اول وقت گوشی نگاه نکن.'},
+
+// ===== درس =====
+{c:'study',ic:'📚',q:'چطور تمرکزمو حفظ کنم؟',a:'• میز مرتب، نور کافی\n• موبایل اتاق دیگه\n\nپومودورو:\n۲۵ دقیقه کار + ۵ دقیقه استراحت\n۴ دور = ۱۵ دقیقه استراحت\n\n+ هدف مشخص + آب کافی'},
+{c:'study',ic:'📝',q:'چطور بهتر درس بخونم؟',a:'۱. یادآوری فعال — کتاب ببند، سوال بپرس\n۲. تکرار فاصله‌دار — روز ۱، ۳، ۷، ۱۴، ۳۰\n۳. خلاصه‌نویسی\n۴. آموزش به دیگران\n۵. تست بزن\n\n💡 قبل خواب بخون.'},
+{c:'study',ic:'📖',q:'چطور برای امتحان آماده شم؟',a:'یک هفته قبل: همه فصل‌ها یه دور + خلاصه\nسه روز قبل: تست + نقاط ضعف\nیک روز قبل: فقط مرور، شب زود بخواب\n\nروز امتحان: صبحانه، اول آسون‌ها'},
+{c:'study',ic:'😰',q:'چطور استرس امتحان رو کم کنم؟',a:'قبل: ۷-۸ ساعت خواب، تنفس، پیاده‌روی\nموقع: نفس عمیق، آب، اول آسون‌ها\nبعد: خودت رو سرزنش نکن\n\n💡 استرس تا حدی خوبه.'},
+{c:'study',ic:'🧠',q:'چطور حافظه‌مو تقویت کنم؟',a:'• خواب ۷-۸ ساعت\n• ورزش هوازی\n• غذای سالم (ماهی، مغزها)\n• یادگیری فعال\n• پازل و سودوکو\n• کم کردن استرس\n\nغذاها: ماهی، گردو، زردچوبه'},
+{c:'study',ic:'📅',q:'چطور برنامه‌ریزی درست کنم؟',a:'۱. اهداف بنویس\n۲. به کارهای کوچیک تقسیم کن\n۳. اولویت‌بندی\n۴. زمان مشخص\n۵. استراحت\n۶. بازبینی هفتگی\n\nتکنیک ۱-۳-۵:\n۱ بزرگ + ۳ متوسط + ۵ کوچیک'},
+{c:'study',ic:'📓',q:'چطور خلاصه‌نویسی کنم؟',a:'• نقشهٔ ذهنی\n• کلمات کلیدی\n• فلش‌کارت\n• خلاصه در ۵ خط\n• رنگ‌بندی\n\n💡 خلاصه باید بعداً قابل فهم باشه.'},
+
+// ===== ورزش =====
+{c:'sport',ic:'🏃',q:'چطور ورزش رو شروع کنم؟',a:'هفتهٔ ۱: ۱۰ دقیقه پیاده‌روی\nهفتهٔ ۲: ۱۵ دقیقه + شنا/دوچرخه\nهفتهٔ ۳+: ۲۰-۳۰ دقیقه\n\nنکات: گرم کردن، سرد کردن، آب، استراحت\n\n💡 بهترین ورزش، همونیه که دوست داری.'},
+{c:'sport',ic:'💪',q:'فواید ورزش چیست؟',a:'جسمی:\n• سلامت قلب\n• کنترل وزن\n• عضلات قوی\n• استخوان سالم\n\nذهنی:\n• کاهش استرس\n• بهبود خلق\n• حافظه بهتر\n• خواب بهتر\n\n💡 حداقل ۳۰ دقیقه، ۵ روز هفته.'},
+{c:'sport',ic:'🏋️',q:'چطور عضله بسازم؟',a:'• تمرین مقاومتی ۳-۴ روز هفته\n• پروتئین ۱.۶ گرم/کیلو\n• خواب ۷-۸ ساعت\n• آب کافی\n• استراحت بین ست‌ها ۶۰-۹۰ ثانیه\n\nغذاها: تخم‌مرغ، مرغ، ماهی، حبوبات'},
+{c:'sport',ic:'🧘',q:'چطور انعطاف‌پذیری‌مو زیاد کنم؟',a:'• صبح ۵ دقیقه کشش\n• قبل ورزش گرم کردن\n• بعد ورزش سرد کردن\n• یوگا یا پیلاتس\n\nهر کشش ۳۰ ثانیه، تا درد نکش\n\n💡 با تمرین روزانه، ۱ ماهه بهتر می‌شه.'},
+{c:'sport',ic:'🚶',q:'چقدر پیاده‌روی کنیم؟',a:'• حداقل ۱۰,۰۰۰ قدم\n• یا ۳۰ دقیقه سریع\n\nچطور بیشتر؟\n• از پله استفاده کن\n• ماشین دورتر پارک کن\n• پیاده به خرید برو\n\n💡 ۱۰ دقیقه بعد غذا، قند رو کنترل می‌کنه.'},
+{c:'sport',ic:'💧',q:'موقع ورزش چقدر آب بخوریم؟',a:'قبل: ۲ ساعت قبل ۵۰۰ml، ۱۵ دقیقه قبل ۲۰۰ml\nحین: هر ۱۵-۲۰ دقیقه ۱۵۰-۲۵۰ml\nبعد: هر نیم کیلو کاهش وزن، ۵۰۰ml\n\n⚠️ نشانه‌های کم‌آبی: ادرار تیره، سردرد'},
+{c:'sport',ic:'⚽',q:'چه ورزشی برای من مناسبه؟',a:'کاهش وزن: دویدن، شنا، دوچرخه\nعضله‌سازی: بدنسازی، کراس‌فیت\nآرامش: یوگا، پیلاتس\nاجتماعی: فوتبال، بسکتبال\nانفرادی: پیاده‌روی، دوچرخه\n\n💡 هفتهٔ اول ۱۵ دقیقه.'},
+{c:'sport',ic:'🔥',q:'چطور کالری بیشتری بسوزونم؟',a:'• HIIT — ۲۰ دقیقه\n• تمرینات ترکیبی\n• بالا رفتن از پله\n• پیاده‌روی سریع\n• شنا\n\nکالری‌سوزی:\nدویدن: ۶۰۰/ساعت\nشنا: ۵۰۰/ساعت\nدوچرخه: ۴۰۰/ساعت'}
+
+];
+
+// ===== رندر =====
 var curCat=null;
-var CATS=window.CATS||[];
-var QA=window.QA||[];
 document.getElementById('search').classList.add('hidden');
 
 function goBack(){
@@ -82,72 +180,38 @@ location.href='index.html';
 function render(){
 var content=document.getElementById('content');
 content.innerHTML='';
+var q=document.getElementById('search').value.trim();
+
 if(curCat){
 var cat=CATS.find(function(c){return c.id===curCat});
 if(!cat)return;
-var q=document.getElementById('search').value.trim();
 var hdr=document.createElement('div');hdr.className='cat-hdr';
 var ic=document.createElement('div');ic.className='ic';ic.style.background=cat.g;ic.textContent=cat.ic;
 var info=document.createElement('div');info.className='info';
 var nm=document.createElement('div');nm.className='nm';nm.textContent=cat.nm;
-var ct=document.createElement('div');ct.className='ct';
 var items=QA.filter(function(x){return x.c===curCat});
-ct.textContent=items.length+' پرسش';
+var ct=document.createElement('div');ct.className='ct';ct.textContent=items.length+' پرسش';
 info.appendChild(nm);info.appendChild(ct);
 hdr.appendChild(ic);hdr.appendChild(info);
 content.appendChild(hdr);
-
-var bb=document.createElement('button');bb.className='back-btn';bb.textContent='← بازگشت به دسته‌ها';bb.onclick=goBack;
+var bb=document.createElement('button');bb.className='back-btn';bb.textContent='← بازگشت';bb.onclick=goBack;
 content.appendChild(bb);
-
-var filtered=items.filter(function(x){
-if(!q)return true;
-return x.q.indexOf(q)>=0||x.a.indexOf(q)>=0;
-});
-if(filtered.length===0){
-content.innerHTML+='<div class="empty"><div class="ic">🔍</div><div>سوالی پیدا نشد</div></div>';
+var filtered=items.filter(function(x){if(!q)return true;return x.q.indexOf(q)>=0||x.a.indexOf(q)>=0})
+  filtered.forEach(function(item){content.appendChild(makeQ(item,cat.ic))});
 return;
 }
-filtered.forEach(function(item){
-var d=document.createElement('div');d.className='q';
-var h=document.createElement('div');h.className='q-head';
-var ico=document.createElement('div');ico.className='q-icon';ico.textContent=item.ic||cat.ic;
-var ti=document.createElement('div');ti.className='q-title';ti.textContent=item.q;
-var ar=document.createElement('div');ar.className='q-arrow';ar.textContent='▼';
-h.appendChild(ico);h.appendChild(ti);h.appendChild(ar);
-var b=document.createElement('div');b.className='q-body';
-var a=document.createElement('div');a.className='q-answer';a.innerHTML=item.a;
-b.appendChild(a);
-d.appendChild(h);d.appendChild(b);
-h.onclick=function(){d.classList.toggle('open')};
-content.appendChild(d);
-});
-}else{
-var q=document.getElementById('search').value.trim();
+
 if(q){
 document.getElementById('search').classList.remove('hidden');
 var all=QA.filter(function(x){return x.q.indexOf(q)>=0||x.a.indexOf(q)>=0});
-if(all.length===0){
-content.innerHTML='<div class="empty"><div class="ic">🔍</div><div>چیزی پیدا نشد</div></div>';
-return;
-}
+if(all.length===0){content.innerHTML='<div class="empty">چیزی پیدا نشد</div>';return}
 all.forEach(function(item){
-var cat=CATS.find(function(c){return c.id===item.c})||{ic:'📌',nm:''};
-var d=document.createElement('div');d.className='q';
-var h=document.createElement('div');h.className='q-head';
-var ico=document.createElement('div');ico.className='q-icon';ico.textContent=item.ic||cat.ic;
-var ti=document.createElement('div');ti.className='q-title';ti.textContent=item.q;
-var ar=document.createElement('div');ar.className='q-arrow';ar.textContent='▼';
-h.appendChild(ico);h.appendChild(ti);h.appendChild(ar);
-var b=document.createElement('div');b.className='q-body';
-var a=document.createElement('div');a.className='q-answer';a.innerHTML=item.a;
-b.appendChild(a);
-d.appendChild(h);d.appendChild(b);
-h.onclick=function(){d.classList.toggle('open')};
-content.appendChild(d);
+var cat=CATS.find(function(c){return c.id===item.c})||{ic:'📌'};
+content.appendChild(makeQ(item,cat.ic));
 });
 return;
 }
+
 document.getElementById('search').classList.add('hidden');
 var grid=document.createElement('div');grid.className='cat-grid';
 CATS.forEach(function(cat){
@@ -162,8 +226,23 @@ grid.appendChild(card);
 });
 content.appendChild(grid);
 }
+
+function makeQ(item,catIc){
+var d=document.createElement('div');d.className='q';
+var h=document.createElement('div');h.className='q-head';
+var ico=document.createElement('div');ico.className='q-icon';ico.textContent=item.ic||catIc||'📌';
+var ti=document.createElement('div');ti.className='q-title';ti.textContent=item.q;
+var ar=document.createElement('div');ar.className='q-arrow';ar.textContent='▼';
+h.appendChild(ico);h.appendChild(ti);h.appendChild(ar);
+var b=document.createElement('div');b.className='q-body';
+var a=document.createElement('div');a.className='q-answer';a.innerHTML=item.a;
+b.appendChild(a);
+d.appendChild(h);d.appendChild(b);
+h.onclick=function(){d.classList.toggle('open')};
+return d;
 }
+
 render();
 </script>
 </body>
-  </html>
+</html>
