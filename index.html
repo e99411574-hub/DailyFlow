@@ -2,14 +2,20 @@
 <html lang="fa" dir="rtl">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="viewport" content="width=device-width,initial-scale=1">
 <title>برنامه من</title>
 <link rel="manifest" href="manifest.json">
 <style>
 :root{--bg:#f4f6f8;--card:#fff;--text:#2c3e50;--tl:#7f8c8d;--pr:#27ae60;--ac:#2980b9;--bar:#ecf0f1;--dgr:#e74c3c;--bd:#e0e6ed}
-body.dark{--bg:#12161c;--card:#1e242e;--text:#ecf0f1;--tl:#95a5a6;--pr:#2ecc71;--ac:#3498db;--bar:#2c3442;--bd:#2c3442}
-*{box-sizing:border-box}
-body{font-family:Tahoma,sans-serif;background:var(--bg);color:var(--text);margin:0;min-height:100vh}
+body[data-theme="dark"]{--bg:#12161c;--card:#1e242e;--text:#ecf0f1;--tl:#95a5a6;--pr:#2ecc71;--ac:#3498db;--bar:#2c3442;--bd:#2c3442}
+body[data-theme="mint"]{--bg:#e8f5e9;--card:#fff;--text:#1b5e20;--tl:#81c784;--pr:#2e7d32;--ac:#00695c;--bar:#c8e6c9;--bd:#a5d6a7}
+body[data-theme="ocean"]{--bg:#e3f2fd;--card:#fff;--text:#0d47a1;--tl:#64b5f6;--pr:#1976d2;--ac:#01579b;--bar:#bbdefb;--bd:#90caf9}
+body[data-theme="purple"]{--bg:#f3e5f5;--card:#fff;--text:#4a148c;--tl:#ba68c8;--pr:#7b1fa2;--ac:#6a1b9a;--bar:#e1bee7;--bd:#ce93d8}
+body[data-theme="sunset"]{--bg:#fff3e0;--card:#fff;--text:#bf360c;--tl:#ffb74d;--pr:#e64a19;--ac:#d84315;--bar:#ffe0b2;--bd:#ffcc80}
+body[data-theme="rose"]{--bg:#fce4ec;--card:#fff;--text:#880e4f;--tl:#f06292;--pr:#c2185b;--ac:#ad1457;--bar:#f8bbd0;--bd:#f48fb1}
+body[data-theme="teal"]{--bg:#e0f2f1;--card:#fff;--text:#004d40;--tl:#4db6ac;--pr:#00897b;--ac:#00695c;--bar:#b2dfdb;--bd:#80cbc4}
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+body{font-family:Tahoma,sans-serif;background:var(--bg);color:var(--text);margin:0;min-height:100vh;transition:background .3s,color .3s}
 .view{display:none}.view.active{display:block}
 .hdr{display:flex;align-items:center;justify-content:space-between;padding:12px 16px;background:var(--card);box-shadow:0 1px 4px rgba(0,0,0,.08);position:sticky;top:0;z-index:10}
 .hdr h1{font-size:16px;margin:0}
@@ -20,33 +26,41 @@ body{font-family:Tahoma,sans-serif;background:var(--bg);color:var(--text);margin
 .ptxt{font-size:13px;color:var(--tl);margin-bottom:8px;display:flex;justify-content:space-between}
 .bar{height:10px;background:var(--bar);border-radius:10px;overflow:hidden}
 .bfill{height:100%;width:0;background:var(--pr);transition:width .3s}
-.stitle{font-size:14px;font-weight:bold;color:var(--ac);margin:18px 6px 8px}
+.stitle{font-size:14px;font-weight:bold;color:var(--ac);margin:18px 6px 8px;display:flex;justify-content:space-between;align-items:center}
+.stitle button{background:none;border:none;color:var(--tl);font-size:14px;cursor:pointer;padding:4px 8px;border-radius:6px}
+.stitle button:active{background:var(--bar)}
 ul{list-style:none;padding:0;margin:0}
 li{background:var(--card);margin:7px 0;padding:12px 14px;border-radius:12px;box-shadow:0 1px 4px rgba(0,0,0,.06);display:flex;align-items:center;gap:8px}
-li.done{opacity:.5}
+li.done{opacity:.55}
 li.done .txt{text-decoration:line-through;color:var(--tl)}
 li label{display:flex;align-items:center;gap:10px;cursor:pointer;flex:1;min-width:0}
 li input[type=checkbox]{width:22px;height:22px;accent-color:var(--pr);flex-shrink:0}
-.txt{font-size:15px;flex:1;word-break:break-word}
+.txt{font-size:15px;flex:1;word-break:break-word;display:flex;flex-direction:column;gap:3px}
+.tm{font-size:11px;color:var(--tl);background:var(--bar);padding:2px 8px;border-radius:8px;align-self:flex-start;display:inline-block}
 .edt{background:none;border:none;cursor:pointer;font-size:15px;padding:6px;border-radius:8px;color:var(--tl)}
 .rbtn{display:block;width:100%;margin-top:20px;padding:12px;border:none;border-radius:12px;background:var(--dgr);color:#fff;font-family:inherit;font-size:14px;cursor:pointer}
-.slist{background:var(--card);border-radius:14px;overflow:hidden;box-shadow:0 1px 4px rgba(0,0,0,.06)}
-.srow{display:flex;align-items:center;justify-content:space-between;padding:14px 16px;border-bottom:1px solid var(--bd)}
+.addbtn{display:block;width:100%;margin-top:10px;padding:11px;border:2px dashed var(--bd);border-radius:12px;background:none;color:var(--tl);font-family:inherit;font-size:13px;cursor:pointer}
+.addbtn:active{background:var(--bar)}
+.slist{background:var(--card);border-radius:14px;overflow:hidden;box-shadow:0 1px 4px rgba(0,0,0,.06);margin-top:14px}
+.srow{display:flex;align-items:center;justify-content:space-between;padding:14px 16px;border-bottom:1px solid var(--bd);gap:10px;flex-direction:column;align-items:stretch}
 .srow:last-child{border-bottom:none}
-.slbl{font-size:15px}
-.tg{position:relative;width:46px;height:26px;background:var(--bar);border-radius:13px;cursor:pointer;transition:background .3s}
-.tg.on{background:var(--pr)}
-.tg::after{content:'';position:absolute;top:3px;right:3px;width:20px;height:20px;background:#fff;border-radius:50%;transition:transform .3s}
-.tg.on::after{transform:translateX(-20px)}
+.slbl{font-size:15px;margin-bottom:10px}
+.tgrid{display:grid;grid-template-columns:repeat(4,1fr);gap:10px}
+.tbtn{width:100%;aspect-ratio:1;border-radius:12px;border:3px solid transparent;cursor:pointer;position:relative}
+.tbtn.active{border-color:var(--text);box-shadow:0 0 0 2px var(--card)}
+.tbtn span{position:absolute;bottom:-18px;left:0;right:0;font-size:10px;color:var(--tl);text-align:center}
 .ovl{position:fixed;inset:0;background:rgba(0,0,0,.55);display:flex;align-items:center;justify-content:center;z-index:200;padding:20px}
 .mdl{background:var(--card);border-radius:16px;padding:20px;width:100%;max-width:400px}
-.mdl h3{margin:0 0 14px;font-size:16px}
-.mdl input{width:100%;padding:12px;font-size:15px;font-family:inherit;border:1px solid var(--bd);border-radius:10px;background:var(--bg);color:var(--text);margin-bottom:14px;outline:none}
-.mac{display:flex;gap:8px}
+.mdl h3{margin:0 0 14px;font-size:16px;color:var(--text)}
+.mdl input{width:100%;padding:12px;font-size:15px;font-family:inherit;border:1px solid var(--bd);border-radius:10px;background:var(--bg);color:var(--text);margin-bottom:10px;outline:none}
+.mdl input:focus{border-color:var(--pr)}
+.mac{display:flex;gap:8px;margin-top:6px}
 .mac button{flex:1;padding:11px;border:none;border-radius:10px;font-family:inherit;font-size:14px;cursor:pointer}
 .bc{background:var(--bar);color:var(--text)}
 .bs{background:var(--pr);color:#fff}
 .bd{background:var(--dgr);color:#fff}
+.toast{position:fixed;bottom:20px;left:50%;transform:translateX(-50%);background:var(--pr);color:#fff;padding:10px 22px;border-radius:20px;font-size:13px;z-index:300;opacity:0;transition:opacity .3s;pointer-events:none;max-width:90%}
+.toast.on{opacity:1}
 </style>
 </head>
 <body>
@@ -55,7 +69,7 @@ li input[type=checkbox]{width:22px;height:22px;accent-color:var(--pr);flex-shrin
 <div class="hdr">
 <button class="ibtn" onclick="openSet()">⚙️</button>
 <h1>🌿 برنامه روزانه</h1>
-<button class="ibtn" onclick="location.href='game.html'">🐐</button>
+<button class="ibtn" onclick="alert('به‌زودی!')">🐐</button>
 </div>
 <div class="wrap">
 <div class="pbox">
@@ -63,6 +77,7 @@ li input[type=checkbox]{width:22px;height:22px;accent-color:var(--pr);flex-shrin
 <div class="bar"><div class="bfill" id="fl"></div></div>
 </div>
 <div id="app"></div>
+<button class="addbtn" onclick="addSection()">+ افزودن بخش جدید</button>
 <button class="rbtn" onclick="resetAll()">شروع روز جدید</button>
 </div>
 </div>
@@ -76,156 +91,230 @@ li input[type=checkbox]{width:22px;height:22px;accent-color:var(--pr);flex-shrin
 <div class="wrap">
 <div class="slist">
 <div class="srow">
-<span class="slbl">🌙 حالت تاریک</span>
-<div class="tg" id="dtg" onclick="togDark()"></div>
+<span class="slbl">🎨 رنگ‌بندی</span>
+<div class="tgrid" id="tgrid"></div>
 </div>
 </div>
+<div class="slist">
+<div class="srow" style="flex-direction:row;align-items:center">
+<span class="slbl" style="margin:0">🔄 ریست همه داده‌ها</span>
+<button class="edt" onclick="clearAll()" style="color:var(--dgr);opacity:1;font-size:13px">پاک کردن</button>
+</div>
+</div>
+<p style="text-align:center;color:var(--tl);font-size:12px;margin-top:24px">نسخهٔ ۳.۰ — ساخته شده با ❤️</p>
 </div>
 </div>
 
 <div id="em" class="ovl" style="display:none">
 <div class="mdl">
-<h3>✏️ ویرایش کار</h3>
-<input type="text" id="ei" placeholder="متن کار...">
+<h3 id="emTitle">✏️ ویرایش</h3>
+<input type="text" id="ei" placeholder="متن...">
+<input type="text" id="et" placeholder="ساعت (اختیاری) مثلاً 06:00">
 <div class="mac">
-<button class="bd" onclick="delTask()">حذف</button>
+<button class="bd" id="delBtn" onclick="delItem()">حذف</button>
 <button class="bc" onclick="closeEdt()">لغو</button>
 <button class="bs" onclick="saveEdt()">ذخیره</button>
 </div>
 </div>
 </div>
 
+<div id="toast" class="toast"></div>
+
 <script>
-var DEFAULT_PLAN=[
+var KP='plan_v8',KT='theme_v8',KD='date_v8';
+var THEMES=[
+{id:'light',nm:'روشن',c1:'#f4f6f8',c2:'#27ae60'},
+{id:'dark',nm:'تاریک',c1:'#12161c',c2:'#2ecc71'},
+{id:'mint',nm:'نعنایی',c1:'#e8f5e9',c2:'#2e7d32'},
+{id:'ocean',nm:'اقیانوس',c1:'#e3f2fd',c2:'#1976d2'},
+{id:'purple',nm:'بنفش',c1:'#f3e5f5',c2:'#7b1fa2'},
+{id:'sunset',nm:'غروب',c1:'#fff3e0',c2:'#e64a19'},
+{id:'rose',nm:'رز',c1:'#fce4ec',c2:'#c2185b'},
+{id:'teal',nm:'فیروزه',c1:'#e0f2f1',c2:'#00897b'}
+];
+var DEF=[
 {title:"🌅 صبح",items:["بیدار شدن","۱ لیوان آب","مسواک صبح","شستن صورت","صبحانه"]},
 {title:"🏫 مدرسه",items:["مدرسه / کلاس‌ها","ناهار","مسواک ظهر","خواب ظهر ۳۰ دقیقه"]},
 {title:"📚 مطالعه",items:["ریاضی","هندسه","فیزیک","شیمی"]},
 {title:"🌤️ عصر و ورزش",items:["میان‌وعده عصر","ورزش ۳۰–۶۰ دقیقه","حمام / بهداشت","سیبیل / موهای زائد"]},
 {title:"🌙 شب",items:["شام","مرور درس‌ها","حل تمرین و تست","هوای آزاد","تکمیل ۶–۸ لیوان آب","کنار گذاشتن گوشی","مسواک شب","شستن صورت شب","خواب شب"]}
 ];
-
 var TODAY=new Date().toLocaleDateString('fa-IR');
-var KP='plan_v5',KD='date_v5',KT='theme_v5';
 var plan=null;
-
-try{plan=JSON.parse(localStorage.getItem(KP)||'null');}catch(e){plan=null;}
-
-if(!plan||!plan.length||!plan[0]||!plan[0].items){
-plan=DEFAULT_PLAN.map(function(s){
-return {title:s.title,items:s.items.map(function(t){return {text:t,done:false};})};
-});
+try{plan=JSON.parse(localStorage.getItem(KP)||'null')}catch(e){}
+if(!plan||!plan.length||!plan[0].tasks){
+plan=DEF.map(function(s,i){return {id:'s'+i,title:s.title,tasks:s.items.map(function(t,j){return {id:'t'+i+'_'+j,text:t,time:'',done:false}})}});
 localStorage.setItem(KP,JSON.stringify(plan));
 }
-
 if(localStorage.getItem(KD)!==TODAY){
-plan.forEach(function(s){s.items.forEach(function(i){i.done=false;});});
+plan.forEach(function(s){s.tasks.forEach(function(t){t.done=false})});
 localStorage.setItem(KP,JSON.stringify(plan));
 localStorage.setItem(KD,TODAY);
 }
+var editKey=null,addMode=null;
 
-var editKey=null;
-
-function savePlan(){localStorage.setItem(KP,JSON.stringify(plan));}
-function toFa(n){return n.toLocaleString('fa-IR');}
-
+function save(){localStorage.setItem(KP,JSON.stringify(plan))}
+function toFa(n){return n.toLocaleString('fa-IR')}
 function applyTheme(){
 var t=localStorage.getItem(KT)||'light';
-if(t==='dark')document.body.classList.add('dark');else document.body.classList.remove('dark');
-var tg=document.getElementById('dtg');
-if(tg){if(t==='dark')tg.classList.add('on');else tg.classList.remove('on');}
+document.body.setAttribute('data-theme',t);
+renderThemes();
 }
-function togDark(){
-var c=localStorage.getItem(KT)||'light';
-localStorage.setItem(KT,c==='dark'?'light':'dark');
-applyTheme();
+function setTheme(t){localStorage.setItem(KT,t);applyTheme();}
+function renderThemes(){
+var g=document.getElementById('tgrid');g.innerHTML='';
+var cur=localStorage.getItem(KT)||'light';
+THEMES.forEach(function(th){
+var b=document.createElement('button');
+b.className='tbtn'+(th.id===cur?' active':'');
+b.style.background='linear-gradient(135deg,'+th.c1+' 50%,'+th.c2+' 50%)';
+var sp=document.createElement('span');sp.textContent=th.nm;
+b.appendChild(sp);
+b.onclick=function(){setTheme(th.id)};
+g.appendChild(b);
+});
 }
-
 function render(){
-var app=document.getElementById('app');
-app.innerHTML='';
+var app=document.getElementById('app');app.innerHTML='';
 plan.forEach(function(sec,si){
-var h=document.createElement('div');
-h.className='stitle';
-h.textContent=sec.title;
-app.appendChild(h);
+var h=document.createElement('div');h.className='stitle';
+var ht=document.createElement('span');ht.textContent=sec.title;
+var hb=document.createElement('button');hb.textContent='✏️';hb.onclick=function(){editSection(si)};
+h.appendChild(ht);h.appendChild(hb);app.appendChild(h);
 var ul=document.createElement('ul');
-sec.items.forEach(function(item,ii){
-var li=document.createElement('li');
-if(item.done)li.className='done';
+sec.tasks.forEach(function(t,ti){
+var li=document.createElement('li');if(t.done)li.className='done';
 var lb=document.createElement('label');
-var cb=document.createElement('input');
-cb.type='checkbox';
-cb.checked=item.done;
+var cb=document.createElement('input');cb.type='checkbox';cb.checked=t.done;
 cb.onchange=function(){
-item.done=cb.checked;
-savePlan();
-if(cb.checked)li.classList.add('done');else li.classList.remove('done');
-updateProg();
+t.done=cb.checked;save();
+li.classList.toggle('done',cb.checked);updateProg();
+if(cb.checked)showToast('👍 آفرین!');
 };
-var sp=document.createElement('span');
-sp.className='txt';
-sp.textContent=item.text;
+var sp=document.createElement('span');sp.className='txt';
+var tx=document.createElement('span');tx.textContent=t.text;sp.appendChild(tx);
+if(t.time){var tm=document.createElement('span');tm.className='tm';tm.textContent='🕐 '+t.time;sp.appendChild(tm)}
 lb.appendChild(cb);lb.appendChild(sp);
-var eb=document.createElement('button');
-eb.className='edt';
-eb.textContent='✏️';
-eb.onclick=function(e){e.preventDefault();openEdt(si,ii);};
-li.appendChild(lb);li.appendChild(eb);
-ul.appendChild(li);
+var eb=document.createElement('button');eb.className='edt';eb.textContent='✏️';
+eb.onclick=function(e){e.preventDefault();openEdt(si,ti)};
+li.appendChild(lb);li.appendChild(eb);ul.appendChild(li);
 });
 app.appendChild(ul);
+var ab=document.createElement('button');ab.className='addbtn';ab.textContent='+ افزودن کار به این بخش';
+ab.onclick=function(){addTask(si)};
+app.appendChild(ab);
 });
 updateProg();
 }
 function updateProg(){
-var total=0,done=0;
-plan.forEach(function(s){s.items.forEach(function(i){total++;if(i.done)done++;});});
-document.getElementById('cnt').textContent=toFa(done)+' از '+toFa(total);
-document.getElementById('fl').style.width=(total?done/total*100:0)+'%';
+var tot=0,dn=0;
+plan.forEach(function(s){s.tasks.forEach(function(t){tot++;if(t.done)dn++})});
+document.getElementById('cnt').textContent=toFa(dn)+' از '+toFa(tot);
+document.getElementById('fl').style.width=(tot?dn/tot*100:0)+'%';
+if(tot>0&&dn===tot)setTimeout(function(){showToast('🎉 همه کارها انجام شد!')},300);
+}
+function showToast(msg){
+var t=document.getElementById('toast');t.textContent=msg;t.classList.add('on');
+clearTimeout(window._tt);
+window._tt=setTimeout(function(){t.classList.remove('on')},2000);
 }
 function resetAll(){
 if(confirm('همه تیک‌ها پاک شود؟')){
-plan.forEach(function(s){s.items.forEach(function(i){i.done=false;});});
-savePlan();render();
+plan.forEach(function(s){s.tasks.forEach(function(t){t.done=false})});
+save();render();
 }
 }
-
-function openEdt(si,ii){
-editKey={si:si,ii:ii};
-document.getElementById('ei').value=plan[si].items[ii].text;
+function clearAll(){
+if(confirm('همه داده‌ها پاک شود؟ این کار برگشت‌پذیر نیست.')){
+localStorage.removeItem(KP);localStorage.removeItem(KD);
+location.reload();
+}
+}
+function openEdt(si,ti){
+editKey={si:si,ti:ti};addMode=null;
+document.getElementById('emTitle').textContent='✏️ ویرایش کار';
+document.getElementById('ei').value=plan[si].tasks[ti].text;
+document.getElementById('et').value=plan[si].tasks[ti].time||'';
+document.getElementById('et').style.display='block';
+document.getElementById('delBtn').style.display='block';
 document.getElementById('em').style.display='flex';
-setTimeout(function(){document.getElementById('ei').focus();},100);
+setTimeout(function(){document.getElementById('ei').focus()},100);
 }
-function closeEdt(){document.getElementById('em').style.display='none';editKey=null;}
+function editSection(si){
+addMode=null;editKey={si:si,section:true};
+document.getElementById('emTitle').textContent='✏️ ویرایش عنوان بخش';
+document.getElementById('ei').value=plan[si].title;
+document.getElementById('et').value='';
+document.getElementById('et').style.display='none';
+document.getElementById('delBtn').style.display='block';
+document.getElementById('em').style.display='flex';
+setTimeout(function(){document.getElementById('ei').focus()},100);
+}
+function addTask(si){
+addMode={si:si,task:true};editKey=null;
+document.getElementById('emTitle').textContent='➕ افزودن کار جدید';
+document.getElementById('ei').value='';
+document.getElementById('et').value='';
+document.getElementById('et').style.display='block';
+document.getElementById('delBtn').style.display='none';
+document.getElementById('em').style.display='flex';
+setTimeout(function(){document.getElementById('ei').focus()},100);
+}
+function addSection(){
+addMode={section:true};editKey=null;
+document.getElementById('emTitle').textContent='➕ افزودن بخش جدید';
+document.getElementById('ei').value='';
+document.getElementById('et').value='';
+document.getElementById('et').style.display='none';
+document.getElementById('delBtn').style.display='none';
+document.getElementById('em').style.display='flex';
+setTimeout(function(){document.getElementById('ei').focus()},100);
+}
+function closeEdt(){
+document.getElementById('em').style.display='none';
+document.getElementById('et').style.display='block';
+editKey=null;addMode=null;
+}
 function saveEdt(){
-if(!editKey)return;
 var v=document.getElementById('ei').value.trim();
 if(!v)return;
-plan[editKey.si].items[editKey.ii].text=v;
-savePlan();closeEdt();render();
+var t=document.getElementById('et').value.trim();
+if(addMode){
+if(addMode.task){
+plan[addMode.si].tasks.push({id:'t'+Date.now(),text:v,time:t,done:false});
 }
-function delTask(){
+else if(addMode.section){
+plan.push({id:'s'+Date.now(),title:v,tasks:[]});
+}
+}
+else if(editKey){
+if(editKey.section){
+plan[editKey.si].title=v;
+}
+else{
+plan[editKey.si].tasks[editKey.ti].text=v;
+plan[editKey.si].tasks[editKey.ti].time=t;
+}
+}
+save();closeEdt();render();
+}
+function delItem(){
 if(!editKey)return;
+if(editKey.section){
+if(!confirm('این بخش و همه کارهایش حذف شود؟'))return;
+plan.splice(editKey.si,1);
+}
+else{
 if(!confirm('این کار حذف شود؟'))return;
-plan[editKey.si].items.splice(editKey.ii,1);
-savePlan();closeEdt();render();
+plan[editKey.si].tasks.splice(editKey.ti,1);
 }
-
-function openSet(){
-document.getElementById('vm').classList.remove('active');
-document.getElementById('vs').classList.add('active');
+save();closeEdt();render();
 }
-function closeSet(){
-document.getElementById('vs').classList.remove('active');
-document.getElementById('vm').classList.add('active');
-}
+function openSet(){document.getElementById('vm').classList.remove('active');document.getElementById('vs').classList.add('active')}
+function closeSet(){document.getElementById('vs').classList.remove('active');document.getElementById('vm').classList.add('active')}
 
-applyTheme();
-render();
-
-document.getElementById('em').addEventListener('click',function(e){
-if(e.target.id==='em')closeEdt();
-});
+applyTheme();render();
+document.getElementById('em').addEventListener('click',function(e){if(e.target.id==='em')closeEdt()});
 </script>
 </body>
 </html>
