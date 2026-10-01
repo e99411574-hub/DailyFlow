@@ -1,0 +1,203 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,user-scalable=no">
+<title>ماشین حساب</title>
+<style>
+*{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+body{font-family:Tahoma,sans-serif;background:#000;color:#fff;min-height:100vh;display:flex;flex-direction:column;overflow:hidden}
+.hdr{display:flex;align-items:center;justify-content:space-between;padding:14px 18px;background:#0a0e1a}
+.hdr h1{font-size:17px;font-weight:700}
+.ibtn{background:none;border:none;color:#fff;font-size:20px;cursor:pointer;width:42px;height:42px;border-radius:12px;display:flex;align-items:center;justify-content:center}
+.ibtn:active{background:#1a1f32}
+.display{flex:0 0 auto;padding:20px 24px 10px;text-align:left;direction:ltr;background:#0a0e1a}
+.hist{font-size:14px;color:#6b7280;min-height:20px;margin-bottom:6px;word-break:break-all}
+.num{font-size:54px;font-weight:200;word-break:break-all;line-height:1.1;min-height:64px}
+.sci{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;padding:8px 12px 4px;background:#0a0e1a}
+.sci button{aspect-ratio:auto;height:46px;font-size:16px;border-radius:23px;background:#1a1f32;color:#fff;border:none;cursor:pointer;font-family:inherit}
+.sci button:active{opacity:.6}
+.pad{flex:1;display:grid;grid-template-columns:repeat(4,1fr);gap:8px;padding:8px 12px 16px;background:#0a0e1a}
+.btn{border:none;border-radius:50%;aspect-ratio:1;font-size:26px;font-weight:400;cursor:pointer;font-family:inherit;display:flex;align-items:center;justify-content:center;color:#fff}
+.btn:active{opacity:.6}
+.bn{background:#333}
+.bo{background:#ff9500;font-size:30px}
+.bf{background:#a5a5a5;color:#000}
+.be{background:#ff9500;font-size:30px}
+.bw{grid-column:span 2;aspect-ratio:auto;border-radius:40px;justify-content:center}
+#histPanel{display:none;position:fixed;inset:0;background:rgba(0,0,0,.95);z-index:100;padding:20px;overflow-y:auto}
+.hi{display:flex;justify-content:space-between;align-items:center;margin-bottom:20px}
+.hi h2{font-size:18px}
+.hi button{background:none;border:none;color:#fff;font-size:24px;cursor:pointer}
+.he{padding:12px;background:#1a1f32;border-radius:12px;margin-bottom:8px;direction:ltr;text-align:left;cursor:pointer}
+.he .ex{font-size:13px;color:#6b7280}
+.he .rr{font-size:20px;font-weight:600;color:#fff}
+.clear{width:100%;margin-top:20px;padding:12px;border:none;border-radius:12px;background:#ef4444;color:#fff;font-family:inherit;font-size:14px;cursor:pointer}
+</style>
+</head>
+<body>
+
+<div class="hdr">
+<button class="ibtn" onclick="location.href='index.html'">←</button>
+<h1>🧮 ماشین حساب</h1>
+<button class="ibtn" onclick="toggleHist()">📜</button>
+</div>
+
+<div class="display">
+<div class="hist" id="hist"></div>
+<div class="num" id="num">0</div>
+</div>
+
+<div class="sci">
+<button onclick="sci('sqrt')">√</button>
+<button onclick="sci('sq')">x²</button>
+<button onclick="sci('inv')">1/x</button>
+<button onclick="sci('sign')">±</button>
+</div>
+
+<div class="pad">
+<button class="btn bf" onclick="clearAll()">AC</button>
+<button class="btn bf" onclick="back()">⌫</button>
+<button class="btn bf" onclick="percent()">%</button>
+<button class="btn bo" onclick="setOp('÷')">÷</button>
+
+<button class="btn bn" onclick="digit('7')">7</button>
+<button class="btn bn" onclick="digit('8')">8</button>
+<button class="btn bn" onclick="digit('9')">9</button>
+<button class="btn bo" onclick="setOp('×')">×</button>
+
+<button class="btn bn" onclick="digit('4')">4</button>
+<button class="btn bn" onclick="digit('5')">5</button>
+<button class="btn bn" onclick="digit('6')">6</button>
+<button class="btn bo" onclick="setOp('−')">−</button>
+
+<button class="btn bn" onclick="digit('1')">1</button>
+<button class="btn bn" onclick="digit('2')">2</button>
+<button class="btn bn" onclick="digit('3')">3</button>
+<button class="btn bo" onclick="setOp('+')">+</button>
+
+<button class="btn bn bw" onclick="digit('0')">0</button>
+<button class="btn bn" onclick="dot()">.</button>
+<button class="btn be" onclick="equals()">=</button>
+</div>
+
+<div id="histPanel">
+<div style="max-width:500px;margin:0 auto">
+<div class="hi">
+<h2>📜 تاریخچه</h2>
+<button onclick="toggleHist()">✕</button>
+</div>
+<div id="histList"></div>
+<button class="clear" onclick="clearHist()">پاک کردن تاریخچه</button>
+</div>
+</div>
+
+<script>
+var cur='0',prev=null,op=null,waiting=false,hist=[];
+try{var h=localStorage.getItem('calcHist');if(h)hist=JSON.parse(h)}catch(e){}
+function fmt(n){
+if(!isFinite(n))return 'خطا';
+var s=String(n);
+if(s.length>14){
+if(Math.abs(n)>=1e12||Math.abs(n)<1e-6)return n.toExponential(6);
+return String(parseFloat(n.toPrecision(12)));
+}
+return s;
+}
+function upd(){
+document.getElementById('num').textContent=cur;
+document.getElementById('hist').textContent=(prev!==null&&op)?prev+' '+op:'';
+}
+function digit(d){
+if(waiting){cur=d;waiting=false}
+else{cur=(cur==='0'?d:cur+d)}
+upd();
+}
+function dot(){
+if(waiting){cur='0.';waiting=false;upd();return}
+if(cur.indexOf('.')<0)cur+='.';
+upd();
+}
+function clearAll(){cur='0';prev=null;op=null;waiting=false;upd()}
+function back(){
+if(waiting)return;
+if(cur.length<=1){cur='0'}else{cur=cur.slice(0,-1)}
+upd();
+}
+function setOp(o){
+var v=parseFloat(cur);
+if(op&&!waiting){var r=calc(prev,v,op);cur=fmt(r);prev=r}
+else{prev=v}
+op=o;waiting=true;upd();
+}
+function calc(a,b,o){
+if(o==='+')return a+b;
+if(o==='−')return a-b;
+if(o==='×')return a*b;
+if(o==='÷')return b===0?NaN:a/b;
+return b;
+}
+function equals(){
+if(op===null)return;
+var v=parseFloat(cur);
+var r=calc(prev,v,op);
+var expr=fmt(prev)+' '+op+' '+fmt(v);
+cur=fmt(r);
+hist.unshift({e:expr,r:cur});
+if(hist.length>50)hist=hist.slice(0,50);
+try{localStorage.setItem('calcHist',JSON.stringify(hist))}catch(e){}
+prev=null;op=null;waiting=true;
+document.getElementById('hist').textContent=expr+' =';
+document.getElementById('num').textContent=cur;
+}
+function percent(){
+var v=parseFloat(cur);
+if(prev!==null){cur=fmt(prev*v/100)}else{cur=fmt(v/100)}
+upd();
+}
+function sci(t){
+var v=parseFloat(cur);
+if(t==='sqrt'){if(v<0){cur='خطا'}else{cur=fmt(Math.sqrt(v))}}
+else if(t==='sq'){cur=fmt(v*v)}
+else if(t==='inv'){if(v===0)cur='خطا';else cur=fmt(1/v)}
+else if(t==='sign'){cur=fmt(-v)}
+upd();
+}
+function toggleHist(){
+var p=document.getElementById('histPanel');
+if(p.style.display!=='block'){p.style.display='block';renderHist()}
+else{p.style.display='none'}
+}
+function renderHist(){
+var l=document.getElementById('histList');
+l.innerHTML='';
+if(hist.length===0){l.innerHTML='<p style="text-align:center;color:#6b7280;padding:20px">هنوز محاسبه‌ای نکردی</p>';return}
+for(var i=0;i<hist.length;i++){
+var d=document.createElement('div');
+d.className='he';
+d.innerHTML='<div class="ex">'+hist[i].e+'</div><div class="rr">'+hist[i].r+'</div>';
+(function(r){d.onclick=function(){cur=r;waiting=true;toggleHist();upd()}})(hist[i].r);
+l.appendChild(d);
+}
+}
+function clearHist(){
+if(!confirm('تاریخچه پاک شود؟'))return;
+hist=[];try{localStorage.removeItem('calcHist')}catch(e){}
+renderHist();
+}
+document.addEventListener('keydown',function(e){
+if(e.key>='0'&&e.key<='9')digit(e.key);
+else if(e.key==='.')dot();
+else if(e.key==='+')setOp('+');
+else if(e.key==='-')setOp('−');
+else if(e.key==='*')setOp('×');
+else if(e.key==='/'){e.preventDefault();setOp('÷')}
+else if(e.key==='Enter'||e.key==='='){e.preventDefault();equals()}
+else if(e.key==='Escape')clearAll();
+else if(e.key==='Backspace')back();
+else if(e.key==='%')percent();
+});
+upd();
+</script>
+</body>
+</html>
