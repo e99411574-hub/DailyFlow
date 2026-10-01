@@ -60,3 +60,8 @@ if(!(st.goat.fl>0&&Math.floor(st.goat.fl/5)%2===0)){var x=70,y=st.goat.y;ctx.fil
 if(st.inv>0&&Math.floor(st.inv/5)%2===0){ctx.strokeStyle='rgba(255,255,255,.6)';ctx.lineWidth=2;ctx.beginPath();ctx.arc(x+20,y+16,35,0,7);ctx.stroke();}}
 W=cvs.width=innerWidth;H=cvs.height=innerHeight;gy=H*0.78;init();
 addEventListener('resize',function(){W=cvs.width=innerWidth;H=cvs.height=innerHeight;gy=H*0.78;});
+window.gameStart=gs;
+window.gamePause=gp;
+window.gameResume=gr;
+window.gameEnd=ge;
+window.showScreen=ss;
