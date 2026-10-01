@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>سرگرمی</title>
+<style>
+*{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+body{font-family:Tahoma,sans-serif;background:#0f172a;color:#f1f5f9;min-height:100vh}
+.hdr{display:flex;align-items:center;justify-content:space-between;padding:14px 18px;background:#1e293b;border-bottom:1px solid rgba(255,255,255,.08);position:sticky;top:0;z-index:10;padding-top:calc(14px + env(safe-area-inset-top))}
+.hdr h1{font-size:17px;font-weight:700}
+.ibtn{background:none;border:none;color:#f1f5f9;font-size:20px;cursor:pointer;width:42px;height:42px;border-radius:12px;display:flex;align-items:center;justify-content:center}
+.ibtn:active{background:rgba(255,255,255,.08)}
+.wrap{padding:16px;max-width:600px;margin:0 auto}
+.intro{text-align:center;margin-bottom:24px}
+.intro .em{font-size:64px;margin-bottom:12px}
+.intro h2{font-size:20px;font-weight:700;margin-bottom:6px;background:linear-gradient(135deg,#6366f1,#8b5cf6);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
+.intro p{font-size:13px;color:#94a3b8}
+.grid{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+.game-card{background:#1e293b;border-radius:18px;padding:24px 14px;cursor:pointer;border:1px solid rgba(255,255,255,.08);display:flex;flex-direction:column;align-items:center;gap:12px;text-decoration:none;color:#f1f5f9;transition:.2s}
+.game-card:active{transform:scale(.95);background:rgba(99,102,241,.15)}
+.game-card .ic{width:72px;height:72px;border-radius:22px;display:flex;align-items:center;justify-content:center;font-size:36px;box-shadow:0 8px 20px rgba(0,0,0,.25)}
+.game-card .nm{font-size:15px;font-weight:700}
+.game-card .ds{font-size:11px;color:#94a3b8;text-align:center}
+</style>
+</head>
+<body>
+
+<div class="hdr">
+<button class="ibtn" onclick="location.href='index.html'">←</button>
+<h1>🎮 سرگرمی</h1>
+<div style="width:42px"></div>
+</div>
+
+<div class="wrap">
+<div class="intro">
+<div class="em">🎮</div>
+<h2>بازی‌های من</h2>
+<p>یک بازی انتخاب کن و لذت ببر</p>
+</div>
+
+<div class="grid">
+<a class="game-card" href="rps.html">
+<div class="ic" style="background:linear-gradient(135deg,#ef4444,#f59e0b);color:#fff">🪨</div>
+<div class="nm">سنگ کاغذ قیچی</div>
+<div class="ds">با کامپیوتر مسابقه بده</div>
+</a>
+<a class="game-card" href="guess.html">
+<div class="ic" style="background:linear-gradient(135deg,#10b981,#059669);color:#fff">🔢</div>
+<div class="nm">حدس عدد</div>
+<div class="ds">عدد مخفی رو پیدا کن</div>
+</a>
+<a class="game-card" href="ttt.html">
+<div class="ic" style="background:linear-gradient(135deg,#3b82f6,#8b5cf6);color:#fff">❌</div>
+<div class="nm">دوز</div>
+<div class="ds">X و O روی صفحه</div>
+</a>
+<a class="game-card" href="memory.html">
+<div class="ic" style="background:linear-gradient(135deg,#ec4899,#8b5cf6);color:#fff">🧠</div>
+<div class="nm">حافظه</div>
+<div class="ds">جفت کارت‌ها رو پیدا کن</div>
+</a>
+</div>
+</div>
+
+</body>
+</html>
