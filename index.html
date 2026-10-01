@@ -264,7 +264,7 @@ function fa(n){return String(n).split('').map(function(c){return faN[+c]||c}).jo
 function toFa(n){return n.toLocaleString('fa-IR')}
 var TODAY=new Date().toLocaleDateString('fa-IR');
 document.getElementById('todayDate').textContent=new Date().toLocaleDateString('fa-IR',{weekday:'long',day:'numeric',month:'long'});
-var plan=[],stats={hvar plan=[],stats={history:{},totalDone:0,bestPct:0,maxStreak:0,streak:0,lastDone:'',themesUsed:[],customTasks:0,notesCount:0,backups:0,shared:0,imgShared:0,iconsChanged:0,notifOn:false,achievements:[]};
+var plan=[],stats={history:{},totalDone:0,bestPct:0,maxStreak:0,streak:0,lastDone:'',themesUsed:[],customTasks:0,notesCount:0,backups:0,shared:0,imgShared:0,iconsChanged:0,notifOn:false,achievements:[]};
 try{var s=localStorage.getItem(KP);if(s)plan=JSON.parse(s)}catch(e){plan=[]}
 try{var st=localStorage.getItem(KS);if(st){var o=JSON.parse(st);for(var k in o)stats[k]=o[k]}}catch(e){}
 if(!plan||!Array.isArray(plan)||plan.length===0||!plan[0].tasks){plan=[];for(var i=0;i<DEF.length;i++){var tk=[];for(var j=0;j<DEF[i].items.length;j++)tk.push({id:'t'+i+'_'+j,text:DEF[i].items[j],time:'',note:'',done:false,imp:false,color:SCOLORS[i%SCOLORS.length]});plan.push({id:'s'+i,title:DEF[i].title,tasks:tk,color:SCOLORS[i%SCOLORS.length]})}try{localStorage.setItem(KP,JSON.stringify(plan))}catch(e){}}
