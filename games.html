@@ -12,56 +12,317 @@ body{font-family:Tahoma,sans-serif;background:#0f172a;color:#f1f5f9;min-height:1
 .ibtn{background:none;border:none;color:#f1f5f9;font-size:20px;cursor:pointer;width:42px;height:42px;border-radius:12px;display:flex;align-items:center;justify-content:center}
 .ibtn:active{background:rgba(255,255,255,.08)}
 .wrap{padding:16px;max-width:600px;margin:0 auto}
+.game{display:none}
+.game.on{display:block}
 .intro{text-align:center;margin-bottom:24px}
 .intro .em{font-size:64px;margin-bottom:12px}
 .intro h2{font-size:20px;font-weight:700;margin-bottom:6px;background:linear-gradient(135deg,#6366f1,#8b5cf6);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
 .intro p{font-size:13px;color:#94a3b8}
 .grid{display:grid;grid-template-columns:1fr 1fr;gap:14px}
-.game-card{background:#1e293b;border-radius:18px;padding:24px 14px;cursor:pointer;border:1px solid rgba(255,255,255,.08);display:flex;flex-direction:column;align-items:center;gap:12px;text-decoration:none;color:#f1f5f9;transition:.2s}
-.game-card:active{transform:scale(.95);background:rgba(99,102,241,.15)}
-.game-card .ic{width:72px;height:72px;border-radius:22px;display:flex;align-items:center;justify-content:center;font-size:36px;box-shadow:0 8px 20px rgba(0,0,0,.25)}
-.game-card .nm{font-size:15px;font-weight:700}
-.game-card .ds{font-size:11px;color:#94a3b8;text-align:center}
+.gcard{background:#1e293b;border-radius:18px;padding:24px 14px;cursor:pointer;border:1px solid rgba(255,255,255,.08);display:flex;flex-direction:column;align-items:center;gap:12px;color:#f1f5f9;transition:.2s}
+.gcard:active{transform:scale(.95);background:rgba(99,102,241,.15)}
+.gcard .ic{width:72px;height:72px;border-radius:22px;display:flex;align-items:center;justify-content:center;font-size:36px;box-shadow:0 8px 20px rgba(0,0,0,.25)}
+.gcard .nm{font-size:15px;font-weight:700}
+.gcard .ds{font-size:11px;color:#94a3b8;text-align:center}
+.back-g{background:none;border:none;color:#818cf8;font-size:13px;font-weight:600;font-family:inherit;padding:8px 0;margin-bottom:14px;cursor:pointer}
+.title-c{font-size:18px;font-weight:700;text-align:center;margin-bottom:20px}
+/* سنگ کاغذ قیچی */
+.rps-choices{display:flex;gap:14px;justify-content:center;margin:24px 0}
+.rps-btn{width:90px;height:90px;border-radius:24px;background:#1e293b;border:2px solid rgba(255,255,255,.1);font-size:44px;cursor:pointer;display:flex;align-items:center;justify-content:center;transition:.2s}
+.rps-btn:active{transform:scale(.9);background:rgba(99,102,241,.2)}
+.rps-result{text-align:center;font-size:18px;font-weight:700;margin:20px 0;min-height:80px;padding:16px;background:#1e293b;border-radius:16px;line-height:1.8}
+.rps-score{display:flex;justify-content:space-around;font-size:14px;color:#94a3b8;margin-top:16px}
+.rps-score b{color:#818cf8;font-size:20px;display:block}
+/* حدس عدد */
+.guess-input{width:100%;padding:18px;font-size:24px;text-align:center;font-family:inherit;background:#1e293b;color:#f1f5f9;border:2px solid rgba(255,255,255,.1);border-radius:16px;outline:none;margin-bottom:14px}
+.guess-input:focus{border-color:#818cf8}
+.guess-btn{width:100%;padding:16px;border:none;border-radius:16px;background:linear-gradient(135deg,#6366f1,#8b5cf6);color:#fff;font-family:inherit;font-size:16px;font-weight:700;cursor:pointer;margin-bottom:14px}
+.guess-btn:active{transform:scale(.97)}
+.guess-hint{text-align:center;font-size:16px;font-weight:700;padding:20px;background:#1e293b;border-radius:16px;min-height:70px;line-height:1.6}
+.guess-info{text-align:center;color:#94a3b8;font-size:13px;margin-top:12px}
+/* دوز */
+.ttt-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin:20px auto;max-width:320px}
+.ttt-cell{aspect-ratio:1;background:#1e293b;border:2px solid rgba(255,255,255,.1);border-radius:16px;display:flex;align-items:center;justify-content:center;font-size:52px;font-weight:900;cursor:pointer;color:#f1f5f9;transition:.2s}
+.ttt-cell:active{background:rgba(99,102,241,.15)}
+.ttt-cell.x{color:#ef4444}
+.ttt-cell.o{color:#3b82f6}
+.ttt-status{text-align:center;font-size:18px;font-weight:700;margin:16px 0;min-height:30px}
+/* حافظه */
+.mem-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin-top:16px}
+.mem-card{aspect-ratio:1;border-radius:14px;cursor:pointer;perspective:800px;position:relative}
+.mem-inner{position:relative;width:100%;height:100%;transition:transform .5s;transform-style:preserve-3d}
+.mem-card.flip .mem-inner{transform:rotateY(180deg)}
+.mem-front,.mem-back{position:absolute;inset:0;border-radius:14px;display:flex;align-items:center;justify-content:center;backface-visibility:hidden;-webkit-backface-visibility:hidden;font-size:36px}
+.mem-front{background:linear-gradient(135deg,#6366f1,#8b5cf6);color:#fff}
+.mem-back{background:#1e293b;border:2px solid rgba(255,255,255,.1);transform:rotateY(180deg)}
+.mem-card.matched .mem-inner{opacity:.4;pointer-events:none}
+.mem-status{text-align:center;font-size:14px;color:#94a3b8;margin-top:14px}
 </style>
 </head>
 <body>
 
 <div class="hdr">
-<button class="ibtn" onclick="location.href='index.html'">←</button>
-<h1>🎮 سرگرمی</h1>
+<button class="ibtn" onclick="goBack()">←</button>
+<h1 id="hTitle">🎮 سرگرمی</h1>
 <div style="width:42px"></div>
 </div>
 
 <div class="wrap">
+
+<!-- منوی بازی‌ها -->
+<div id="menu" class="game on">
 <div class="intro">
 <div class="em">🎮</div>
 <h2>بازی‌های من</h2>
-<p>یک بازی انتخاب کن و لذت ببر</p>
+<p>یک بازی انتخاب کن</p>
 </div>
-
 <div class="grid">
-<a class="game-card" href="rps.html">
-<div class="ic" style="background:linear-gradient(135deg,#ef4444,#f59e0b);color:#fff">🪨</div>
+<div class="gcard" onclick="openGame('rps')">
+<div class="ic" style="background:linear-gradient(135deg,#ef4444,#f59e0b)">🪨</div>
 <div class="nm">سنگ کاغذ قیچی</div>
 <div class="ds">با کامپیوتر مسابقه بده</div>
-</a>
-<a class="game-card" href="guess.html">
-<div class="ic" style="background:linear-gradient(135deg,#10b981,#059669);color:#fff">🔢</div>
+</div>
+<div class="gcard" onclick="openGame('guess')">
+<div class="ic" style="background:linear-gradient(135deg,#10b981,#059669)">🔢</div>
 <div class="nm">حدس عدد</div>
 <div class="ds">عدد مخفی رو پیدا کن</div>
-</a>
-<a class="game-card" href="ttt.html">
-<div class="ic" style="background:linear-gradient(135deg,#3b82f6,#8b5cf6);color:#fff">❌</div>
+</div>
+<div class="gcard" onclick="openGame('ttt')">
+<div class="ic" style="background:linear-gradient(135deg,#3b82f6,#8b5cf6)">❌</div>
 <div class="nm">دوز</div>
 <div class="ds">X و O روی صفحه</div>
-</a>
-<a class="game-card" href="memory.html">
-<div class="ic" style="background:linear-gradient(135deg,#ec4899,#8b5cf6);color:#fff">🧠</div>
+</div>
+<div class="gcard" onclick="openGame('mem')">
+<div class="ic" style="background:linear-gradient(135deg,#ec4899,#8b5cf6)">🧠</div>
 <div class="nm">حافظه</div>
 <div class="ds">جفت کارت‌ها رو پیدا کن</div>
-</a>
+</div>
 </div>
 </div>
 
+<!-- سنگ کاغذ قیچی -->
+<div id="rps" class="game">
+<button class="back-g" onclick="goBack()">← بازگشت</button>
+<div class="title-c">🪨 سنگ کاغذ قیچی</div>
+<div class="rps-choices">
+<div class="rps-btn" onclick="playRPS('rock')">🪨</div>
+<div class="rps-btn" onclick="playRPS('paper')">📄</div>
+<div class="rps-btn" onclick="playRPS('scissors')">✂️</div>
+</div>
+<div class="rps-result" id="rpsResult">یک انتخاب کن 👆</div>
+<div class="rps-score">
+<div>تو<b id="rpsMe">0</b></div>
+<div>مساوی<b id="rpsTie">0</b></div>
+<div>کامپیوتر<b id="rpsPc">0</b></div>
+</div>
+</div>
+
+<!-- حدس عدد -->
+<div id="guess" class="game">
+<button class="back-g" onclick="goBack()">← بازگشت</button>
+<div class="title-c">🔢 حدس عدد</div>
+<input type="number" class="guess-input" id="guessIn" placeholder="عدد ۱ تا ۱۰۰" min="1" max="100">
+<button class="guess-btn" onclick="checkGuess()">حدس بزن</button>
+<div class="guess-hint" id="guessHint">عددی بین ۱ تا ۱۰۰ حدس بزن</div>
+<div class="guess-info">تعداد تلاش: <b id="guessTries">0</b></div>
+</div>
+
+<!-- دوز -->
+<div id="ttt" class="game">
+<button class="back-g" onclick="goBack()">← بازگشت</button>
+<div class="title-c">❌⭕ دوز</div>
+<div class="ttt-status" id="tttStatus">نوبت تو (❌)</div>
+<div class="ttt-grid" id="tttGrid"></div>
+</div>
+
+<!-- حافظه -->
+<div id="mem" class="game">
+<button class="back-g" onclick="goBack()">← بازگشت</button>
+<div class="title-c">🧠 حافظه</div>
+<div class="mem-status" id="memStatus">جفت‌ها رو پیدا کن</div>
+<div class="mem-grid" id="memGrid"></div>
+</div>
+
+</div>
+
+<script>
+var curGame=null;
+
+function goBack(){
+if(curGame){
+document.getElementById(curGame).classList.remove('on');
+document.getElementById('menu').classList.add('on');
+document.getElementById('hTitle').textContent='🎮 سرگرمی';
+curGame=null;
+}else{
+location.href='index.html';
+}
+}
+
+function openGame(g){
+document.getElementById('menu').classList.remove('on');
+document.getElementById(g).classList.add('on');
+curGame=g;
+var titles={rps:'🪨 سنگ کاغذ قیچی',guess:'🔢 حدس عدد',ttt:'❌⭕ دوز',mem:'🧠 حافظه'};
+document.getElementById('hTitle').textContent=titles[g];
+if(g==='ttt')initTTT();
+if(g==='mem')initMem();
+if(g==='guess')initGuess();
+}
+
+/* ===== سنگ کاغذ قیچی ===== */
+var rpsMe=0,rpsPc=0,rpsTie=0;
+function playRPS(me){
+var arr=['rock','paper','scissors'];
+var pc=arr[Math.floor(Math.random()*3)];
+var names={rock:'🪨',paper:'📄',scissors:'✂️'};
+var result='';
+if(me===pc){rpsTie++;result='🤝 مساوی!'}
+else if((me==='rock'&&pc==='scissors')||(me==='paper'&&pc==='rock')||(me==='scissors'&&pc==='paper')){rpsMe++;result='🎉 بردی!'}
+else{rpsPc++;result='😢 باختی!'}
+document.getElementById('rpsResult').innerHTML='تو: '+names[me]+'<br>کامپیوتر: '+names[pc]+'<br><span style="font-size:22px">'+result+'</span>';
+document.getElementById('rpsMe').textContent=rpsMe;
+document.getElementById('rpsPc').textContent=rpsPc;
+document.getElementById('rpsTie').textContent=rpsTie;
+}
+
+/* ===== حدس عدد ===== */
+var secretNum=0,guessTries=0;
+function initGuess(){
+secretNum=Math.floor(Math.random()*100)+1;
+guessTries=0;
+document.getElementById('guessTries').textContent='0';
+document.getElementById('guessHint').textContent='عددی بین ۱ تا ۱۰۰ حدس بزن';
+document.getElementById('guessIn').value='';
+}
+function checkGuess(){
+var v=parseInt(document.getElementById('guessIn').value);
+if(!v||v<1||v>100){document.getElementById('guessHint').textContent='⚠️ عدد بین ۱ تا ۱۰۰ وارد کن';return}
+guessTries++;
+document.getElementById('guessTries').textContent=guessTries;
+if(v===secretNum){
+document.getElementById('guessHint').innerHTML='🎉 آفرین! عدد '+secretNum+' بود<br>در '+guessTries+' تلاش';
+setTimeout(initGuess,3000);
+}else if(v<secretNum){
+document.getElementById('guessHint').textContent='⬆️ برو بالاتر';
+}else{
+document.getElementById('guessHint').textContent='⬇️ برو پایین‌تر';
+}
+document.getElementById('guessIn').value='';
+}
+
+/* ===== دوز ===== */
+var tttBoard=[],tttTurn='X',tttActive=false;
+function initTTT(){
+tttBoard=['','','','','','','','',''];
+tttTurn='X';
+tttActive=true;
+document.getElementById('tttStatus').textContent='نوبت تو (❌)';
+var g=document.getElementById('tttGrid');
+g.innerHTML='';
+for(var i=0;i<9;i++){
+(function(idx){
+var c=document.createElement('div');
+c.className='ttt-cell';
+c.onclick=function(){tttClick(idx)};
+g.appendChild(c);
+})(i);
+}
+}
+function tttClick(i){
+if(!tttActive||tttBoard[i])return;
+tttBoard[i]='X';
+renderTTT();
+if(checkTTT('X'))return;
+tttActive=false;
+document.getElementById('tttStatus').textContent='نوبت کامپیوتر...';
+setTimeout(pcMove,500);
+}
+function pcMove(){
+var empty=[];
+for(var i=0;i<9;i++)if(!tttBoard[i])empty.push(i);
+if(empty.length===0)return;
+var m=empty[Math.floor(Math.random()*empty.length)];
+tttBoard[m]='O';
+renderTTT();
+if(checkTTT('O'))return;
+tttActive=true;
+document.getElementById('tttStatus').textContent='نوبت تو (❌)';
+}
+function renderTTT(){
+var cells=document.querySelectorAll('#tttGrid .ttt-cell');
+for(var i=0;i<9;i++){
+cells[i].textContent=tttBoard[i];
+cells[i].className='ttt-cell'+(tttBoard[i]?' '+tttBoard[i].toLowerCase():'');
+}
+}
+function checkTTT(p){
+var wins=[[0,1,2],[3,4,5],[6,7,8],[0,3,6],[1,4,7],[2,5,8],[0,4,8],[2,4,6]];
+for(var i=0;i<wins.length;i++){
+var w=wins[i];
+if(tttBoard[w[0]]===p&&tttBoard[w[1]]===p&&tttBoard[w[2]]===p){
+tttActive=false;
+document.getElementById('tttStatus').textContent=p==='X'?'🎉 بردی!':'😢 باختی!';
+setTimeout(initTTT,2500);
+return true;
+}
+}
+if(tttBoard.indexOf('')<0){
+tttActive=false;
+document.getElementById('tttStatus').textContent='🤝 مساوی!';
+setTimeout(initTTT,2500);
+return true;
+}
+return false;
+}
+
+/* ===== حافظه ===== */
+var memFlipped=[],memMatched=0,memLock=false;
+function initMem(){
+var emojis=['🍎','🍌','🍇','🍊','🍓','🍉','🥝','🍒'];
+var deck=emojis.concat(emojis).sort(function(){return Math.random()-0.5});
+memFlipped=[];
+memMatched=0;
+memLock=false;
+document.getElementById('memStatus').textContent='جفت‌ها رو پیدا کن';
+var g=document.getElementById('memGrid');
+g.innerHTML='';
+for(var i=0;i<16;i++){
+(function(idx){
+var c=document.createElement('div');
+c.className='mem-card';
+c.innerHTML='<div class="mem-inner"><div class="mem-front">?</div><div class="mem-back">'+deck[idx]+'</div></div>';
+c.onclick=function(){memClick(idx,c,deck[idx])};
+g.appendChild(c);
+})(i);
+}
+}
+function memClick(i,c,emoji){
+if(memLock||c.classList.contains('flip')||c.classList.contains('matched'))return;
+c.classList.add('flip');
+memFlipped.push({c:c,e:emoji});
+if(memFlipped.length===2){
+memLock=true;
+if(memFlipped[0].e===memFlipped[1].e){
+memFlipped[0].c.classList.add('matched');
+memFlipped[1].c.classList.add('matched');
+memMatched++;
+memFlipped=[];
+memLock=false;
+if(memMatched===8){
+document.getElementById('memStatus').textContent='🎉 آفرین! همه رو پیدا کردی';
+setTimeout(initMem,2500);
+}
+}else{
+setTimeout(function(){
+memFlipped[0].c.classList.remove('flip');
+memFlipped[1].c.classList.remove('flip');
+memFlipped=[];
+memLock=false;
+},900);
+}
+}
+}
+</script>
 </body>
-</html>
+  </html>
