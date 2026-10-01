@@ -260,7 +260,7 @@ var cat=CATS.find(function(c){return c.id===item.c})||{ic:'📌'};
 content.appendChild(makeQ(item,cat.ic));
 });
 return;
-}
+} 
 
 document.getElementById('search').classList.add('hidden');
 var grid=document.createElement('div');grid.className='cat-grid';
