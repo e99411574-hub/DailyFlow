@@ -1,0 +1,351 @@
+/* ===== main.css - استایل اصلی ستاره ===== */
+
+/* ---------- متغیرها ---------- */
+:root {
+  /* رنگ اصلی گرادیانت */
+  --pr: #6C5CE7;
+  --pr2: #0984E3;
+  --gold: #FDCB6E;
+
+  /* رنگ‌های پس‌زمینه (تم پیش‌فرض: بنفش-آبی) */
+  --bg1: #1a1a2e;
+  --bg2: #16213e;
+  --bg3: #0f3460;
+
+  /* رنگ‌های متن */
+  --text: #ffffff;
+  --text2: #b8b8d0;
+  --text3: #8080a0;
+
+  /* کارت‌ها */
+  --card: rgba(255, 255, 255, 0.06);
+  --card2: rgba(255, 255, 255, 0.1);
+  --card-b: rgba(255, 255, 255, 0.12);
+
+  /* اندازه‌ها */
+  --r: 16px;
+  --r2: 24px;
+  --sp: 16px;
+  --sp2: 24px;
+
+  /* سایه */
+  --sd: 0 8px 32px rgba(0, 0, 0, 0.3);
+  --sd2: 0 4px 16px rgba(0, 0, 0, 0.2);
+}
+
+/* ---------- ریست ---------- */
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+  -webkit-tap-highlight-color: transparent;
+}
+
+html, body {
+  height: 100%;
+  overflow-x: hidden;
+}
+
+body {
+  font-family: 'Vazirmatn', Tahoma, sans-serif;
+  background: linear-gradient(160deg, var(--bg1), var(--bg2), var(--bg3));
+  background-attachment: fixed;
+  color: var(--text);
+  direction: rtl;
+  min-height: 100vh;
+  line-height: 1.6;
+  font-size: 15px;
+  transition: background 0.6s ease;
+}
+
+body[dir="ltr"] {
+  direction: ltr;
+  font-family: 'Nunito', Tahoma, sans-serif;
+}
+
+/* ---------- تایپوگرافی ---------- */
+h1, h2, h3, h4 {
+  font-weight: 800;
+  line-height: 1.3;
+  margin-bottom: 12px;
+}
+
+h1 { font-size: 26px; }
+h2 { font-size: 22px; }
+h3 { font-size: 18px; }
+
+p { margin-bottom: 8px; }
+
+a {
+  color: var(--gold);
+  text-decoration: none;
+}
+
+/* ---------- لِی‌اوت اصلی ---------- */
+.app {
+  max-width: 600px;
+  margin: 0 auto;
+  padding: 0 var(--sp);
+  padding-bottom: 100px;
+  min-height: 100vh;
+  position: relative;
+}
+
+/* ---------- هدر بالا ---------- */
+.hdr {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 16px 0;
+  gap: 12px;
+  margin-bottom: 16px;
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  background: linear-gradient(180deg, var(--bg1) 70%, transparent);
+  backdrop-filter: blur(10px);
+}
+
+.hdr-logo {
+  font-size: 22px;
+  font-weight: 900;
+  background: linear-gradient(135deg, var(--pr), var(--pr2), var(--gold));
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.hdr-coins {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  background: var(--card);
+  border: 1px solid var(--card-b);
+  padding: 8px 14px;
+  border-radius: 999px;
+  font-weight: 700;
+  font-size: 14px;
+  transition: transform 0.2s;
+}
+
+.hdr-coins:active { transform: scale(0.95); }
+
+.hdr-coins .icon { font-size: 16px; }
+
+/* ---------- نوار پایین (ناوبری) ---------- */
+.nav {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+  background: rgba(20, 20, 40, 0.95);
+  backdrop-filter: blur(20px);
+  border-top: 1px solid var(--card-b);
+  padding: 8px 4px;
+  padding-bottom: max(8px, env(safe-area-inset-bottom));
+  z-index: 200;
+}
+
+.nav-btn {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 4px;
+  padding: 8px 4px;
+  background: none;
+  border: none;
+  color: var(--text3);
+  font-family: inherit;
+  font-size: 10px;
+  font-weight: 600;
+  cursor: pointer;
+  border-radius: 12px;
+  transition: all 0.25s ease;
+  position: relative;
+}
+
+.nav-btn .nav-icon {
+  font-size: 22px;
+  transition: transform 0.25s;
+}
+
+.nav-btn:active { transform: scale(0.9); }
+
+.nav-btn.active {
+  color: var(--gold);
+}
+
+.nav-btn.active .nav-icon {
+  transform: scale(1.15) translateY(-2px);
+  filter: drop-shadow(0 0 8px var(--gold));
+}
+
+.nav-btn.active::before {
+  content: '';
+  position: absolute;
+  top: -1px;
+  width: 40%;
+  height: 3px;
+  border-radius: 0 0 8px 8px;
+  background: linear-gradient(90deg, var(--pr), var(--gold));
+}
+
+/* ---------- صفحات (View) ---------- */
+.view {
+  display: none;
+  animation: fadeIn 0.35s ease;
+}
+
+.view.active {
+  display: block;
+}
+
+/* ---------- کارت پایه ---------- */
+.card {
+  background: var(--card);
+  border: 1px solid var(--card-b);
+  border-radius: var(--r);
+  padding: 16px;
+  margin-bottom: 12px;
+  transition: all 0.25s ease;
+}
+
+.card:active { transform: scale(0.98); }
+
+/* ---------- دکمه‌ها ---------- */
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  padding: 12px 20px;
+  border: none;
+  border-radius: 12px;
+  font-family: inherit;
+  font-size: 15px;
+  font-weight: 700;
+  cursor: pointer;
+  transition: all 0.2s;
+  background: linear-gradient(135deg, var(--pr), var(--pr2));
+  color: white;
+  box-shadow: var(--sd2);
+}
+
+.btn:active { transform: scale(0.95); }
+
+.btn-gold {
+  background: linear-gradient(135deg, var(--gold), #E17055);
+}
+
+.btn-ghost {
+  background: var(--card);
+  border: 1px solid var(--card-b);
+  color: var(--text);
+  box-shadow: none;
+}
+
+.btn-block {
+  width: 100%;
+  display: flex;
+}
+
+/* ---------- Toast ---------- */
+.toast {
+  position: fixed;
+  bottom: 100px;
+  left: 50%;
+  transform: translateX(-50%) translateY(20px);
+  background: rgba(20, 20, 40, 0.95);
+  color: var(--text);
+  border: 1px solid var(--card-b);
+  padding: 12px 20px;
+  border-radius: 12px;
+  font-size: 14px;
+  font-weight: 700;
+  z-index: 1000;
+  opacity: 0;
+  pointer-events: none;
+  transition: all 0.3s ease;
+  max-width: 90vw;
+  text-align: center;
+  box-shadow: var(--sd);
+}
+
+.toast.on {
+  opacity: 1;
+  transform: translateX(-50%) translateY(0);
+  pointer-events: auto;
+}
+
+/* ---------- عنوان بخش ---------- */
+.sec-title {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-size: 16px;
+  font-weight: 800;
+  margin: 20px 0 12px;
+  color: var(--text);
+}
+
+.sec-title .icon {
+  font-size: 20px;
+}
+
+/* ---------- گرید ---------- */
+.grid-2 {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+}
+
+.grid-3 {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 10px;
+}
+
+/* ---------- اعداد فارسی ---------- */
+.fa-num {
+  font-feature-settings: "ss01";
+}
+
+/* ---------- مخفی ---------- */
+.hidden { display: none !important; }
+
+/* ---------- انیمیشن‌های پایه ---------- */
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(8px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes pulse {
+  0%, 100% { transform: scale(1); }
+  50%      { transform: scale(1.06); }
+}
+
+@keyframes spin {
+  from { transform: rotate(0deg); }
+  to   { transform: rotate(360deg); }
+}
+
+@keyframes float {
+  0%, 100% { transform: translateY(0); }
+  50%      { transform: translateY(-6px); }
+}
+
+/* ---------- اسکرول‌بار ---------- */
+::-webkit-scrollbar { width: 6px; }
+::-webkit-scrollbar-track { background: transparent; }
+::-webkit-scrollbar-thumb {
+  background: var(--card-b);
+  border-radius: 3px;
+  }
