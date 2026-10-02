@@ -1,270 +1,149 @@
-// ===== i18n.js - سیستم ترجمه =====
-var I18N = {
+// ===== i18n.js - ترجمه و زبان =====
+
+var LANG = 'fa';
+
+var TRANSLATIONS = {
   fa: {
-    // عمومی
-    appName: "ستاره",
-    slogan: "بازی کن، بساز، بدرخش",
-    ok: "تایید",
-    cancel: "لغو",
-    save: "ذخیره",
-    delete: "حذف",
-    edit: "ویرایش",
-    close: "بستن",
-    back: "بازگشت",
-    yes: "بله",
-    no: "خیر",
-    loading: "در حال بارگذاری...",
-    comingSoon: "به‌زودی!",
-    
-    // خانه
-    home: "خانه",
-    games: "سرگرمی",
-    tools: "ابزارها",
-    dailyPoem: "شعر روز",
-    dailyChallenge: "چالش روزانه",
-    coins: "سکه",
-    streak: "روز پیوسته",
-    
-    // نوار بالا
-    shop: "فروشگاه",
-    
-    // بازی‌ها
-    rps: "سنگ کاغذ قیچی",
-    guess: "حدس عدد",
-    tictactoe: "دوز",
-    memory: "حافظه",
-    easy: "مبتدی",
-    medium: "متوسط",
-    hard: "سخت",
-    level: "مرحله",
-    time: "زمان",
-    score: "امتیاز",
-    win: "بردی!",
-    lose: "باختی",
-    draw: "مساوی",
-    playAgain: "دوباره بازی",
-    nextLevel: "مرحله بعد",
-    youWon: "🎉 آفرین! بردی",
-    youLost: "😢 باختی، دوباره تلاش کن",
-    
-    // ماشین حساب
-    calculator: "ماشین‌حساب",
-    simple: "ساده",
-    scientific: "علمی",
-    history: "تاریخچه",
-    clearHistory: "پاک کردن تاریخچه",
-    
-    // کرنومتر
-    stopwatch: "کرنومتر",
-    timer: "تایمر",
-    pomodoro: "پومودورو",
-    start: "شروع",
-    pause: "توقف",
-    reset: "ریست",
-    lap: "دور",
-    
-    // برنامه روزانه
-    planner: "برنامه روزانه",
-    weekly: "برنامه هفتگی",
-    weeklyStats: "آمار هفتگی",
-    goal: "هدف روزانه",
-    addTask: "افزودن کار",
-    newDay: "شروع روز جدید",
-    
-    // تنظیمات
-    settings: "تنظیمات",
-    language: "زبان",
-    theme: "تم",
-    sound: "صدا",
-    privacy: "حریم خصوصی",
-    about: "درباره",
-    version: "نسخه",
-    clearData: "پاک کردن داده‌ها",
-    
-    // حریم خصوصی
-    profile: "پروفایل",
-    name: "نام کاربری",
-    bio: "بیوگرافی",
-    avatar: "آواتار",
-    selectTick: "انتخاب تیک",
-    male: "مرد",
-    female: "زن",
-    uploadFromGallery: "آپلود از گالری",
-    preview: "پیش‌نمایش",
-    
-    // فروشگاه
-    buy: "خرید",
-    owned: "خریداری شده",
-    active: "فعال",
-    simpleTicks: "تیک‌های ساده",
-    animatedTicks: "تیک‌های متحرک",
-    specialSymbols: "نمادهای ویژه",
-    themes: "تم‌های رنگی",
-    sounds: "صداها",
-    notEnoughCoins: "سکه کافی نداری!",
-    purchased: "خریداری شد!",
-    equipped: "فعال شد!",
-    
-    // متن‌ها
-    dailyPoemTitle: "شعر امروز",
-    goodbye: "خداحافظ",
-    hello: "سلام",
+    app_name: 'ستاره',
+    welcome: 'خوش آمدی',
+    welcome_sub: 'امروز چیکار کنیم؟',
+    guest: 'دوست',
+    coins: 'سکه',
+    level: 'مرحله',
+    streak: 'روز پیوسته',
+    settings: 'تنظیمات',
+    language: 'زبان',
+    sound: 'صدا',
+    version: 'نسخه',
+    reset_all: 'پاک کردن همه داده‌ها',
+    confirm_reset: 'همهٔ داده‌ها پاک شود؟',
+    soon: 'به‌زودی',
+    quick_access: 'دسترسی سریع',
+    save: 'ذخیره', cancel: 'لغو', delete: 'حذف',
+    edit: 'ویرایش', close: 'بستن', ok: 'باشه',
+    greet_morning: 'صبح بخیر ☀️',
+    greet_noon: 'ظهر بخیر 🌤️',
+    greet_evening: 'عصر بخیر 🌆',
+    greet_night: 'شب بخیر 🌙',
+    home: 'خانه', games: 'بازی', tools: 'ابزار',
+    shop: 'فروشگاه', profile: 'من',
+    shop_title: '🛒 فروشگاه',
+    shop_ticks: 'تیک', shop_symbols: 'نماد',
+    shop_themes: 'تم', shop_sounds: 'صدا',
+    shop_equip: 'فعال', shop_equipped_btn: '✓ فعال',
+    shop_bought: 'خریداری شد!', shop_equipped: 'فعال شد!',
+    shop_not_enough: 'سکه کافی نداری!',
+    shop_already: 'قبلاً خریداری شده', shop_error: 'خطا!',
+    notEnoughCoins: 'سکه کافی نداری!',
+    specialSymbols: 'نمادهای خاص',
+    tick_default: 'تیک ساده', tick_star: 'ستاره طلایی',
+    tick_heart: 'قلب سرخ', tick_diamond: 'الماس آبی',
+    'star_black': 'ستاره سیاه', 'star_gold': 'ستاره طلایی',
+    'heart_red': 'قلب سرخ', 'heart_pink': 'قلب صورتی',
+    'diamond_blue': 'الماس آبی', 'tick_simple': 'تیک ساده',
+    sym_moon: 'ماه', sym_sun: 'خورشید', sym_rocket: 'موشک',
+    sym_rainbow: 'رنگین‌کمان', sym_galaxy: 'کهکشان',
+    theme_purple: 'بنفش', theme_gold: 'طلایی',
+    theme_ocean: 'اقیانوس', theme_sunset: 'غروب', theme_dark: 'تیره',
+    sound_basic: 'پایه', sound_chime: 'زنگ',
+    sound_arcade: 'بازی', sound_nature: 'طبیعت',
+    noName: 'بدون نام', noBio: 'بدون بیو',
+    editName: 'ویرایش نام', editBio: 'ویرایش بیو',
+    chooseAvatar: 'انتخاب آواتار',
+    male: 'مرد', female: 'زن', gallery: 'گالری',
+    chooseTick: 'انتخاب تیک',
+    namePlaceholder: 'نامت را بنویس...',
+    bioPlaceholder: 'درباره‌ات بنویس...',
+    nameSaved: 'نام ذخیره شد', bioSaved: 'بیو ذخیره شد',
+    nameEmpty: 'نام را وارد کن', imgSaved: 'تصویر ذخیره شد',
+    imgTooBig: 'تصویر خیلی بزرگه', tickNotOwned: 'این تیک را نداری',
+    rps: 'سنگ کاغذ قیچی', guess: 'حدس عدد',
+    ttt: 'دوز', memory: 'حافظه',
+    calc: 'ماشین‌حساب', stopwatch: 'کرنومتر',
+    planner: 'برنامه روزانه', notes: 'یادداشت', todo: 'کارها',
+    levelup: 'سطح جدید', loading: 'در حال بارگذاری...', error: 'خطا'
   },
-  
   en: {
-    // General
-    appName: "Setareh",
-    slogan: "Play, Build, Shine",
-    ok: "OK",
-    cancel: "Cancel",
-    save: "Save",
-    delete: "Delete",
-    edit: "Edit",
-    close: "Close",
-    back: "Back",
-    yes: "Yes",
-    no: "No",
-    loading: "Loading...",
-    comingSoon: "Coming soon!",
-    
-    // Home
-    home: "Home",
-    games: "Games",
-    tools: "Tools",
-    dailyPoem: "Daily Poem",
-    dailyChallenge: "Daily Challenge",
-    coins: "Coins",
-    streak: "Day Streak",
-    
-    // Top bar
-    shop: "Shop",
-    
-    // Games
-    rps: "Rock Paper Scissors",
-    guess: "Guess Number",
-    tictactoe: "Tic Tac Toe",
-    memory: "Memory",
-    easy: "Easy",
-    medium: "Medium",
-    hard: "Hard",
-    level: "Level",
-    time: "Time",
-    score: "Score",
-    win: "You Win!",
-    lose: "You Lose",
-    draw: "Draw",
-    playAgain: "Play Again",
-    nextLevel: "Next Level",
-    youWon: "🎉 Great! You won",
-    youLost: "😢 You lost, try again",
-    
-    // Calculator
-    calculator: "Calculator",
-    simple: "Simple",
-    scientific: "Scientific",
-    history: "History",
-    clearHistory: "Clear History",
-    
-    // Stopwatch
-    stopwatch: "Stopwatch",
-    timer: "Timer",
-    pomodoro: "Pomodoro",
-    start: "Start",
-    pause: "Pause",
-    reset: "Reset",
-    lap: "Lap",
-    
-    // Planner
-    planner: "Daily Planner",
-    weekly: "Weekly Planner",
-    weeklyStats: "Weekly Stats",
-    goal: "Daily Goal",
-    addTask: "Add Task",
-    newDay: "Start New Day",
-    
-    // Settings
-    settings: "Settings",
-    language: "Language",
-    theme: "Theme",
-    sound: "Sound",
-    privacy: "Privacy",
-    about: "About",
-    version: "Version",
-    clearData: "Clear Data",
-    
-    // Privacy
-    profile: "Profile",
-    name: "Username",
-    bio: "Bio",
-    avatar: "Avatar",
-    selectTick: "Select Tick",
-    male: "Male",
-    female: "Female",
-    uploadFromGallery: "Upload from Gallery",
-    preview: "Preview",
-    
-    // Shop
-    buy: "Buy",
-    owned: "Owned",
-    active: "Active",
-    simpleTicks: "Simple Ticks",
-    animatedTicks: "Animated Ticks",
-    specialSymbols: "Special Symbols",
-    themes: "Color Themes",
-    sounds: "Sounds",
-    notEnoughCoins: "Not enough coins!",
-    purchased: "Purchased!",
-    equipped: "Equipped!",
-    
-    // Texts
-    dailyPoemTitle: "Today's Poem",
-    goodbye: "Goodbye",
-    hello: "Hello",
+    app_name: 'Setareh',
+    welcome: 'Welcome', welcome_sub: 'What shall we do today?',
+    guest: 'friend', coins: 'Coins', level: 'Level', streak: 'Streak',
+    settings: 'Settings', language: 'Language', sound: 'Sound',
+    version: 'Version', reset_all: 'Reset all data',
+    confirm_reset: 'Delete all data?', soon: 'Coming soon',
+    quick_access: 'Quick access',
+    save: 'Save', cancel: 'Cancel', delete: 'Delete',
+    edit: 'Edit', close: 'Close', ok: 'OK',
+    greet_morning: 'Good morning ☀️', greet_noon: 'Good afternoon 🌤️',
+    greet_evening: 'Good evening 🌆', greet_night: 'Good night 🌙',
+    home: 'Home', games: 'Games', tools: 'Tools',
+    shop: 'Shop', profile: 'Me',
+    shop_title: '🛒 Shop', shop_ticks: 'Ticks', shop_symbols: 'Symbols',
+    shop_themes: 'Themes', shop_sounds: 'Sounds',
+    shop_equip: 'Equip', shop_equipped_btn: '✓ Equipped',
+    shop_bought: 'Purchased!', shop_equipped: 'Equipped!',
+    shop_not_enough: 'Not enough coins!',
+    shop_already: 'Already owned', shop_error: 'Error!',
+    notEnoughCoins: 'Not enough coins!', specialSymbols: 'Special symbols',
+    tick_default: 'Simple tick', tick_star: 'Gold star',
+    tick_heart: 'Red heart', tick_diamond: 'Blue diamond',
+    'star_black': 'Black star', 'star_gold': 'Gold star',
+    'heart_red': 'Red heart', 'heart_pink': 'Pink heart',
+    'diamond_blue': 'Blue diamond', 'tick_simple': 'Simple tick',
+    sym_moon: 'Moon', sym_sun: 'Sun', sym_rocket: 'Rocket',
+    sym_rainbow: 'Rainbow', sym_galaxy: 'Galaxy',
+    theme_purple: 'Purple', theme_gold: 'Gold',
+    theme_ocean: 'Ocean', theme_sunset: 'Sunset', theme_dark: 'Dark',
+    sound_basic: 'Basic', sound_chime: 'Chime',
+    sound_arcade: 'Arcade', sound_nature: 'Nature',
+    noName: 'No name', noBio: 'No bio',
+    editName: 'Edit name', editBio: 'Edit bio',
+    chooseAvatar: 'Choose avatar',
+    male: 'Male', female: 'Female', gallery: 'Gallery',
+    chooseTick: 'Choose tick',
+    namePlaceholder: 'Write your name...',
+    bioPlaceholder: 'About you...',
+    nameSaved: 'Name saved', bioSaved: 'Bio saved',
+    nameEmpty: 'Enter a name', imgSaved: 'Image saved',
+    imgTooBig: 'Image too large', tickNotOwned: 'You don\'t own this tick',
+    rps: 'Rock Paper Scissors', guess: 'Guess the number',
+    ttt: 'Tic Tac Toe', memory: 'Memory',
+    calc: 'Calculator', stopwatch: 'Stopwatch',
+    planner: 'Daily planner', notes: 'Notes', todo: 'To-Do',
+    levelup: 'New level', loading: 'Loading...', error: 'Error'
   }
 };
 
-// زبان فعلی
-var currentLang = localStorage.getItem('setareh_lang') || 'fa';
-
-// تابع ترجمه
 function t(key) {
-  var dict = I18N[currentLang];
-  if (!dict) return key;
-  return dict[key] || I18N['fa'][key] || key;
+  if (!key) return '';
+  var dict = TRANSLATIONS[LANG] || TRANSLATIONS.fa;
+  if (dict[key] !== undefined) return dict[key];
+  if (TRANSLATIONS.fa[key] !== undefined) return TRANSLATIONS.fa[key];
+  return key;
 }
 
-// تغییر زبان
+function toFa(input) {
+  if (input === null || input === undefined) return '';
+  var str = String(input);
+  if (LANG !== 'fa') return str;
+  return str.replace(/\d/g, function(d) { return '۰۱۲۳۴۵۶۷۸۹'[d]; });
+}
+
+function fmtNum(input) { return toFa(input); }
+
 function setLanguage(lang) {
-  if (!I18N[lang]) return;
-  currentLang = lang;
-  localStorage.setItem('setareh_lang', lang);
+  if (lang !== 'fa' && lang !== 'en') return;
+  LANG = lang;
+  window.LANG = lang;
   document.documentElement.lang = lang;
   document.documentElement.dir = (lang === 'fa') ? 'rtl' : 'ltr';
-  document.body.dir = (lang === 'fa') ? 'rtl' : 'ltr';
-  if (typeof onLanguageChange === 'function') {
-    onLanguageChange();
-  }
+  document.body.setAttribute('dir', (lang === 'fa') ? 'rtl' : 'ltr');
+  document.body.style.fontFamily = (lang === 'fa')
+    ? "'Vazirmatn', Tahoma, sans-serif"
+    : "'Nunito', Tahoma, sans-serif";
 }
 
-// تبدیل ارقام به فارسی
-function toFa(num) {
-  if (currentLang !== 'fa') return String(num);
-  var faDigits = ['۰','۱','۲','۳','۴','۵','۶','۷','۸','۹'];
-  return String(num).replace(/\d/g, function(d) { return faDigits[+d]; });
-}
-
-// تبدیل ارقام به انگلیسی
-function toEn(num) {
-  var faDigits = ['۰','۱','۲','۳','۴','۵','۶','۷','۸','۹'];
-  return String(num).replace(/[۰-۹]/g, function(d) { return faDigits.indexOf(d); });
-}
-
-// فرمت عدد با جداکننده هزارگان
-function fmtNum(n) {
-  var s = Number(n).toLocaleString('en-US');
-  return toFa(s);
-}
-
-// راه‌اندازی اولیه
-document.documentElement.lang = currentLang;
-document.documentElement.dir = (currentLang === 'fa') ? 'rtl' : 'ltr';
+window.t = t;
+window.toFa = toFa;
+window.fmtNum = fmtNum;
+window.setLanguage = setLanguage;
+window.TRANSLATIONS = TRANSLATIONS;
