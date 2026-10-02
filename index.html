@@ -13,6 +13,12 @@ body[data-t=ocean]{--bg1:#eff6ff;--bg2:#dbeafe;--card:#fff;--text:#1e3a8a;--t2:#
 body[data-t=purple]{--bg1:#faf5ff;--bg2:#f3e8ff;--card:#fff;--text:#581c87;--t2:#9333ea;--t3:#a855f7;--pr:#a855f7;--pr2:#d946ef;--bd:rgba(168,85,247,.1)}
 body[data-t=rose]{--bg1:#fff1f2;--bg2:#ffe4e6;--card:#fff;--text:#881337;--t2:#e11d48;--t3:#fb7185;--pr:#e11d48;--pr2:#ec4899;--bd:rgba(225,29,72,.1)}
 body[data-t=midnight]{--bg1:#0f172a;--bg2:#1e293b;--card:#1e293b;--text:#f1f5f9;--t2:#94a3b8;--t3:#64748b;--pr:#38bdf8;--pr2:#a78bfa;--bd:rgba(255,255,255,.06);--sd:0 4px 20px rgba(0,0,0,.5)}
+body[data-t=spotify]{--bg1:#121212;--bg2:#181818;--card:#181818;--text:#fff;--t2:#b3b3b3;--t3:#7a7a7a;--pr:#1db954;--pr2:#1ed760;--bd:rgba(255,255,255,.08);--sd:0 4px 20px rgba(0,0,0,.5)}
+body[data-t=discord]{--bg1:#36393f;--bg2:#2f3136;--card:#2f3136;--text:#fff;--t2:#b9bbbe;--t3:#72767d;--pr:#5865f2;--pr2:#7289da;--bd:rgba(255,255,255,.06);--sd:0 4px 20px rgba(0,0,0,.4)}
+body[data-t=instagram]{--bg1:#fafafa;--bg2:#fff0f6;--card:#fff;--text:#262626;--t2:#8e8e8e;--t3:#c7c7c7;--pr:#e1306c;--pr2:#fd1d1d;--bd:rgba(225,48,108,.1);--sd:0 4px 20px rgba(225,48,108,.1)}
+body[data-t=twitter]{--bg1:#fff;--bg2:#f7f9f9;--card:#fff;--text:#0f1419;--t2:#536471;--t3:#8b98a5;--pr:#1da1f2;--pr2:#0d8bd9;--bd:rgba(0,0,0,.08);--sd:0 4px 20px rgba(29,161,242,.1)}
+body[data-t=youtube]{--bg1:#0f0f0f;--bg2:#181818;--card:#212121;--text:#fff;--t2:#aaa;--t3:#717171;--pr:#ff0000;--pr2:#cc0000;--bd:rgba(255,255,255,.08);--sd:0 4px 20px rgba(0,0,0,.5)}
+body[data-t=whatsapp]{--bg1:#111b21;--bg2:#0b141a;--card:#202c33;--text:#e9edef;--t2:#8696a0;--t3:#667781;--pr:#25d366;--pr2:#128c7e;--bd:rgba(255,255,255,.06);--sd:0 4px 20px rgba(0,0,0,.4)}
 *{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
 html,body{overscroll-behavior:none}
 body{font-family:Tahoma,sans-serif;background:linear-gradient(160deg,var(--bg1),var(--bg2));background-attachment:fixed;color:var(--text);min-height:100vh;transition:background .3s,color .3s;font-size:14px}
@@ -135,6 +141,9 @@ li input[type=checkbox]:checked::after{content:'✓';position:absolute;inset:0;d
 .userHdr .info{flex:1;text-align:right}
 .userHdr .nm{font-size:15px;font-weight:700}
 .userHdr .sub{font-size:11px;opacity:.85;margin-top:2px}
+.ct-colors{display:grid;grid-template-columns:repeat(6,1fr);gap:10px;margin-bottom:16px}
+.ct-colors button{width:100%;aspect-ratio:1;border-radius:12px;border:3px solid transparent;cursor:pointer;transition:.2s}
+.ct-colors button:active{transform:scale(.9)}
 </style>
 </head>
 <body>
@@ -242,6 +251,10 @@ li input[type=checkbox]:checked::after{content:'✓';position:absolute;inset:0;d
 <div class="tgrid" id="tgrid"></div>
 </div>
 <div class="srow-flat">
+<div class="slbl">🎨 تم اختصاصی</div>
+<button class="mini" onclick="openCT()" style="font-size:20px;opacity:1">🎨</button>
+</div>
+<div class="srow-flat">
 <div class="slbl">🌙 حالت خودکار شب/روز</div>
 <div class="tg" id="autoTg" onclick="toggleAuto()"></div>
 </div>
@@ -253,6 +266,7 @@ li input[type=checkbox]:checked::after{content:'✓';position:absolute;inset:0;d
 <div class="slbl">🔊 صدا</div>
 <div class="tg" id="sndTg" onclick="toggleSound()"></div>
 </div>
+<div class="srow-flat">
 <div class="srow-flat">
 <div class="slbl">📳 لرزش</div>
 <div class="tg" id="vibTg" onclick="toggleVib()"></div>
@@ -320,7 +334,7 @@ li input[type=checkbox]:checked::after{content:'✓';position:absolute;inset:0;d
 <div class="slist">
 <div class="srow-flat">
 <div class="slbl">📱 نسخه</div>
-<span style="color:var(--t2);font-size:13px">۱۲.۰</span>
+<span style="color:var(--t2);font-size:13px">۱۳.۰</span>
 </div>
 <div class="srow-flat">
 <div class="slbl">💡 راهنما</div>
@@ -372,12 +386,44 @@ li input[type=checkbox]:checked::after{content:'✓';position:absolute;inset:0;d
 </div>
 </div>
 
+<div id="ct" class="ovl" style="display:none">
+<div class="mdl">
+<h3>🎨 تم اختصاصی</h3>
+<p style="font-size:13px;color:var(--t2);margin-bottom:12px">یک رنگ اصلی انتخاب کن:</p>
+<div class="ct-colors" id="ctColors"></div>
+<p style="font-size:12px;color:var(--t2);margin-bottom:10px">یا رنگ دلخواه خودت:</p>
+<div style="display:flex;gap:8px;margin-bottom:16px">
+<input type="color" id="ctC1" value="#6366f1" style="width:100%;height:50px;border:none;border-radius:12px;cursor:pointer;background:transparent">
+<input type="color" id="ctC2" value="#8b5cf6" style="width:100%;height:50px;border:none;border-radius:12px;cursor:pointer;background:transparent">
+</div>
+<div class="mac">
+<button class="bc" onclick="closeCT()">لغو</button>
+<button class="bs" onclick="applyCT()">اعمال</button>
+</div>
+</div>
+</div>
+
 <div id="toast" class="toast"></div>
 
 <script>
-var KP='plan_v20',KT='theme_v20',KD='date_v20',KS='stats_v20',KSND='sound_v20',KAUTO='auto_v20',KVIB='vib_v20',KU='user_v20',KG='goal_v20';
+var KP='plan_v21',KT='theme_v21',KD='date_v21',KS='stats_v21',KSND='sound_v21',KAUTO='auto_v21',KVIB='vib_v21',KU='user_v21',KG='goal_v21';
 
-var THEMES=[{id:'light',nm:'روشن',c1:'#ffffff',c2:'#6366f1'},{id:'dark',nm:'تاریک',c1:'#1a1f32',c2:'#818cf8'},{id:'mint',nm:'نعنایی',c1:'#f0fdf4',c2:'#10b981'},{id:'ocean',nm:'اقیانوس',c1:'#eff6ff',c2:'#3b82f6'},{id:'purple',nm:'بنفش',c1:'#faf5ff',c2:'#a855f7'},{id:'rose',nm:'رز',c1:'#fff1f2',c2:'#e11d48'},{id:'midnight',nm:'نیمه‌شب',c1:'#0f172a',c2:'#38bdf8'}];
+var THEMES=[
+{id:'light',nm:'روشن',c1:'#ffffff',c2:'#6366f1'},
+{id:'dark',nm:'تاریک',c1:'#1a1f32',c2:'#818cf8'},
+{id:'mint',nm:'نعنایی',c1:'#f0fdf4',c2:'#10b981'},
+{id:'ocean',nm:'اقیانوس',c1:'#eff6ff',c2:'#3b82f6'},
+{id:'purple',nm:'بنفش',c1:'#faf5ff',c2:'#a855f7'},
+{id:'rose',nm:'رز',c1:'#fff1f2',c2:'#e11d48'},
+{id:'midnight',nm:'نیمه‌شب',c1:'#0f172a',c2:'#38bdf8'},
+{id:'spotify',nm:'اسپاتیفای',c1:'#121212',c2:'#1db954'},
+{id:'discord',nm:'دیسکورد',c1:'#36393f',c2:'#5865f2'},
+{id:'instagram',nm:'اینستاگرام',c1:'#fff0f6',c2:'#e1306c'},
+{id:'twitter',nm:'توییتر',c1:'#ffffff',c2:'#1da1f2'},
+{id:'youtube',nm:'یوتیوب',c1:'#0f0f0f',c2:'#ff0000'},
+{id:'whatsapp',nm:'واتساپ',c1:'#111b21',c2:'#25d366'}
+];
+
 var SCOLORS=['#6366f1','#10b981','#f59e0b','#ef4444','#ec4899','#3b82f6','#8b5cf6','#06b6d4','#84cc16','#f97316'];
 var SICONS=['🌅','🌙','⭐','📚','🏫','🌤️','🍽️','🪥','💧','🏃','🚿','😴','📖','✍️','💪','🎯','🧘','🎵','🎨','💻','📱','🔬','🧪','🌿','🐐','🐱','🦁','🌸','⚡','🔥','🎁','✨'];
 
@@ -509,24 +555,73 @@ function save(){try{localStorage.setItem(KP,JSON.stringify(plan))}catch(e){}}
 function saveStats(){try{localStorage.setItem(KS,JSON.stringify(stats))}catch(e){}}
 
 function getAutoTheme(){var h=new Date().getHours();return (h>=19||h<7)?'midnight':'light'}
+
 function applyTheme(){
 var t=localStorage.getItem(KT)||'light';
 if(autoOn)t=getAutoTheme();
+if(t==='custom'){
+var c1=localStorage.getItem(KT+'_c1')||'#6366f1';
+var c2=localStorage.getItem(KT+'_c2')||'#8b5cf6';
+var se=document.getElementById('cts');
+if(!se){se=document.createElement('style');se.id='cts';document.head.appendChild(se);}
+se.textContent='body[data-t=custom]{--bg1:#f8f9fc;--bg2:#eef1f8;--card:#fff;--text:#1a1f36;--t2:#6b7280;--t3:#9ca3af;--pr:'+c1+';--pr2:'+c2+';--bd:rgba(0,0,0,.06);--sd:0 4px 20px '+c1+'22}';
+}
 document.body.setAttribute('data-t',t);
 if(!autoOn&&stats.themesUsed.indexOf(t)<0){stats.themesUsed.push(t);saveStats()}
 renderThemes();
 }
+
 function setTheme(t){try{localStorage.setItem(KT,t)}catch(e){};applyTheme();sndAdd();showToast('🎨 تم تغییر کرد')}
 function toggleAuto(){autoOn=!autoOn;localStorage.setItem(KAUTO,autoOn?'on':'off');updateToggles();applyTheme();sndAdd();showToast(autoOn?'🌙 حالت خودکار روشن':'خاموش')}
 function toggleSound(){soundOn=!soundOn;localStorage.setItem(KSND,soundOn?'on':'off');updateToggles();if(soundOn)beep(880,0.1,'sine',0.1);showToast(soundOn?'🔔 صدا روشن':'🔕 صدا خاموش')}
 function toggleVib(){vibOn=!vibOn;localStorage.setItem(KVIB,vibOn?'on':'off');updateToggles();vibrate(50);showToast(vibOn?'📳 لرزش روشن':'لرزش خاموش')}
+
 function updateToggles(){
 var t1=document.getElementById('autoTg');if(t1)t1.classList.toggle('on',autoOn);
 var t2=document.getElementById('sndTg');if(t2)t2.classList.toggle('on',soundOn);
 var t4=document.getElementById('vibTg');if(t4)t4.classList.toggle('on',vibOn);
 var g=document.getElementById('goalIn');if(g)g.value=goal;
 }
+
 function setGoal(v){v=Math.max(0,Math.min(100,parseInt(v)||70));goal=v;localStorage.setItem(KG,v);sndAdd();showToast('🎯 هدف روزانه: '+fa(v)+'٪')}
+
+function openCT(){
+var g=document.getElementById('ctColors');
+g.innerHTML='';
+var colors=['#6366f1','#8b5cf6','#ec4899','#ef4444','#f59e0b','#10b981','#06b6d4','#3b82f6','#84cc16','#f97316','#a855f7','#14b8a6'];
+colors.forEach(function(c){
+var b=document.createElement('button');
+b.style.background=c;
+b.onclick=function(){
+document.getElementById('ctC1').value=c;
+document.getElementById('ctC2').value=adjustBright(c,20);
+};
+g.appendChild(b);
+});
+document.getElementById('ct').style.display='flex';
+}
+function closeCT(){document.getElementById('ct').style.display='none'}
+function adjustBright(hex,percent){
+var num=parseInt(hex.replace('#',''),16);
+var amt=Math.round(2.55*percent);
+var R=Math.min(255,(num>>16)+amt);
+var G=Math.min(255,((num>>8)&0xFF)+amt);
+var B=Math.min(255,(num&0xFF)+amt);
+return '#'+(0x1000000+R*0x10000+G*0x100+B).toString(16).slice(1);
+}
+function applyCT(){
+var c1=document.getElementById('ctC1').value;
+var c2=document.getElementById('ctC2').value;
+try{
+localStorage.setItem(KT+'_c1',c1);
+localStorage.setItem(KT+'_c2',c2);
+localStorage.setItem(KT,'custom');
+}catch(e){}
+applyTheme();
+closeCT();
+sndAdd();
+showToast('🎨 تم اختصاصی اعمال شد');
+}
 
 function renderThemes(){
 var g=document.getElementById('tgrid');if(!g)return;
@@ -632,7 +727,7 @@ function resetAll(){if(confirm('همه تیک‌ها پاک شود؟')){for(var 
 
 function clearAll(){if(confirm('همه داده‌ها پاک شود؟')){try{localStorage.removeItem(KP);localStorage.removeItem(KD);localStorage.removeItem(KS)}catch(e){}location.reload()}}
 
-function backup(){try{var data={plan:plan,stats:stats,user:userName,version:'12.0',date:new Date().toISOString()};var blob=new Blob([JSON.stringify(data,null,2)],{type:'application/json'});var url=URL.createObjectURL(blob);var a=document.createElement('a');a.href=url;var d=new Date();a.download='barnameh-'+d.getFullYear()+'-'+(d.getMonth()+1)+'-'+d.getDate()+'.json';a.click();URL.revokeObjectURL(url);stats.backups=(stats.backups||0)+1;saveStats();checkAch();sndAdd();showToast('💾 پشتیبان ذخیره شد')}catch(e){showToast('خطا')}}
+function backup(){try{var data={plan:plan,stats:stats,user:userName,version:'13.0',date:new Date().toISOString()};var blob=new Blob([JSON.stringify(data,null,2)],{type:'application/json'});var url=URL.createObjectURL(blob);var a=document.createElement('a');a.href=url;var d=new Date();a.download='barnameh-'+d.getFullYear()+'-'+(d.getMonth()+1)+'-'+d.getDate()+'.json';a.click();URL.revokeObjectURL(url);stats.backups=(stats.backups||0)+1;saveStats();checkAch();sndAdd();showToast('💾 پشتیبان ذخیره شد')}catch(e){showToast('خطا')}}
 
 function restore(e){var f=e.target.files[0];if(!f)return;var r=new FileReader();r.onload=function(ev){try{var data=JSON.parse(ev.target.result);if(!data.plan)throw new Error('invalid');if(!confirm('داده‌های فعلی جایگزین شوند؟'))return;plan=data.plan;stats=data.stats||stats;save();saveStats();location.reload()}catch(err){showToast('❌ فایل نامعتبر')}};r.readAsText(f)}
 
@@ -751,7 +846,7 @@ document.getElementById('poemBy').textContent=p.p;
 }
 
 function showHelp(){
-alert('📖 راهنما\n\n🏠 خانه: ابزارها\n📋 برنامه روزانه: تیک زدن کارها\n🧮 ماشین حساب: محاسبات\n🗓 تقویم: تقویم شمسی\n⏱ کرنومتر: شمارش زمان\n💬 پرسش: دایرة‌المعارف\n🎮 سرگرمی: بازی‌ها\n\n☰ تنظیمات بالا-چپ\n🏅 دستاوردها بالا-راست');
+alert('📖 راهنما\n\n🏠 خانه: ابزارها\n📋 برنامه روزانه: تیک زدن کارها\n🧮 ماشین حساب: محاسبات\n🗓 تقویم: تقویم شمسی\n⏱ کرنومتر: شمارش زمان\n💬 پرسش: دایرة‌المعارف\n🎮 سرگرمی: بازی‌ها\n\n☰ تنظیمات بالا-چپ\n🏅 دستاوردها بالا-راست\n🎨 تم اختصاصی در تنظیمات');
 }
 
 (function init(){
@@ -766,6 +861,7 @@ setInterval(function(){if(autoOn)applyTheme()},60000);
 
 document.getElementById('em').onclick=function(e){if(e.target.id==='em')closeEdt()};
 document.getElementById('nm').onclick=function(e){if(e.target.id==='nm')document.getElementById('nm').style.display='none'};
+document.getElementById('ct').onclick=function(e){if(e.target.id==='ct')closeCT()};
 document.addEventListener('click',function(){initAudio()},{once:true});
 </script>
 </body>
