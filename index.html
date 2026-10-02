@@ -2,958 +2,127 @@
 <html lang="fa" dir="rtl">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
-<title>اپ من</title>
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, viewport-fit=cover">
+<meta name="theme-color" content="#6C5CE7">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="ستاره">
+<meta name="description" content="ستاره - بازی کن، بساز، بدرخش">
+<title>⭐ ستاره | Setareh</title>
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Vazirmatn:wght@400;600;700;800;900&family=Nunito:wght@400;600;700;800;900&display=swap" rel="stylesheet">
+
 <link rel="manifest" href="manifest.json">
-<style>
-:root{--bg1:#f8f9fc;--bg2:#eef1f8;--card:#fff;--text:#1a1f36;--t2:#6b7280;--t3:#9ca3af;--pr:#6366f1;--pr2:#8b5cf6;--bd:rgba(0,0,0,.06);--rad:18px;--sd:0 4px 20px rgba(99,102,241,.08);--gold:#f59e0b}
-body[data-t=dark]{--bg1:#0a0e1a;--bg2:#0f1424;--card:#1a1f32;--text:#f1f5f9;--t2:#94a3b8;--t3:#64748b;--pr:#818cf8;--pr2:#a78bfa;--bd:rgba(255,255,255,.06);--sd:0 4px 20px rgba(0,0,0,.4)}
-body[data-t=mint]{--bg1:#f0fdf4;--bg2:#dcfce7;--card:#fff;--text:#064e3b;--t2:#059669;--t3:#34d399;--pr:#10b981;--pr2:#14b8a6;--bd:rgba(16,185,129,.1)}
-body[data-t=ocean]{--bg1:#eff6ff;--bg2:#dbeafe;--card:#fff;--text:#1e3a8a;--t2:#3b82f6;--t3:#60a5fa;--pr:#3b82f6;--pr2:#2563eb;--bd:rgba(59,130,246,.1)}
-body[data-t=purple]{--bg1:#faf5ff;--bg2:#f3e8ff;--card:#fff;--text:#581c87;--t2:#9333ea;--t3:#a855f7;--pr:#a855f7;--pr2:#d946ef;--bd:rgba(168,85,247,.1)}
-body[data-t=rose]{--bg1:#fff1f2;--bg2:#ffe4e6;--card:#fff;--text:#881337;--t2:#e11d48;--t3:#fb7185;--pr:#e11d48;--pr2:#ec4899;--bd:rgba(225,29,72,.1)}
-body[data-t=midnight]{--bg1:#0f172a;--bg2:#1e293b;--card:#1e293b;--text:#f1f5f9;--t2:#94a3b8;--t3:#64748b;--pr:#38bdf8;--pr2:#a78bfa;--bd:rgba(255,255,255,.06);--sd:0 4px 20px rgba(0,0,0,.5)}
-body[data-t=spotify]{--bg1:#121212;--bg2:#181818;--card:#181818;--text:#fff;--t2:#b3b3b3;--t3:#7a7a7a;--pr:#1db954;--pr2:#1ed760;--bd:rgba(255,255,255,.08);--sd:0 4px 20px rgba(0,0,0,.5)}
-body[data-t=discord]{--bg1:#36393f;--bg2:#2f3136;--card:#2f3136;--text:#fff;--t2:#b9bbbe;--t3:#72767d;--pr:#5865f2;--pr2:#7289da;--bd:rgba(255,255,255,.06);--sd:0 4px 20px rgba(0,0,0,.4)}
-body[data-t=instagram]{--bg1:#fafafa;--bg2:#fff0f6;--card:#fff;--text:#262626;--t2:#8e8e8e;--t3:#c7c7c7;--pr:#e1306c;--pr2:#fd1d1d;--bd:rgba(225,48,108,.1);--sd:0 4px 20px rgba(225,48,108,.1)}
-body[data-t=twitter]{--bg1:#fff;--bg2:#f7f9f9;--card:#fff;--text:#0f1419;--t2:#536471;--t3:#8b98a5;--pr:#1da1f2;--pr2:#0d8bd9;--bd:rgba(0,0,0,.08);--sd:0 4px 20px rgba(29,161,242,.1)}
-body[data-t=youtube]{--bg1:#0f0f0f;--bg2:#181818;--card:#212121;--text:#fff;--t2:#aaa;--t3:#717171;--pr:#ff0000;--pr2:#cc0000;--bd:rgba(255,255,255,.08);--sd:0 4px 20px rgba(0,0,0,.5)}
-body[data-t=whatsapp]{--bg1:#111b21;--bg2:#0b141a;--card:#202c33;--text:#e9edef;--t2:#8696a0;--t3:#667781;--pr:#25d366;--pr2:#128c7e;--bd:rgba(255,255,255,.06);--sd:0 4px 20px rgba(0,0,0,.4)}
-*{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
-html,body{overscroll-behavior:none}
-body{font-family:Tahoma,sans-serif;background:linear-gradient(160deg,var(--bg1),var(--bg2));background-attachment:fixed;color:var(--text);min-height:100vh;transition:background .3s,color .3s;font-size:14px}
-.view{display:none}
-.view.active{display:block;animation:fadeIn .35s ease}
-@keyframes fadeIn{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:translateY(0)}}
-@keyframes slideIn{from{opacity:0;transform:translateX(20px)}to{opacity:1;transform:translateX(0)}}
-@keyframes spin{from{transform:rotate(0)}to{transform:rotate(360deg)}}
-@keyframes spin2{from{transform:rotate(0)}to{transform:rotate(-360deg)}}
-@keyframes shine{0%{background-position:0% 0}100%{background-position:200% 0}}
-.hdr{display:flex;align-items:center;justify-content:space-between;padding:12px 16px;background:var(--card);box-shadow:var(--sd);position:sticky;top:0;z-index:10;padding-top:calc(12px + env(safe-area-inset-top))}
-.hdr-mid{text-align:center;flex:1;padding:0 8px;min-width:0}
-.hdr h1{font-size:16px;font-weight:700;background:linear-gradient(135deg,var(--pr),var(--pr2));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
-.hdr .date{font-size:11px;color:var(--t2);margin-top:2px;font-weight:500}
-.ibtn{background:none;border:none;font-size:20px;cursor:pointer;width:42px;height:42px;border-radius:12px;color:var(--text);display:flex;align-items:center;justify-content:center;flex-shrink:0;transition:transform .15s}
-.ibtn:active{background:var(--bd);transform:scale(.9)}
-.wrap{padding:16px 14px 90px;max-width:600px;margin:0 auto}
-.profileHdr{display:flex;align-items:center;gap:14px;padding:18px;background:linear-gradient(135deg,var(--pr),var(--pr2));color:#fff;border-radius:var(--rad);margin-bottom:16px;box-shadow:0 10px 30px rgba(99,102,241,.35);cursor:pointer;transition:transform .2s;position:relative;overflow:hidden;animation:slideIn .4s ease}
-.profileHdr::before{content:'';position:absolute;top:-50%;left:-50%;width:200%;height:200%;background:radial-gradient(circle,rgba(255,255,255,.15),transparent 70%);animation:spin 20s linear infinite}
-.profileHdr:active{transform:scale(.98)}
-.profileHdr .avatar{width:64px;height:64px;border-radius:50%;background:rgba(255,255,255,.3);display:flex;align-items:center;justify-content:center;font-size:32px;font-weight:700;position:relative;flex-shrink:0;border:3px solid rgba(255,255,255,.4)}
-.profileHdr .info{flex:1;text-align:right;position:relative;z-index:1}
-.profileHdr .nm{font-size:18px;font-weight:800;margin-bottom:4px}
-.profileHdr .sub{font-size:12px;opacity:.9;margin-bottom:6px}
-.profileHdr .stats{display:flex;gap:12px;justify-content:flex-end;font-size:11px;opacity:.9}
-.profileHdr .stats span{background:rgba(255,255,255,.2);padding:3px 9px;border-radius:10px;font-weight:600}
-.poemBox{background:var(--card);border-radius:var(--rad);padding:22px 18px;box-shadow:var(--sd);margin-bottom:18px;border:1px solid var(--bd);text-align:center;position:relative;overflow:hidden;min-height:110px;display:flex;flex-direction:column;justify-content:center;animation:fadeIn .5s ease}
-.poemBox::before{content:'❝';position:absolute;top:6px;right:14px;font-size:36px;color:var(--pr);opacity:.12}
-.poemBox::after{content:'❞';position:absolute;bottom:6px;left:14px;font-size:36px;color:var(--pr);opacity:.12}
-.poemTxt{font-size:15px;font-weight:500;line-height:2;color:var(--text);margin-bottom:12px;white-space:pre-line;position:relative;z-index:1}
-.poemBy{font-size:12px;color:var(--pr);font-weight:700;position:relative;z-index:1}
-.poemBy::before{content:'— '}
-.sec-title-bar{display:flex;align-items:center;gap:10px;margin:24px 4px 12px;font-size:16px;font-weight:800;color:var(--text)}
-.sec-title-bar .ic{width:38px;height:38px;border-radius:12px;display:flex;align-items:center;justify-content:center;font-size:20px}
-.sec-title-bar .tt{flex:1}
-.sec-title-bar .sb{font-size:11px;color:var(--t2);font-weight:500;margin-top:2px}
-.homeGrid{display:grid;grid-template-columns:1fr 1fr;gap:14px;animation:fadeIn .6s ease}
-.card{background:var(--card);border:1px solid var(--bd);border-radius:var(--rad);padding:22px 12px;cursor:pointer;box-shadow:var(--sd);display:flex;flex-direction:column;align-items:center;gap:10px;color:var(--text);font-family:inherit;transition:all .25s;position:relative;overflow:hidden}
-.card:active{transform:scale(.94)}
-.card .ic{width:64px;height:64px;border-radius:20px;display:flex;align-items:center;justify-content:center;font-size:32px;box-shadow:0 8px 20px rgba(0,0,0,.15);transition:transform .3s}
-.card:active .ic{transform:scale(.9) rotate(-5deg)}
-.card .nm{font-weight:700;font-size:14px;color:var(--text)}
-.card .sb{font-size:11px;color:var(--t2)}
-.ring{display:flex;flex-direction:column;align-items:center;gap:8px;padding:20px;background:var(--card);border-radius:var(--rad);box-shadow:var(--sd);margin-bottom:16px;border:1px solid var(--bd);position:relative;overflow:hidden}
-.ring::before{content:'';position:absolute;top:0;left:0;right:0;height:3px;background:linear-gradient(90deg,var(--pr),var(--pr2),var(--pr));background-size:200% 100%;animation:shine 3s linear infinite}
-.ring svg{transform:rotate(-90deg)}
-.ring circle{fill:none;stroke-width:12;stroke-linecap:round}
-.ring .bgc{stroke:var(--bd)}
-.ring .fgc{stroke:url(#rg);transition:stroke-dashoffset .6s ease}
-.ring .pct{position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);font-size:26px;font-weight:700;color:var(--pr);margin-top:-14px}
-.ring .info{font-size:12px;color:var(--t2);font-weight:600;margin-top:4px}
-.ring .info b{color:var(--pr)}
-.ring .streak{display:flex;align-items:center;gap:6px;font-size:13px;color:var(--gold);font-weight:700;background:var(--bd);padding:5px 14px;border-radius:12px;margin-top:6px}
-.stitle{display:flex;justify-content:space-between;align-items:center;margin:20px 4px 10px;gap:8px}
-.stitle>span{display:flex;align-items:center;gap:10px;font-size:14px;font-weight:700;color:var(--text)}
-.ico{width:34px;height:34px;border-radius:11px;background:linear-gradient(135deg,var(--pr),var(--pr2));display:flex;align-items:center;justify-content:center;font-size:17px;box-shadow:0 4px 12px rgba(99,102,241,.3)}
-.stitle button{background:none;border:none;color:var(--t3);font-size:14px;cursor:pointer;padding:6px 10px;border-radius:10px}
-ul{list-style:none}
-li{background:var(--card);margin:7px 0;padding:13px 14px;border-radius:14px;box-shadow:var(--sd);display:flex;align-items:center;gap:8px;border:1px solid var(--bd);position:relative;overflow:hidden;transition:all .2s;animation:slideIn .3s ease}
-li.done{opacity:.5}
-li.done .txt{text-decoration:line-through;color:var(--t2)}
-li.imp{border-right:3px solid var(--gold)}
-li label{display:flex;align-items:center;gap:11px;cursor:pointer;flex:1;min-width:0}
-li input[type=checkbox]{appearance:none;-webkit-appearance:none;width:24px;height:24px;border-radius:8px;border:2px solid var(--bd);background:var(--card);cursor:pointer;flex-shrink:0;position:relative;transition:.2s}
-li input[type=checkbox]:checked{background:linear-gradient(135deg,var(--pr),var(--pr2));border-color:transparent;box-shadow:0 2px 8px rgba(99,102,241,.4)}
-li input[type=checkbox]:checked::after{content:'✓';position:absolute;inset:0;display:flex;align-items:center;justify-content:center;color:#fff;font-size:14px;font-weight:700}
-.txt{font-size:14px;font-weight:500;flex:1;word-break:break-word;display:flex;flex-direction:column;gap:3px}
-.tm{font-size:10px;color:var(--pr);background:var(--bd);padding:2px 8px;border-radius:7px;align-self:flex-start;font-weight:600}
-.nt{font-size:11px;color:var(--t2);background:var(--bd);padding:3px 9px;border-radius:7px;align-self:flex-start;line-height:1.4}
-.mini{background:none;border:none;cursor:pointer;font-size:14px;padding:4px 6px;border-radius:8px;color:var(--t3);opacity:.6;transition:.2s}
-.mini.on{color:var(--gold);opacity:1}
-.rbtn{display:block;width:100%;margin-top:22px;padding:13px;border:none;border-radius:14px;background:linear-gradient(135deg,#ef4444,#dc2626);color:#fff;font-family:inherit;font-size:14px;font-weight:600;cursor:pointer;box-shadow:0 8px 20px rgba(239,68,68,.25);transition:.2s}
-.rbtn:active{transform:scale(.97)}
-.addbtn{display:flex;align-items:center;justify-content:center;width:100%;margin-top:8px;padding:11px;border:2px dashed var(--bd);border-radius:13px;background:transparent;color:var(--t2);font-family:inherit;font-size:13px;cursor:pointer;transition:.2s}
-.addbtn:active{background:var(--bd)}
-.sec-hdr{font-size:13px;font-weight:700;color:var(--pr);margin:18px 6px 8px;display:flex;align-items:center;gap:8px;text-transform:uppercase;letter-spacing:.5px}
-.sec-hdr::after{content:'';flex:1;height:1px;background:var(--bd)}
-.slist{background:var(--card);border-radius:var(--rad);overflow:hidden;box-shadow:var(--sd);border:1px solid var(--bd);margin-bottom:14px}
-.srow{padding:16px 18px;border-bottom:1px solid var(--bd)}
-.srow:last-child{border-bottom:none}
-.slbl{font-size:14px;font-weight:600;margin-bottom:12px;color:var(--text);display:flex;align-items:center;gap:8px}
-.srow-flat{display:flex;align-items:center;justify-content:space-between;padding:15px 18px;border-bottom:1px solid var(--bd);gap:10px}
-.srow-flat:last-child{border-bottom:none}
-.srow-flat .slbl{margin:0}
-.tgrid{display:grid;grid-template-columns:repeat(4,1fr);gap:10px}
-.tbtn-wrap{display:flex;flex-direction:column;align-items:center;gap:5px}
-.tbtn{width:100%;aspect-ratio:1;border-radius:14px;border:3px solid transparent;cursor:pointer;box-shadow:0 4px 12px rgba(0,0,0,.08);transition:all .2s}
-.tbtn.active{border-color:var(--pr);transform:scale(1.05)}
-.tname{font-size:9px;color:var(--t2);font-weight:500}
-.week{display:grid;grid-template-columns:repeat(7,1fr);gap:6px;margin-top:8px}
-.wday{display:flex;flex-direction:column;align-items:center;gap:5px;font-size:10px;color:var(--t2);font-weight:600}
-.wbar{width:100%;height:70px;background:var(--bd);border-radius:8px;overflow:hidden;display:flex;align-items:flex-end}
-.wfill{width:100%;background:linear-gradient(180deg,var(--pr),var(--pr2));border-radius:8px;transition:height .5s;min-height:2px}
-.wfill.g{background:linear-gradient(180deg,#10b981,#059669)}
-.month{display:grid;grid-template-columns:repeat(10,1fr);gap:4px;margin-top:10px}
-.mcell{aspect-ratio:1;border-radius:6px;background:var(--bd);display:flex;align-items:center;justify-content:center;font-size:9px;color:var(--t2);font-weight:600}
-.mcell.full{background:linear-gradient(135deg,#10b981,#059669);color:#fff}
-.mcell.half{background:linear-gradient(135deg,var(--pr),var(--pr2));color:#fff}
-.mcell.low{background:var(--bd);border:1px solid var(--pr)}
-.mchart{display:flex;align-items:flex-end;gap:3px;height:110px;margin-top:10px;padding:6px 0}
-.mcbar{flex:1;background:linear-gradient(180deg,var(--pr),var(--pr2));border-radius:4px 4px 0 0;min-height:3px}
-.mstat{display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px;margin-top:8px}
-.mstat div{background:var(--bg1);padding:10px;border-radius:12px;text-align:center;border:1px solid var(--bd)}
-.mstat .v{font-size:20px;font-weight:700;color:var(--pr)}
-.mstat .l{font-size:10px;color:var(--t2);margin-top:2px}
-.ovl{position:fixed;inset:0;background:rgba(0,0,0,.5);display:flex;align-items:center;justify-content:center;z-index:200;padding:20px;animation:fadeIn .2s ease}
-.mdl{background:var(--card);border-radius:20px;padding:20px;width:100%;max-width:400px;box-shadow:0 20px 50px rgba(0,0,0,.3);max-height:85vh;overflow-y:auto;animation:slideIn .25s ease}
-.mdl h3{margin:0 0 14px;font-size:15px;color:var(--text);font-weight:700}
-.mdl input,.mdl textarea{width:100%;padding:12px 14px;font-size:14px;font-family:inherit;border:2px solid var(--bd);border-radius:12px;background:var(--bg1);color:var(--text);margin-bottom:9px;outline:none;resize:none}
-.mdl input:focus{border-color:var(--pr)}
-.colors{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:10px}
-.colors button{width:34px;height:34px;border-radius:50%;border:3px solid transparent;cursor:pointer}
-.colors button.on{border-color:var(--text);transform:scale(1.1)}
-.icons{display:grid;grid-template-columns:repeat(8,1fr);gap:6px;margin-bottom:10px}
-.icons button{aspect-ratio:1;border:2px solid var(--bd);border-radius:10px;background:var(--bg1);font-size:18px;cursor:pointer;padding:0;display:flex;align-items:center;justify-content:center}
-.icons button.on{border-color:var(--pr);background:var(--bd);transform:scale(1.1)}
-.mac{display:flex;gap:8px;margin-top:6px}
-.mac button{flex:1;padding:11px;border:none;border-radius:12px;font-family:inherit;font-size:13px;font-weight:600;cursor:pointer}
-.bc{background:var(--bd);color:var(--text)}
-.bs{background:linear-gradient(135deg,var(--pr),var(--pr2));color:#fff}
-.bd2{background:linear-gradient(135deg,#ef4444,#dc2626);color:#fff}
-.toast{position:fixed;bottom:30px;left:50%;transform:translateX(-50%) translateY(80px);background:linear-gradient(135deg,var(--pr),var(--pr2));color:#fff;padding:11px 24px;border-radius:14px;font-size:13px;font-weight:600;z-index:300;opacity:0;transition:all .3s;pointer-events:none;max-width:90%;box-shadow:0 12px 30px rgba(99,102,241,.4)}
-.toast.on{opacity:1;transform:translateX(-50%) translateY(0)}
-.fab{position:fixed;bottom:22px;left:22px;width:54px;height:54px;border-radius:18px;background:linear-gradient(135deg,var(--pr),var(--pr2));color:#fff;border:none;font-size:26px;cursor:pointer;box-shadow:0 12px 30px rgba(99,102,241,.45);z-index:50;display:flex;align-items:center;justify-content:center;transition:.2s}
-.fab:active{transform:scale(.9) rotate(90deg)}
-.ach-list{display:flex;flex-direction:column;gap:8px}
-.ach{display:flex;align-items:center;gap:10px;padding:11px 13px;background:var(--bg1);border-radius:12px;border:1px solid var(--bd);opacity:.5;transition:.2s}
-.ach.on{opacity:1;border-color:var(--gold);background:linear-gradient(135deg,rgba(245,158,11,.1),transparent)}
-.ach .ai{font-size:24px}
-.ach .at{flex:1;font-size:13px;font-weight:600}
-.ach .as{font-size:10px;color:var(--t2);margin-top:2px}
-.tg{position:relative;width:46px;height:26px;background:var(--bd);border-radius:13px;cursor:pointer;transition:background .3s;flex-shrink:0}
-.tg.on{background:var(--pr)}
-.tg::after{content:'';position:absolute;top:3px;right:3px;width:20px;height:20px;background:#fff;border-radius:50%;transition:transform .3s;box-shadow:0 2px 4px rgba(0,0,0,.2)}
-.tg.on::after{transform:translateX(-20px)}
-.goalBox{display:flex;align-items:center;gap:10px}
-.goalBox input{width:80px;padding:8px 12px;text-align:center;font-size:14px;border:2px solid var(--bd);border-radius:10px;background:var(--bg1);color:var(--text);outline:none}
-.ct-colors{display:grid;grid-template-columns:repeat(6,1fr);gap:10px;margin-bottom:16px}
-.ct-colors button{width:100%;aspect-ratio:1;border-radius:12px;border:3px solid transparent;cursor:pointer;transition:.2s}
-.pBig{display:flex;flex-direction:column;align-items:center;gap:14px;padding:28px 20px;background:linear-gradient(135deg,var(--pr),var(--pr2));color:#fff;border-radius:var(--rad);margin-bottom:18px;position:relative;overflow:hidden;box-shadow:0 15px 40px rgba(99,102,241,.35)}
-.pBig::before{content:'';position:absolute;top:-50%;right:-50%;width:200%;height:200%;background:radial-gradient(circle,rgba(255,255,255,.15),transparent 60%);animation:spin 25s linear infinite}
-.pBig .pNm{font-size:24px;font-weight:800;position:relative;z-index:1}
-.pBig .pSub{font-size:13px;opacity:.9;position:relative;z-index:1}
-.badge7{position:relative;width:170px;height:170px;margin:10px auto;z-index:1}
-.badge7 .ring1{position:absolute;inset:0;border-radius:50%;border:3px dashed rgba(255,255,255,.3);animation:spin 20s linear infinite}
-.badge7 .ring2{position:absolute;inset:14px;border-radius:50%;border:2px dotted rgba(255,255,255,.25);animation:spin2 15s linear infinite}
-.badge7 .center{position:absolute;inset:38px;border-radius:50%;background:rgba(255,255,255,.25);display:flex;align-items:center;justify-content:center;font-size:48px}
-.tick{position:absolute;top:50%;left:50%;width:30px;height:30px;margin:-15px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:14px;font-weight:800;color:#fff;box-shadow:0 4px 10px rgba(0,0,0,.4);border:2px solid rgba(255,255,255,.5)}
-.tick.t1{background:#ef4444;animation:orbit1 8s linear infinite}
-.tick.t2{background:#f59e0b;animation:orbit2 8s linear infinite}
-.tick.t3{background:#84cc16;animation:orbit3 8s linear infinite}
-.tick.t4{background:#10b981;animation:orbit4 8s linear infinite}
-.tick.t5{background:#06b6d4;animation:orbit5 8s linear infinite}
-.tick.t6{background:#3b82f6;animation:orbit6 8s linear infinite}
-.tick.t7{background:#8b5cf6;animation:orbit7 8s linear infinite}
-@keyframes orbit1{from{transform:translate(0,-75px) rotate(0)}to{transform:translate(0,-75px) rotate(360deg)}}
-@keyframes orbit2{from{transform:translate(53px,-53px) rotate(0)}to{transform:translate(53px,-53px) rotate(360deg)}}
-@keyframes orbit3{from{transform:translate(75px,0) rotate(0)}to{transform:translate(75px,0) rotate(360deg)}}
-@keyframes orbit4{from{transform:translate(53px,53px) rotate(0)}to{transform:translate(53px,53px) rotate(360deg)}}
-@keyframes orbit5{from{transform:translate(0,75px) rotate(0)}to{transform:translate(0,75px) rotate(360deg)}}
-@keyframes orbit6{from{transform:translate(-53px,53px) rotate(0)}to{transform:translate(-53px,53px) rotate(360deg)}}
-@keyframes orbit7{from{transform:translate(-75px,0) rotate(0)}to{transform:translate(-75px,0) rotate(360deg)}}
-.pStats{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:14px}
-.pStat{background:var(--card);border-radius:var(--rad);padding:18px;box-shadow:var(--sd);border:1px solid var(--bd);text-align:center;animation:fadeIn .5s ease}
-.pStat .v{font-size:26px;font-weight:800;background:linear-gradient(135deg,var(--pr),var(--pr2));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
-.pStat .l{font-size:11px;color:var(--t2);margin-top:4px;font-weight:600}
-.pStat .ic{font-size:24px;margin-bottom:4px}
-.badgeTitle{font-size:15px;font-weight:800;color:#fff;position:relative;z-index:1;text-align:center;margin-top:8px}
-</style>
+<link rel="icon" type="image/svg+xml" href="icon.svg">
+
+<link rel="stylesheet" href="css/main.css">
+<link rel="stylesheet" href="css/themes.css">
+<link rel="stylesheet" href="css/animations.css">
 </head>
-<body>
+<body data-theme="theme_purple">
 
-<div id="vh" class="view active">
-<div class="hdr">
-<button class="ibtn" onclick="sndNav();openSet()">☰</button>
-<div class="hdr-mid"></div>
-<button class="ibtn" onclick="sndNav();openAch()">🏅</button>
-</div>
-<div class="wrap" style="padding-top:16px">
-<div class="profileHdr" onclick="openProfile()">
-<div class="avatar" id="uAvatar">👤</div>
-<div class="info">
-<div class="nm" id="uName">کاربر عزیز</div>
-<div class="sub" id="uSub">خوش آمدی</div>
-<div class="stats"><span>🪙 <b id="hCoins">۰</b></span><span>🏆 <b id="hBest">۰</b></span></div>
-</div>
-</div>
-<div class="poemBox">
-<div class="poemTxt" id="poemTxt">—</div>
-<div class="poemBy" id="poemBy">—</div>
-</div>
-<div class="sec-title-bar">
-<div class="ic" style="background:linear-gradient(135deg,#f97316,#ec4899);color:#fff">🎮</div>
-<div class="tt">بخش سرگرمی<div class="sb">بازی‌ها و چالش‌ها</div></div>
-</div>
-<div class="homeGrid">
-<div class="card" onclick="goPage('games')">
-<div class="ic" style="background:linear-gradient(135deg,#ef4444,#f59e0b);color:#fff">🪨</div>
-<div class="nm">سنگ کاغذ قیچی</div>
-<div class="sb">با کامپیوتر مسابقه بده</div>
-</div>
-<div class="card" onclick="goPage('guess')">
-<div class="ic" style="background:linear-gradient(135deg,#10b981,#059669);color:#fff">🔢</div>
-<div class="nm">حدس عدد</div>
-<div class="sb">عدد مخفی رو پیدا کن</div>
-</div>
-<div class="card" onclick="goPage('ttt')">
-<div class="ic" style="background:linear-gradient(135deg,#3b82f6,#8b5cf6);color:#fff">❌</div>
-<div class="nm">دوز</div>
-<div class="sb">X و O روی صفحه</div>
-</div>
-<div class="card" onclick="goPage('mem')">
-<div class="ic" style="background:linear-gradient(135deg,#ec4899,#8b5cf6);color:#fff">🧠</div>
-<div class="nm">حافظه</div>
-<div class="sb">جفت کارت‌ها رو پیدا کن</div>
-</div>
-<div class="card" onclick="goPage('goat')">
-<div class="ic" style="background:linear-gradient(135deg,#10b981,#06b6d4);color:#fff">🐐</div>
-<div class="nm">بز ماجراجو</div>
-<div class="sb">بی‌نهایت و پر از ماجرا</div>
-</div>
-<div class="card" onclick="goPage('games')">
-<div class="ic" style="background:linear-gradient(135deg,#8b5cf6,#06b6d4);color:#fff">🎯</div>
-<div class="nm">همهٔ بازی‌ها</div>
-<div class="sb">مشاهدهٔ کامل</div>
-</div>
-</div>
-<div class="sec-title-bar">
-<div class="ic" style="background:linear-gradient(135deg,#6366f1,#8b5cf6);color:#fff">🔧</div>
-<div class="tt">بخش ابزارک<div class="sb">ابزارهای کاربردی</div></div>
-</div>
-<div class="homeGrid">
-<div class="card" onclick="goPage('plan')">
-<div class="ic" style="background:linear-gradient(135deg,#6366f1,#8b5cf6);color:#fff">📋</div>
-<div class="nm">برنامه روزانه</div>
-<div class="sb">کارها و عادت‌ها</div>
-</div>
-<div class="card" onclick="goPage('calc')">
-<div class="ic" style="background:linear-gradient(135deg,#10b981,#06b6d4);color:#fff">🧮</div>
-<div class="nm">ماشین حساب</div>
-<div class="sb">محاسبات سریع</div>
-</div>
-<div class="card" onclick="goPage('cal')">
-<div class="ic" style="background:linear-gradient(135deg,#f59e0b,#ef4444);color:#fff">🗓</div>
-<div class="nm">تقویم</div>
-<div class="sb">تقویم شمسی</div>
-</div>
-<div class="card" onclick="goPage('time')">
-<div class="ic" style="background:linear-gradient(135deg,#ec4899,#8b5cf6);color:#fff">⏱</div>
-<div class="nm">کرنومتر</div>
-<div class="sb">شمارش زمان</div>
-</div>
-<div class="card" onclick="goPage('ask')">
-<div class="ic" style="background:linear-gradient(135deg,#06b6d4,#3b82f6);color:#fff">💬</div>
-<div class="nm">پرسش</div>
-<div class="sb">دایرة‌المعارف</div>
-</div>
-</div>
-</div>
+<div class="app">
+
+  <header class="hdr">
+    <div class="hdr-logo">
+      <span>⭐</span>
+      <span>ستاره</span>
+    </div>
+    <div class="hdr-coins" onclick="ROUTER.go('shop')">
+      <span class="icon">🪙</span>
+      <span id="hdrCoins">۰</span>
+    </div>
+  </header>
+
+  <section id="view-home" class="view active">
+    <div id="greeting" class="sec-title"></div>
+    <div id="homeContent"></div>
+  </section>
+
+  <section id="view-games" class="view">
+    <div id="gamesContent"></div>
+  </section>
+
+  <section id="view-tools" class="view">
+    <div id="toolsContent"></div>
+  </section>
+
+  <section id="view-shop" class="view">
+    <div id="shopContent"></div>
+  </section>
+
+  <section id="view-profile" class="view">
+    <div id="profileContent"></div>
+  </section>
+
+  <section id="view-settings" class="view">
+    <div id="settingsContent"></div>
+  </section>
+
 </div>
 
-<div id="vp" class="view">
-<div class="hdr">
-<button class="ibtn" onclick="sndNav();closeProfile()">←</button>
-<div class="hdr-mid"><h1>👤 پروفایل</h1></div>
-<div style="width:42px"></div>
-</div>
-<div class="wrap">
-<div class="pBig">
-<div class="badge7">
-<div class="ring1"></div>
-<div class="ring2"></div>
-<div class="center">🏆</div>
-<div class="tick t1">✓</div>
-<div class="tick t2">✓</div>
-<div class="tick t3">✓</div>
-<div class="tick t4">✓</div>
-<div class="tick t5">✓</div>
-<div class="tick t6">✓</div>
-<div class="tick t7">✓</div>
-</div>
-<div class="pNm" id="pName">کاربر عزیز</div>
-<div class="pSub" id="pSub">🌟 عضو از امروز</div>
-<div class="badgeTitle">✨ قهرمان هفت‌رنگ ✨</div>
-</div>
-<div class="pStats">
-<div class="pStat"><div class="ic">🪙</div><div class="v" id="pCoins">۰</div><div class="l">سکه</div></div>
-<div class="pStat"><div class="ic">🏆</div><div class="v" id="pBest">۰</div><div class="l">رکورد بز</div></div>
-<div class="pStat"><div class="ic">🔥</div><div class="v" id="pStreak">۰</div><div class="l">روز پیوسته</div></div>
-<div class="pStat"><div class="ic">🏅</div><div class="v" id="pAch">۰</div><div class="l">دستاورد</div></div>
-<div class="pStat"><div class="ic">✅</div><div class="v" id="pDone">۰</div><div class="l">کار انجام شده</div></div>
-<div class="pStat"><div class="ic">📅</div><div class="v" id="pSince">۰</div><div class="l">روز عضویت</div></div>
-</div>
-<div class="slist">
-<div class="srow-flat">
-<div class="slbl">✏️ ویرایش نام</div>
-<button class="mini" onclick="editName()" style="font-size:20px;opacity:1">✏️</button>
-</div>
-</div>
-</div>
-</div>
-
-<div id="vm" class="view">
-<div class="hdr">
-<button class="ibtn" onclick="sndNav();showView('vh')">🏠</button>
-<div class="hdr-mid"><h1>برنامه روزانه</h1><div class="date" id="todayDate"></div></div>
-<button class="ibtn" onclick="sndNav();openAch()">🏅</button>
-</div>
-<div class="wrap">
-<div class="ring">
-<svg width="130" height="130" viewBox="0 0 130 130">
-<defs><linearGradient id="rg" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" stop-color="var(--pr)"/><stop offset="100%" stop-color="var(--pr2)"/></linearGradient></defs>
-<circle class="bgc" cx="65" cy="65" r="54"/>
-<circle class="fgc" id="ring" cx="65" cy="65" r="54" stroke-dasharray="339.29" stroke-dashoffset="339.29"/>
-</svg>
-<div class="pct" id="ringPct">۰٪</div>
-<div class="info"><b id="ringInfo">۰</b> از <b id="ringTot">۰</b> کار انجام شد</div>
-<div class="streak" id="streakBox" style="display:none">🔥 <span id="streakN">۰</span> روز پیوسته</div>
-</div>
-<div id="app"></div>
-<button class="rbtn" onclick="resetAll()">🔄 شروع روز جدید</button>
-</div>
-<button class="fab" onclick="addSection()">＋</button>
-</div>
-
-<div id="vs" class="view">
-<div class="hdr">
-<button class="ibtn" onclick="sndNav();closeSet()">←</button>
-<div class="hdr-mid"><h1>⚙️ تنظیمات</h1></div>
-<div style="width:42px"></div>
-</div>
-<div class="wrap">
-<div class="sec-hdr">👤 حساب کاربری</div>
-<div class="slist">
-<div class="srow-flat">
-<div class="slbl">نام کاربری</div>
-<button class="mini" onclick="editName()" style="font-size:13px;opacity:1;color:var(--pr);font-weight:600">ویرایش</button>
-</div>
-<div class="srow-flat">
-<div class="slbl">تاریخ شروع</div>
-<span id="startDate" style="color:var(--t2);font-size:12px">—</span>
-</div>
-</div>
-<div class="sec-hdr">🌍 زبان</div>
-<div class="slist">
-<div class="srow-flat">
-<div class="slbl">🇮🇷 فارسی</div>
-<div class="tg" id="faTg" onclick="setLang('fa')"></div>
-</div>
-<div class="srow-flat">
-<div class="slbl">🇬🇧 English</div>
-<div class="tg" id="enTg" onclick="setLang('en')"></div>
-</div>
-</div>
-<div class="sec-hdr">🎨 ظاهر</div>
-<div class="slist">
-<div class="srow">
-<div class="slbl">رنگ‌بندی برنامه</div>
-<div class="tgrid" id="tgrid"></div>
-</div>
-<div class="srow-flat">
-<div class="slbl">🎨 تم اختصاصی</div>
-<button class="mini" onclick="openCT()" style="font-size:20px;opacity:1">🎨</button>
-</div>
-<div class="srow-flat">
-<div class="slbl">🌙 حالت خودکار شب/روز</div>
-<div class="tg" id="autoTg" onclick="toggleAuto()"></div>
-</div>
-</div>
-<div class="sec-hdr">🔔 اعلان‌ها</div>
-<div class="slist">
-<div class="srow-flat">
-<div class="slbl">🔊 صدا</div>
-<div class="tg" id="sndTg" onclick="toggleSound()"></div>
-</div>
-<div class="srow-flat">
-<div class="slbl">📳 لرزش</div>
-<div class="tg" id="vibTg" onclick="toggleVib()"></div>
-</div>
-</div>
-<div class="sec-hdr">📊 آمار و پیشرفت</div>
-<div class="slist">
-<div class="srow">
-<div class="slbl">📊 آمار هفتگی</div>
-<div class="week" id="week"></div>
-</div>
-<div class="srow">
-<div class="slbl">📈 نمودار ۳۰ روز</div>
-<div class="mchart" id="mchart"></div>
-</div>
-<div class="srow">
-<div class="slbl">📅 تقویم ۳۰ روز</div>
-<div class="month" id="month"></div>
-<div class="mstat">
-<div><div class="v" id="msAvg">۰٪</div><div class="l">میانگین</div></div>
-<div><div class="v" id="msFull">۰</div><div class="l">روز کامل</div></div>
-<div><div class="v" id="msBest">۰٪</div><div class="l">بهترین</div></div>
-</div>
-</div>
-<div class="srow-flat">
-<div class="slbl">🎯 هدف روزانه</div>
-<div class="goalBox">
-<input type="number" id="goalIn" min="0" max="100" value="70" onchange="setGoal(this.value)">
-<span style="color:var(--t2);font-size:13px">٪</span>
-</div>
-</div>
-<div class="srow-flat">
-<div class="slbl">🏅 دستاوردها</div>
-<button class="mini" onclick="sndNav();openAch()" style="font-size:13px;opacity:1;color:var(--pr);font-weight:600">مشاهده</button>
-</div>
-</div>
-<div class="sec-hdr">💾 داده‌ها</div>
-<div class="slist">
-<div class="srow-flat">
-<div class="slbl">📤 اشتراک متنی</div>
-<button class="mini" onclick="sharePlan()" style="font-size:20px;opacity:1">📤</button>
-</div>
-<div class="srow-flat">
-<div class="slbl">📸 اشتراک تصویری</div>
-<button class="mini" onclick="shareImage()" style="font-size:20px;opacity:1">📸</button>
-</div>
-<div class="srow-flat">
-<div class="slbl">💾 پشتیبان‌گیری</div>
-<button class="mini" onclick="backup()" style="font-size:20px;opacity:1">📥</button>
-</div>
-<div class="srow-flat">
-<div class="slbl">📁 بازیابی</div>
-<button class="mini" onclick="document.getElementById('fileIn').click()" style="font-size:20px;opacity:1">📂</button>
-<input type="file" id="fileIn" accept=".json" style="display:none" onchange="restore(event)">
-</div>
-<div class="srow-flat">
-<div class="slbl" style="color:#ef4444">🗑 پاک کردن داده‌ها</div>
-<button class="mini" onclick="clearAll()" style="color:#ef4444;opacity:1;font-size:12px;font-weight:600">پاک</button>
-</div>
-</div>
-<div class="sec-hdr">ℹ️ درباره</div>
-<div class="slist">
-<div class="srow-flat">
-<div class="slbl">📱 نسخه</div>
-<span style="color:var(--t2);font-size:13px">۱۴.۰</span>
-</div>
-</div>
-<p style="text-align:center;color:var(--t3);font-size:11px;margin-top:20px;margin-bottom:20px">ساخته شده با ❤️</p>
-</div>
-</div>
-
-<div id="va" class="view">
-<div class="hdr">
-<button class="ibtn" onclick="sndNav();closeAch()">←</button>
-<div class="hdr-mid"><h1>🏅 دستاوردها</h1></div>
-<div style="width:42px"></div>
-</div>
-<div class="wrap"><div class="ach-list" id="achList"></div></div>
-</div>
-
-<div id="em" class="ovl" style="display:none">
-<div class="mdl">
-<h3 id="emTitle">✏️ ویرایش</h3>
-<input type="text" id="ei" placeholder="متن...">
-<input type="text" id="et" placeholder="ساعت (اختیاری)">
-<textarea id="en" placeholder="نُت (اختیاری)" rows="2"></textarea>
-<div id="colBox" style="display:none">
-<div style="font-size:12px;color:var(--t2);margin-bottom:6px">🎨 رنگ بخش:</div>
-<div class="colors" id="colors"></div>
-<div style="font-size:12px;color:var(--t2);margin:10px 0 6px">😀 آیکن بخش:</div>
-<div class="icons" id="icons"></div>
-</div>
-<div class="mac">
-<button class="bd2" id="delBtn" onclick="delItem()">حذف</button>
-<button class="bc" onclick="closeEdt()">لغو</button>
-<button class="bs" onclick="saveEdt()">ذخیره</button>
-</div>
-</div>
-</div>
-
-<div id="nm" class="ovl" style="display:none">
-<div class="mdl">
-<h3>👤 نام کاربری</h3>
-<input type="text" id="nmIn" placeholder="نامت را بنویس..." maxlength="30">
-<div class="mac">
-<button class="bc" onclick="document.getElementById('nm').style.display='none'">لغو</button>
-<button class="bs" onclick="saveName()">ذخیره</button>
-</div>
-</div>
-</div>
-
-<div id="ct" class="ovl" style="display:none">
-<div class="mdl">
-<h3>🎨 تم اختصاصی</h3>
-<p style="font-size:13px;color:var(--t2);margin-bottom:12px">یک رنگ اصلی انتخاب کن:</p>
-<div class="ct-colors" id="ctColors"></div>
-<p style="font-size:12px;color:var(--t2);margin-bottom:10px">یا رنگ دلخواه:</p>
-<div style="display:flex;gap:8px;margin-bottom:16px">
-<input type="color" id="ctC1" value="#6366f1" style="width:100%;height:50px;border:none;border-radius:12px;cursor:pointer;background:transparent">
-<input type="color" id="ctC2" value="#8b5cf6" style="width:100%;height:50px;border:none;border-radius:12px;cursor:pointer;background:transparent">
-</div>
-<div class="mac">
-<button class="bc" onclick="closeCT()">لغو</button>
-<button class="bs" onclick="applyCT()">اعمال</button>
-</div>
-</div>
-</div>
+<nav class="nav">
+  <button class="nav-btn active" data-view="home">
+    <span class="nav-icon">🏠</span>
+    <span>خانه</span>
+  </button>
+  <button class="nav-btn" data-view="games">
+    <span class="nav-icon">🎮</span>
+    <span>بازی</span>
+  </button>
+  <button class="nav-btn" data-view="tools">
+    <span class="nav-icon">🧰</span>
+    <span>ابزار</span>
+  </button>
+  <button class="nav-btn" data-view="shop">
+    <span class="nav-icon">🛒</span>
+    <span>فروشگاه</span>
+  </button>
+  <button class="nav-btn" data-view="profile">
+    <span class="nav-icon">👤</span>
+    <span>من</span>
+  </button>
+</nav>
 
 <div id="toast" class="toast"></div>
 
+<script src="js/i18n.js"></script>
+<script src="js/audio.js"></script>
+<script src="js/tick.js"></script>
+
+<script src="js/storage.js"></script>
+<script src="js/state.js"></script>
+<script src="js/router.js"></script>
+
+<script src="js/shop.js"></script>
+<script src="js/profile.js"></script>
+
+<script src="js/app.js"></script>
+
 <script>
-var KP='plan_v23',KT='theme_v23',KD='date_v23',KS='stats_v23',KSND='sound_v23',KAUTO='auto_v23',KVIB='vib_v23',KU='user_v23',KG='goal_v23',KL='lang_v23',KC='coins_v23';
-var lang=localStorage.getItem(KL)||'fa';
+  if ('serviceWorker' in navigator) {
+    window.addEventListener('load', function() {
+      navigator.serviceWorker.register('sw.js').catch(function(e) {
+        console.log('SW register failed:', e);
+      });
+    });
+  }
 
-var THEMES=[{id:'light',nm:'روشن',c1:'#ffffff',c2:'#6366f1'},{id:'dark',nm:'تاریک',c1:'#1a1f32',c2:'#818cf8'},{id:'mint',nm:'نعنایی',c1:'#f0fdf4',c2:'#10b981'},{id:'ocean',nm:'اقیانوس',c1:'#eff6ff',c2:'#3b82f6'},{id:'purple',nm:'بنفش',c1:'#faf5ff',c2:'#a855f7'},{id:'rose',nm:'رز',c1:'#fff1f2',c2:'#e11d48'},{id:'midnight',nm:'نیمه‌شب',c1:'#0f172a',c2:'#38bdf8'},{id:'spotify',nm:'اسپاتیفای',c1:'#121212',c2:'#1db954'},{id:'discord',nm:'دیسکورد',c1:'#36393f',c2:'#5865f2'},{id:'instagram',nm:'اینستاگرام',c1:'#fff0f6',c2:'#e1306c'},{id:'twitter',nm:'توییتر',c1:'#ffffff',c2:'#1da1f2'},{id:'youtube',nm:'یوتیوب',c1:'#0f0f0f',c2:'#ff0000'},{id:'whatsapp',nm:'واتساپ',c1:'#111b21',c2:'#25d366'}];
-
-var SCOLORS=['#6366f1','#10b981','#f59e0b','#ef4444','#ec4899','#3b82f6','#8b5cf6','#06b6d4','#84cc16','#f97316'];
-var SICONS=['🌅','🌙','⭐','📚','🏫','🌤️','🍽️','🪥','💧','🏃','🚿','😴','📖','✍️','💪','🎯','🧘','🎵','🎨','💻','📱','🔬','🧪','🌿','🐐','🐱','🦁','🌸','⚡','🔥','🎁','✨'];
-
-var POEMS=[{t:"دوش دیدم که ملائک در میخانه زدند\nگِل آدم بسرشتند و به پیمانه زدند",p:"حافظ"},{t:"بنی آدم اعضای یکدیگرند\nکه در آفرینش ز یک گوهرند",p:"سعدی"},{t:"بشنو از نی چون حکایت می‌کند\nاز جدایی‌ها شکایت می‌کند",p:"مولانا"},{t:"توانا بود هر که دانا بود\nز دانش دل پیر برنا بود",p:"فردوسی"},{t:"برگیر پیاله و سبو ای دلجو\nکاین یک دو سه روزه عمر را خوش می‌جو",p:"خیام"},{t:"ای مرغ سحر چو روز شد برخیز\nوز خواب غرور خویشتن برخیز",p:"پروین اعتصامی"},{t:"می‌تراود مهتاب\nمی‌درخشد شب‌تاب",p:"نیما یوشیج"},{t:"علی ای همای رحمت تو چه آیتی خدا را\nکه به ماسوا فکندی همه سایه هما را",p:"شهریار"},{t:"من از نهایت شب حرف می‌زنم\nمن از نهایت تاریکی",p:"فروغ فرخزاد"},{t:"به راه بادیه رفتن به از نشستن باطل\nکه گر مراد نیابم به قدر وسع بکوشم",p:"سعدی"},{t:"از خدا جوییم توفیق ادب\nبی ادب محروم ماند از لطف رب",p:"مولانا"},{t:"دلا بسوز که سوز تو کارها بکند\nنیاز نیم شبی دفع صد بلا بکند",p:"حافظ"},{t:"هنر بیاموز که سلطنت بی هنر بسر آید\nو بی هنر سلطنت به سر ناید",p:"سعدی"},{t:"به نام آنکه جان را فکرت آموخت\nچراغ دل به نور جان برافروخت",p:"صائب تبریزی"},{t:"از خویشتن بپرس که تو کیستی\nتا واقف شوی که در چه کیشی",p:"عطار نیشابوری"},{t:"بیا تا گل برافشانیم و می در ساغر اندازیم\nفلک را سقف بشکافیم و طرحی نو دراندازیم",p:"حافظ"},{t:"با کاروان حله برفتم ز سیستان\nبا حلّهٔ تنیدهٔ زربفت راهبر",p:"حافظ"},{t:"آنچه در آینه جوان بیند\nپیر در خشت خام آن بیند",p:"سعدی"},{t:"هر که را جامه ز عشقی چاک شد\nاو ز حرص و عیب کلی پاک شد",p:"مولانا"},{t:"چو ایران نباشد تن من مباد\nبدین بوم و بر زنده یک تن مباد",p:"فردوسی"},{t:"جهان یادگار است از آن کیست هیچ\nکه را بخت یار است و آن کسش هیچ",p:"خیام"},{t:"سر آن ندارد امشب که برآید آفتابی\nچه خیال‌ها گذر کرد و گذر نکرد خوابی",p:"سعدی"},{t:"مرا عهدی است با جانان که تا جان در بدن دارم\nهواداران کویش را چو جان خویشتن دارم",p:"حافظ"},{t:"توانگران را نباشد به کار دیدهٔ عبرت\nکه کیسه زر و سیم است پیششان به حقیقت",p:"سعدی"},{t:"زندگی صحنهٔ یکتای هنرمندی ماست\nهر کسی نغمهٔ خود خواند و از صحنه رود",p:"ژاله اصفهانی"},{t:"مرغ سحر ناله سر کن\nداغ مرا تازه‌تر کن",p:"ملک‌الشعرا بهار"},{t:"ستاره‌ها همه در آسمان روشن باد\nامید من به تو ای صبح روشن باد",p:"سیمین بهبهانی"},{t:"عشق در دل ماند و یار از دست رفت\nدوستان دستی که کار از دست رفت",p:"مولانا"},{t:"اگر آن ترک شیرازی به دست آرد دل ما را\nبه خال هندویش بخشم سمرقند و بخارا را",p:"حافظ"},{t:"توانگران را عیب نباشد به کار دیدهٔ عبرت\nکه کیسهٔ زر و سیم است پیششان به حقیقت",p:"سعدی"}];
-
-var DEF=[{title:"🌅 صبح",items:["بیدار شدن","۱ لیوان آب","مسواک صبح","شستن صورت","صبحانه"]},{title:"🏫 مدرسه",items:["مدرسه / کلاس‌ها","ناهار","مسواک ظهر","خواب ظهر ۳۰ دقیقه"]},{title:"📚 مطالعه",items:["ریاضی","هندسه","فیزیک","شیمی"]},{title:"🌤️ عصر و ورزش",items:["میان‌وعده عصر","ورزش ۳۰–۶۰ دقیقه","حمام / بهداشت","سیبیل / موهای زائد"]},{title:"🌙 شب",items:["شام","مرور درس‌ها","حل تمرین و تست","هوای آزاد","تکمیل ۶–۸ لیوان آب","کنار گذاشتن گوشی","مسواک شب","شستن صورت شب","خواب شب"]}];
-
-var ACHS=[{id:'first',ic:'🥉',t:'اولین قدم',s:'یک کار انجام بده',ch:function(st){return st.totalDone>=1}},{id:'half',ic:'🥈',t:'نیمه راه',s:'۵۰٪ یک روز',ch:function(st){return st.bestPct>=50}},{id:'full',ic:'🥇',t:'کامل!',s:'۱۰۰٪ یک روز',ch:function(st){return st.bestPct>=100}},{id:'s3',ic:'🔥',t:'سه روز پیوسته',s:'۳ روز پشت‌سرهم',ch:function(st){return st.maxStreak>=3}},{id:'s7',ic:'⚡',t:'یک هفته قهرمان',s:'۷ روز',ch:function(st){return st.maxStreak>=7}},{id:'s30',ic:'👑',t:'افسانه',s:'۳۰ روز',ch:function(st){return st.maxStreak>=30}},{id:'d100',ic:'💯',t:'صدتایی',s:'۱۰۰ کار',ch:function(st){return st.totalDone>=100}},{id:'d500',ic:'🌟',t:'پانصدتایی',s:'۵۰۰ کار',ch:function(st){return st.totalDone>=500}},{id:'th5',ic:'🎨',t:'رنگ‌باز',s:'همه تم‌ها',ch:function(st){return (st.themesUsed||[]).length>=5}},{id:'cus',ic:'✏️',t:'شخصی‌سازی',s:'کار شخصی',ch:function(st){return st.customTasks>=1}},{id:'note',ic:'📝',t:'یادداشت‌بردار',s:'۵ نُت',ch:function(st){return (st.notesCount||0)>=5}},{id:'backup',ic:'💾',t:'محافظ',s:'پشتیبان',ch:function(st){return st.backups>=1}},{id:'share',ic:'📤',t:'سخاوتمند',s:'اشتراک',ch:function(st){return st.shared>=1}},{id:'img',ic:'📸',t:'عکاس',s:'اشتراک تصویری',ch:function(st){return st.imgShared>=1}},{id:'icon',ic:'🎭',t:'آیکن‌باز',s:'آیکن بخش عوض کن',ch:function(st){return (st.iconsChanged||0)>=1}}];
-
-var faN=['۰','۱','۲','۳','۴','۵','۶','۷','۸','۹'];
-function fa(n){return String(n).split('').map(function(c){return faN[+c]||c}).join('')}
-function toFa(n){return n.toLocaleString('fa-IR')}
-
-var TODAY=new Date().toLocaleDateString('fa-IR');
-document.getElementById('todayDate').textContent=new Date().toLocaleDateString('fa-IR',{weekday:'long',day:'numeric',month:'long'});
-
-var plan=[];
-var stats={history:{},totalDone:0,bestPct:0,maxStreak:0,streak:0,lastDone:'',themesUsed:[],customTasks:0,notesCount:0,backups:0,shared:0,imgShared:0,iconsChanged:0,achievements:[]};
-
-try{var s=localStorage.getItem(KP);if(s)plan=JSON.parse(s)}catch(e){plan=[]}
-try{var st=localStorage.getItem(KS);if(st){var o=JSON.parse(st);for(var k in o)stats[k]=o[k]}}catch(e){}
-
-if(!plan||!Array.isArray(plan)||plan.length===0||!plan[0].tasks){
-plan=[];
-for(var i=0;i<DEF.length;i++){
-var tk=[];
-for(var j=0;j<DEF[i].items.length;j++)tk.push({id:'t'+i+'_'+j,text:DEF[i].items[j],time:'',note:'',done:false,imp:false,color:SCOLORS[i%SCOLORS.length]});
-plan.push({id:'s'+i,title:DEF[i].title,tasks:tk,color:SCOLORS[i%SCOLORS.length]});
-}
-try{localStorage.setItem(KP,JSON.stringify(plan))}catch(e){}
-}
-if(localStorage.getItem(KD)!==TODAY){
-for(var a=0;a<plan.length;a++)for(var b=0;b<plan[a].tasks.length;b++)plan[a].tasks[b].done=false;
-try{localStorage.setItem(KP,JSON.stringify(plan));localStorage.setItem(KD,TODAY)}catch(e){}
-}
-
-var editKey=null,addMode=null,selColor=null,selIcon='📌';
-var soundOn=localStorage.getItem(KSND)!=='off';
-var autoOn=localStorage.getItem(KAUTO)==='on';
-var vibOn=localStorage.getItem(KVIB)==='on';
-var goal=parseInt(localStorage.getItem(KG)||'70');
-var coins=parseInt(localStorage.getItem(KC)||'0');
-
-var userName=localStorage.getItem(KU)||'';
-var startDate=localStorage.getItem(KU+'_start')||'';
-if(!startDate){startDate=TODAY;localStorage.setItem(KU+'_start',TODAY)}
-document.getElementById('startDate').textContent=startDate;
-
-var audioCtx=null;
-
-function initAudio(){try{if(!audioCtx)audioCtx=new(window.AudioContext||window.webkitAudioContext)()}catch(e){}}
-function vibrate(ms){if(vibOn&&navigator.vibrate)try{navigator.vibrate(ms)}catch(e){}}
-function beep(f,d,type,vol){
-if(!soundOn)return;
-try{
-initAudio();if(!audioCtx)return;
-var o=audioCtx.createOscillator(),g=audioCtx.createGain();
-o.connect(g);g.connect(audioCtx.destination);o.type=type||'sine';
-var n=audioCtx.currentTime;
-o.frequency.setValueAtTime(f,n);
-g.gain.setValueAtTime(vol||0.08,n);
-g.gain.exponentialRampToValueAtTime(0.001,n+d);
-o.start(n);o.stop(n+d);
-}catch(e){}
-}
-
-function sndChk(){beep(880,0.08,'sine',0.09);setTimeout(function(){beep(1320,0.12,'sine',0.09)},60);vibrate(30)}
-function sndUn(){beep(660,0.08,'sine',0.06)}
-function sndAdd(){beep(440,0.08,'triangle',0.08);setTimeout(function(){beep(660,0.12,'triangle',0.08)},70)}
-function sndDel(){beep(300,0.15,'sawtooth',0.05);vibrate(50)}
-function sndNav(){beep(600,0.06,'sine',0.05);vibrate(15)}
-function sndTab(){beep(700,0.06,'sine',0.06)}
-
-function sndCard(type){
-try{
-if(type==='plan'){beep(523,0.1,'sine',0.1);setTimeout(function(){beep(659,0.15,'sine',0.1)},70);vibrate(25)}
-else if(type==='calc'){beep(440,0.08,'square',0.06);setTimeout(function(){beep(880,0.1,'square',0.06)},60);vibrate(25)}
-else if(type==='cal'){beep(587,0.1,'triangle',0.1);setTimeout(function(){beep(784,0.15,'triangle',0.1)},70);vibrate(25)}
-else if(type==='time'){beep(660,0.08,'sine',0.1);setTimeout(function(){beep(990,0.12,'sine',0.1)},60);vibrate(25)}
-else if(type==='ask'){beep(494,0.1,'sine',0.1);setTimeout(function(){beep(740,0.15,'sine',0.1)},70);vibrate(25)}
-else if(type==='games'||type==='guess'||type==='ttt'||type==='mem'){beep(587,0.1,'square',0.08);setTimeout(function(){beep(880,0.12,'square',0.08)},60);vibrate(25)}
-else if(type==='goat'){beep(660,0.1,'triangle',0.1);setTimeout(function(){beep(990,0.15,'triangle',0.1)},70);vibrate(25)}
-else{vibrate(20)}
-}catch(e){}
-}
-
-function goPage(p){
-sndCard(p);
-setTimeout(function(){
-if(p==='plan')showView('vm');
-else if(p==='calc')location.href='calc.html';
-else if(p==='cal')location.href='calendar.html';
-else if(p==='time')location.href='stopwatch.html';
-else if(p==='ask')location.href='ask.html';
-else if(p==='games')location.href='games.html';
-else if(p==='goat')location.href='goat.html';
-else if(p==='guess')location.href='games.html';
-else if(p==='ttt')location.href='games.html';
-else if(p==='mem')location.href='games.html';
-},80);
-}
-
-function save(){try{localStorage.setItem(KP,JSON.stringify(plan))}catch(e){}}
-function saveStats(){try{localStorage.setItem(KS,JSON.stringify(stats))}catch(e){}}
-function saveCoins(){try{localStorage.setItem(KC,coins)}catch(e){}}
-
-function getAutoTheme(){var h=new Date().getHours();return (h>=19||h<7)?'midnight':'light'}
-
-function applyTheme(){
-var t=localStorage.getItem(KT)||'light';
-if(autoOn)t=getAutoTheme();
-if(t==='custom'){
-var c1=localStorage.getItem(KT+'_c1')||'#6366f1';
-var c2=localStorage.getItem(KT+'_c2')||'#8b5cf6';
-var se=document.getElementById('cts');
-if(!se){se=document.createElement('style');se.id='cts';document.head.appendChild(se);}
-se.textContent='body[data-t=custom]{--bg1:#f8f9fc;--bg2:#eef1f8;--card:#fff;--text:#1a1f36;--t2:#6b7280;--t3:#9ca3af;--pr:'+c1+';--pr2:'+c2+';--bd:rgba(0,0,0,.06);--sd:0 4px 20px '+c1+'22}';
-}
-document.body.setAttribute('data-t',t);
-if(!autoOn&&stats.themesUsed.indexOf(t)<0){stats.themesUsed.push(t);saveStats()}
-renderThemes();
-}
-
-function setTheme(t){try{localStorage.setItem(KT,t)}catch(e){};applyTheme();sndAdd();showToast('🎨 تم تغییر کرد')}
-function toggleAuto(){autoOn=!autoOn;localStorage.setItem(KAUTO,autoOn?'on':'off');updateToggles();applyTheme();sndAdd();showToast(autoOn?'🌙 حالت خودکار روشن':'خاموش')}
-function toggleSound(){soundOn=!soundOn;localStorage.setItem(KSND,soundOn?'on':'off');updateToggles();if(soundOn)beep(880,0.1,'sine',0.1);showToast(soundOn?'🔔 صدا روشن':'🔕 صدا خاموش')}
-function toggleVib(){vibOn=!vibOn;localStorage.setItem(KVIB,vibOn?'on':'off');updateToggles();vibrate(50);showToast(vibOn?'📳 لرزش روشن':'لرزش خاموش')}
-
-function setLang(l){
-lang=l;localStorage.setItem(KL,l);
-document.body.dir=(l==='fa')?'rtl':'ltr';
-updateToggles();
-sndAdd();
-showToast(l==='fa'?'🇮🇷 فارسی':'🇬🇧 English');
-}
-
-function updateToggles(){
-var t1=document.getElementById('autoTg');if(t1)t1.classList.toggle('on',autoOn);
-var t2=document.getElementById('sndTg');if(t2)t2.classList.toggle('on',soundOn);
-var t4=document.getElementById('vibTg');if(t4)t4.classList.toggle('on',vibOn);
-var g=document.getElementById('goalIn');if(g)g.value=goal;
-var f1=document.getElementById('faTg');if(f1)f1.classList.toggle('on',lang==='fa');
-var e1=document.getElementById('enTg');if(e1)e1.classList.toggle('on',lang==='en');
-}
-
-function setGoal(v){v=Math.max(0,Math.min(100,parseInt(v)||70));goal=v;localStorage.setItem(KG,v);sndAdd();showToast('🎯 هدف روزانه: '+fa(v)+'٪')}
-
-function openCT(){
-var g=document.getElementById('ctColors');
-g.innerHTML='';
-var colors=['#6366f1','#8b5cf6','#ec4899','#ef4444','#f59e0b','#10b981','#06b6d4','#3b82f6','#84cc16','#f97316','#a855f7','#14b8a6'];
-colors.forEach(function(c){
-var b=document.createElement('button');
-b.style.background=c;
-b.onclick=function(){
-document.getElementById('ctC1').value=c;
-document.getElementById('ctC2').value=adjustBright(c,20);
-};
-g.appendChild(b);
-});
-document.getElementById('ct').style.display='flex';
-}
-function closeCT(){document.getElementById('ct').style.display='none'}
-function adjustBright(hex,percent){
-var num=parseInt(hex.replace('#',''),16);
-var amt=Math.round(2.55*percent);
-var R=Math.min(255,(num>>16)+amt);
-var G=Math.min(255,((num>>8)&0xFF)+amt);
-var B=Math.min(255,(num&0xFF)+amt);
-return '#'+(0x1000000+R*0x10000+G*0x100+B).toString(16).slice(1);
-}
-function applyCT(){
-var c1=document.getElementById('ctC1').value;
-var c2=document.getElementById('ctC2').value;
-try{
-localStorage.setItem(KT+'_c1',c1);
-localStorage.setItem(KT+'_c2',c2);
-localStorage.setItem(KT,'custom');
-}catch(e){}
-applyTheme();
-closeCT();
-sndAdd();
-showToast('🎨 تم اختصاصی اعمال شد');
-}
-
-function renderThemes(){
-var g=document.getElementById('tgrid');if(!g)return;
-g.innerHTML='';
-var cur=document.body.getAttribute('data-t')||'light';
-for(var i=0;i<THEMES.length;i++){
-var th=THEMES[i];
-var w=document.createElement('div');w.className='tbtn-wrap';
-var b=document.createElement('button');
-b.className='tbtn'+(th.id===cur?' active':'');
-b.style.background='linear-gradient(135deg,'+th.c1+' 50%,'+th.c2+' 50%)';
-(function(id){b.onclick=function(){if(autoOn){showToast('حالت خودکار روشنه');return}setTheme(id)}})(th.id);
-var nm=document.createElement('div');nm.className='tname';nm.textContent=th.nm;
-w.appendChild(b);w.appendChild(nm);g.appendChild(w);
-}
-}
-
-function icon(t){var m=t.match(/^(\S+)/);return m?m[1]:'📌'}
-function titleText(t){return t.replace(/^\S+\s*/,'')||t}
-
-function render(){
-var app=document.getElementById('app');app.innerHTML='';
-for(var si=0;si<plan.length;si++){
-var sec=plan[si];
-var h=document.createElement('div');h.className='stitle';
-var l=document.createElement('span');
-var ic=document.createElement('span');ic.className='ico';ic.textContent=icon(sec.title);
-if(sec.color)ic.style.background='linear-gradient(135deg,'+sec.color+','+sec.color+'aa)';
-var tx=document.createElement('span');tx.textContent=titleText(sec.title);
-l.appendChild(ic);l.appendChild(tx);
-var hb=document.createElement('button');hb.textContent='✏️';(function(i){hb.onclick=function(){editSection(i)}})(si);
-h.appendChild(l);h.appendChild(hb);app.appendChild(h);
-var ul=document.createElement('ul');
-for(var ti=0;ti<sec.tasks.length;ti++){
-var t=sec.tasks[ti];
-var li=document.createElement('li');
-if(t.done)li.className='done';
-if(t.imp)li.classList.add('imp');
-var lb=document.createElement('label');
-var cb=document.createElement('input');cb.type='checkbox';cb.checked=t.done;
-(function(task,liEl,cb2){cb2.onchange=function(){task.done=cb2.checked;save();if(cb2.checked){liEl.classList.add('done');sndChk()}else{liEl.classList.remove('done');sndUn()}updateProg()}})(t,li,cb);
-var sp=document.createElement('span');sp.className='txt';
-var tx2=document.createElement('span');tx2.textContent=t.text;sp.appendChild(tx2);
-if(t.time){var tm=document.createElement('span');tm.className='tm';tm.textContent='🕐 '+t.time;sp.appendChild(tm)}
-if(t.note){var nt=document.createElement('span');nt.className='nt';nt.textContent='📝 '+t.note;sp.appendChild(nt)}
-lb.appendChild(cb);lb.appendChild(sp);
-var ib=document.createElement('button');ib.className='mini'+(t.imp?' on':'');ib.textContent=t.imp?'⭐':'☆';(function(task){ib.onclick=function(e){e.preventDefault();task.imp=!task.imp;save();sndTab();render()}})(t);
-var eb=document.createElement('button');eb.className='mini';eb.textContent='✏️';(function(s2,t2){eb.onclick=function(e){e.preventDefault();sndTab();openEdt(s2,t2)}})(si,ti);
-li.appendChild(lb);li.appendChild(ib);li.appendChild(eb);ul.appendChild(li);
-}
-app.appendChild(ul);
-var ab=document.createElement('button');ab.className='addbtn';ab.textContent='+ افزودن کار';(function(i){ab.onclick=function(){sndTab();addTask(i)}})(si);
-app.appendChild(ab);
-}
-updateProg();updateWeek();updateMonth();updateChart();
-}
-
-function updateProg(){
-var tot=0,dn=0;
-for(var i=0;i<plan.length;i++)for(var j=0;j<plan[i].tasks.length;j++){tot++;if(plan[i].tasks[j].done)dn++}
-var pct=tot?Math.round(dn/tot*100):0;
-document.getElementById('ringPct').textContent=fa(pct)+'٪';
-document.getElementById('ringInfo').textContent=toFa(dn);
-document.getElementById('ringTot').textContent=toFa(tot);
-var c=339.29,off=c-(c*pct/100);var r=document.getElementById('ring');if(r)r.setAttribute('stroke-dashoffset',off);
-if(pct>stats.bestPct)stats.bestPct=pct;
-var dk=new Date().toISOString().slice(0,10);stats.history[dk]=pct;
-if(pct===100){var y=new Date();y.setDate(y.getDate()-1);var yk=y.toISOString().slice(0,10);if(stats.lastDone===yk){stats.streak=(stats.streak||0)+1}else if(stats.lastDone!==dk){stats.streak=1}stats.lastDone=dk;if(stats.streak>stats.maxStreak)stats.maxStreak=stats.streak}
-else if(pct<100&&stats.lastDone&&stats.lastDone!==dk){stats.streak=0}
-if(stats.streak>0){document.getElementById('streakBox').style.display='flex';document.getElementById('streakN').textContent=toFa(stats.streak)}else document.getElementById('streakBox').style.display='none';
-saveStats();checkAch();
-}
-
-function updateWeek(){var w=document.getElementById('week');if(!w)return;w.innerHTML='';var days=['ش','ی','د','س','چ','پ','ج'];for(var i=6;i>=0;i--){var d=new Date();d.setDate(d.getDate()-i);var k=d.toISOString().slice(0,10);var p=stats.history[k]||0;var col=document.createElement('div');col.className='wday';var bar=document.createElement('div');bar.className='wbar';var fill=document.createElement('div');fill.className='wfill'+(p===100?' g':'');fill.style.height=p+'%';bar.appendChild(fill);var lbl=document.createElement('div');lbl.textContent=days[(d.getDay()+1)%7];col.appendChild(bar);col.appendChild(lbl);w.appendChild(col)}}
-
-function updateMonth(){
-var m=document.getElementById('month');if(!m)return;m.innerHTML='';
-var sum=0,full=0,best=0,cnt=0;
-for(var i=29;i>=0;i--){
-var d=new Date();d.setDate(d.getDate()-i);
-var k=d.toISOString().slice(0,10);
-var p=stats.history[k]||0;
-sum+=p;if(p===100)full++;if(p>best)best=p;cnt++;
-var c=document.createElement('div');var cls='mcell';
-if(p===100)cls+=' full';else if(p>=50)cls+=' half';else if(p>0)cls+=' low';
-c.className=cls;c.textContent=fa(d.getDate());c.title=fa(p)+'٪';
-m.appendChild(c);
-}
-document.getElementById('msAvg').textContent=fa(Math.round(sum/cnt))+'٪';
-document.getElementById('msFull').textContent=fa(full);
-document.getElementById('msBest').textContent=fa(best)+'٪';
-}
-
-function updateChart(){var c=document.getElementById('mchart');if(!c)return;c.innerHTML='';for(var i=29;i>=0;i--){var d=new Date();d.setDate(d.getDate()-i);var k=d.toISOString().slice(0,10);var p=stats.history[k]||0;var b=document.createElement('div');b.className='mcbar'+(p===100?' full':'');b.style.height=Math.max(p,3)+'%';c.appendChild(b)}}
-
-function checkAch(){for(var i=0;i<ACHS.length;i++){var a=ACHS[i];if(stats.achievements.indexOf(a.id)<0&&a.ch(stats)){stats.achievements.push(a.id);beep(880,0.15,'sine',0.1);setTimeout(function(){beep(1320,0.25,'sine',0.1)},120);showToast('🏅 دستاورد: '+a.t)}}saveStats()}
-
-function renderAch(){var l=document.getElementById('achList');l.innerHTML='';for(var i=0;i<ACHS.length;i++){var a=ACHS[i];var on=stats.achievements.indexOf(a.id)>=0;var d=document.createElement('div');d.className='ach'+(on?' on':'');d.innerHTML='<div class="ai">'+a.ic+'</div><div><div class="at">'+a.t+'</div><div class="as">'+a.s+'</div></div>';l.appendChild(d)}}
-
-function showToast(m){var t=document.getElementById('toast');t.textContent=m;t.classList.add('on');if(window._tt)clearTimeout(window._tt);window._tt=setTimeout(function(){t.classList.remove('on')},2000)}
-
-function resetAll(){if(confirm('همه تیک‌ها پاک شود؟')){for(var i=0;i<plan.length;i++)for(var j=0;j<plan[i].tasks.length;j++)plan[i].tasks[j].done=false;save();render();sndAdd();showToast('🔄 روز جدید شروع شد')}}
-
-function clearAll(){if(confirm('همه داده‌ها پاک شود؟')){try{localStorage.removeItem(KP);localStorage.removeItem(KD);localStorage.removeItem(KS)}catch(e){}location.reload()}}
-
-function backup(){try{var data={plan:plan,stats:stats,user:userName,version:'14.0',date:new Date().toISOString()};var blob=new Blob([JSON.stringify(data,null,2)],{type:'application/json'});var url=URL.createObjectURL(blob);var a=document.createElement('a');a.href=url;var d=new Date();a.download='barnameh-'+d.getFullYear()+'-'+(d.getMonth()+1)+'-'+d.getDate()+'.json';a.click();URL.revokeObjectURL(url);stats.backups=(stats.backups||0)+1;saveStats();checkAch();sndAdd();showToast('💾 پشتیبان ذخیره شد')}catch(e){showToast('خطا')}}
-
-function restore(e){var f=e.target.files[0];if(!f)return;var r=new FileReader();r.onload=function(ev){try{var data=JSON.parse(ev.target.result);if(!data.plan)throw new Error('invalid');if(!confirm('داده‌های فعلی جایگزین شوند؟'))return;plan=data.plan;stats=data.stats||stats;save();saveStats();location.reload()}catch(err){showToast('❌ فایل نامعتبر')}};r.readAsText(f)}
-
-function sharePlan(){var txt='📋 برنامهٔ روزانهٔ من\n\n';for(var i=0;i<plan.length;i++){txt+=plan[i].title+'\n';for(var j=0;j<plan[i].tasks.length;j++){var t=plan[i].tasks[j];txt+='  • '+t.text+(t.time?' ('+t.time+')':'')+'\n'}txt+='\n'}txt+='\n📱 اپ: https://e99411574-hub.github.io/DailyFlow/';if(navigator.share){navigator.share({title:'برنامهٔ روزانه',text:txt}).then(function(){stats.shared++;saveStats();checkAch()}).catch(function(){})}else{navigator.clipboard.writeText(txt).then(function(){stats.shared++;saveStats();checkAch();showToast('📋 کپی شد!')}).catch(function(){showToast('❌ کپی نشد')})}}
-
-function shareImage(){
-var cv=document.createElement('canvas');cv.width=800;cv.height=1100;
-var x=cv.getContext('2d');
-var bg=x.createLinearGradient(0,0,0,1100);bg.addColorStop(0,'#1a1f36');bg.addColorStop(1,'#0a0e1a');
-x.fillStyle=bg;x.fillRect(0,0,800,1100);
-x.textAlign='center';x.fillStyle='#fff';x.font='bold 46px Tahoma';
-x.fillText('📋 برنامهٔ روزانهٔ من',400,90);
-var tot=0,dn=0;
-for(var i=0;i<plan.length;i++)for(var j=0;j<plan[i].tasks.length;j++){tot++;if(plan[i].tasks[j].done)dn++}
-var pct=tot?Math.round(dn/tot*100):0;
-x.fillStyle='#6366f1';x.font='bold 68px Tahoma';x.fillText(fa(pct)+'٪',400,300);
-x.font='18px Tahoma';x.fillStyle='rgba(255,255,255,.7)';x.fillText(fa(dn)+' از '+fa(tot),400,340);
-cv.toBlob(function(blob){
-var file=new File([blob],'barnameh.png',{type:'image/png'});
-if(navigator.share&&navigator.canShare&&navigator.canShare({files:[file]})){
-navigator.share({files:[file],title:'برنامهٔ روزانه',text:'پیشرفت من'}).then(function(){stats.imgShared=(stats.imgShared||0)+1;stats.shared++;saveStats();checkAch()}).catch(function(){});
-}else{
-var url=URL.createObjectURL(blob);var a=document.createElement('a');a.href=url;a.download='barnameh.png';a.click();
-setTimeout(function(){URL.revokeObjectURL(url)},3000);
-stats.imgShared=(stats.imgShared||0)+1;stats.shared++;saveStats();checkAch();
-showToast('📸 تصویر ذخیره شد');
-}
-},'image/png');
-}
-
-function openEdt(si,ti){editKey={si:si,ti:ti};addMode=null;document.getElementById('emTitle').textContent='✏️ ویرایش کار';document.getElementById('ei').value=plan[si].tasks[ti].text;document.getElementById('et').value=plan[si].tasks[ti].time||'';document.getElementById('en').value=plan[si].tasks[ti].note||'';document.getElementById('et').style.display='block';document.getElementById('en').style.display='block';document.getElementById('colBox').style.display='none';document.getElementById('delBtn').style.display='block';document.getElementById('em').style.display='flex'}
-function editSection(si){addMode=null;editKey={si:si,section:true};document.getElementById('emTitle').textContent='✏️ ویرایش بخش';document.getElementById('ei').value=titleText(plan[si].title);document.getElementById('et').value='';document.getElementById('en').value='';document.getElementById('et').style.display='none';document.getElementById('en').style.display='none';document.getElementById('colBox').style.display='block';selColor=plan[si].color||SCOLORS[0];selIcon=icon(plan[si].title);renderColors();renderIcons();document.getElementById('delBtn').style.display='block';document.getElementById('em').style.display='flex'}
-function addTask(si){addMode={si:si,task:true};editKey=null;document.getElementById('emTitle').textContent='➕ افزودن کار';document.getElementById('ei').value='';document.getElementById('et').value='';document.getElementById('en').value='';document.getElementById('et').style.display='block';document.getElementById('en').style.display='block';document.getElementById('colBox').style.display='none';document.getElementById('delBtn').style.display='none';document.getElementById('em').style.display='flex'}
-function addSection(){addMode={section:true};editKey=null;document.getElementById('emTitle').textContent='➕ بخش جدید';document.getElementById('ei').value='';document.getElementById('et').value='';document.getElementById('en').value='';document.getElementById('et').style.display='none';document.getElementById('en').style.display='none';document.getElementById('colBox').style.display='block';selColor=SCOLORS[Math.floor(Math.random()*SCOLORS.length)];selIcon='📌';renderColors();renderIcons();document.getElementById('delBtn').style.display='none';document.getElementById('em').style.display='flex'}
-function renderColors(){var c=document.getElementById('colors');c.innerHTML='';for(var i=0;i<SCOLORS.length;i++){(function(col){var b=document.createElement('button');b.style.background=col;b.className=(col===selColor?'on':'');b.onclick=function(){selColor=col;sndTab();renderColors()};c.appendChild(b)})(SCOLORS[i])}}
-function renderIcons(){var c=document.getElementById('icons');if(!c)return;c.innerHTML='';for(var i=0;i<SICONS.length;i++){(function(ic){var b=document.createElement('button');b.textContent=ic;b.className=(ic===selIcon?'on':'');b.onclick=function(){selIcon=ic;sndTab();renderIcons()};c.appendChild(b)})(SICONS[i])}}
-function closeEdt(){document.getElementById('em').style.display='none';document.getElementById('et').style.display='block';document.getElementById('en').style.display='block';document.getElementById('colBox').style.display='none';editKey=null;addMode=null}
-
-function saveEdt(){
-var v=document.getElementById('ei').value.trim();if(!v)return;
-var t=document.getElementById('et').value.trim();
-var n=document.getElementById('en').value.trim();
-if(addMode){
-if(addMode.task){plan[addMode.si].tasks.push({id:'t'+Date.now(),text:v,time:t,note:n,done:false,imp:false,color:plan[addMode.si].color||SCOLORS[0]});stats.customTasks++;if(n)stats.notesCount=(stats.notesCount||0)+1;saveStats();sndAdd();showToast('✅ اضافه شد')}
-else if(addMode.section){plan.push({id:'s'+Date.now(),title:selIcon+' '+v,tasks:[],color:selColor||SCOLORS[0]});stats.iconsChanged=(stats.iconsChanged||0)+1;saveStats();sndAdd();showToast('✅ بخش اضافه شد')}
-}else if(editKey){
-if(editKey.section){var oldIcon=icon(plan[editKey.si].title);plan[editKey.si].title=selIcon+' '+v;if(oldIcon!==selIcon)stats.iconsChanged=(stats.iconsChanged||0)+1;if(selColor)plan[editKey.si].color=selColor;saveStats()}
-else{var old=plan[editKey.si].tasks[editKey.ti];if(!old.note&&n)stats.notesCount=(stats.notesCount||0)+1;old.text=v;old.time=t;old.note=n}
-showToast('💾 ذخیره شد');sndAdd();
-}
-save();closeEdt();render();
-}
-
-function delItem(){if(!editKey)return;if(editKey.section){if(!confirm('این بخش حذف شود؟'))return;plan.splice(editKey.si,1)}else{if(!confirm('این کار حذف شود؟'))return;plan[editKey.si].tasks.splice(editKey.ti,1)}save();closeEdt();render();sndDel();showToast('🗑 حذف شد')}
-
-function openSet(){showView('vs');updateWeek();updateMonth();updateChart();updateToggles()}
-function closeSet(){showView('vh')}
-function openAch(){renderAch();showView('va')}
-function closeAch(){showView('vh')}
-function openProfile(){updateProfile();showView('vp')}
-function closeProfile(){showView('vh')}
-
-function updateProfile(){
-document.getElementById('pName').textContent=userName||'کاربر عزیز';
-var h=new Date().getHours();
-var greet=h<12?'صبح بخیر':h<17?'ظهر بخیر':h<20?'عصر بخیر':'شب بخیر';
-document.getElementById('pSub').textContent=greet+' 🌟 عضو از '+startDate;
-document.getElementById('pCoins').textContent=toFa(coins);
-var best=parseInt(localStorage.getItem('goatBest4')||'0');
-document.getElementById('pBest').textContent=toFa(best);
-document.getElementById('pStreak').textContent=toFa(stats.streak||0);
-document.getElementById('pAch').textContent=toFa(stats.achievements.length);
-document.getElementById('pDone').textContent=toFa(stats.totalDone||0);
-try{
-var d1=new Date(startDate.split('/').reverse().join('-'));
-var d2=new Date();
-var days=Math.floor((d2-d1)/86400000)+1;
-document.getElementById('pSince').textContent=toFa(days);
-}catch(e){document.getElementById('pSince').textContent='۱';}
-}
-
-function showView(id){
-document.querySelectorAll('.view').forEach(function(v){v.classList.remove('active')});
-document.getElementById(id).classList.add('active');
-if(id==='vm'){render();updateWeek();updateMonth();updateChart()}
-if(id==='vp'){updateProfile()}
-window.scrollTo(0,0);
-}
-
-function editName(){document.getElementById('nmIn').value=userName;document.getElementById('nm').style.display='flex';setTimeout(function(){document.getElementById('nmIn').focus()},100)}
-function saveName(){
-var v=document.getElementById('nmIn').value.trim();
-userName=v;localStorage.setItem(KU,v);
-document.getElementById('nm').style.display='none';
-updateUserHdr();
-updateProfile();
-sndAdd();
-showToast('✅ نام ذخیره شد');
-}
-function updateUserHdr(){
-var n=userName||'کاربر عزیز';
-document.getElementById('uName').textContent=n;
-var h=new Date().getHours();
-var greet=h<12?'صبح بخیر':h<17?'ظهر بخیر':h<20?'عصر بخیر':'شب بخیر';
-document.getElementById('uSub').textContent=greet+' 🌟';
-document.getElementById('uAvatar').textContent=userName?userName.charAt(0):'👤';
-document.getElementById('hCoins').textContent=toFa(coins);
-var best=parseInt(localStorage.getItem('goatBest4')||'0');
-document.getElementById('hBest').textContent=toFa(best);
-}
-
-function loadPoem(){
-var d=new Date();
-var doy=Math.floor((d-new Date(d.getFullYear(),0,0))/86400000);
-var idx=doy%POEMS.length;
-var p=POEMS[idx];
-document.getElementById('poemTxt').textContent=p.t;
-document.getElementById('poemBy').textContent=p.p;
-}
-
-(function init(){
-updateUserHdr();
-applyTheme();
-render();
-updateToggles();
-loadPoem();
-})();
-
-setInterval(function(){if(autoOn)applyTheme()},60000);
-
-document.getElementById('em').onclick=function(e){if(e.target.id==='em')closeEdt()};
-document.getElementById('nm').onclick=function(e){if(e.target.id==='nm')document.getElementById('nm').style.display='none'};
-document.getElementById('ct').onclick=function(e){if(e.target.id==='ct')closeCT()};
-document.addEventListener('click',function(){initAudio()},{once:true});
+  if (typeof window.showToast !== 'function') {
+    window.showToast = function(msg) {
+      var el = document.getElementById('toast');
+      if (!el) return;
+      el.textContent = msg;
+      el.classList.add('on');
+      clearTimeout(window._toastTimer);
+      window._toastTimer = setTimeout(function() {
+        el.classList.remove('on');
+      }, 2200);
+    };
+  }
 </script>
+
 </body>
 </html>
