@@ -23,7 +23,12 @@ body[data-t=whatsapp]{--bg1:#111b21;--bg2:#0b141a;--card:#202c33;--text:#e9edef;
 html,body{overscroll-behavior:none}
 body{font-family:Tahoma,sans-serif;background:linear-gradient(160deg,var(--bg1),var(--bg2));background-attachment:fixed;color:var(--text);min-height:100vh;transition:background .3s,color .3s;font-size:14px}
 .view{display:none}
-.view.active{display:block}
+.view.active{display:block;animation:fadeIn .35s ease}
+@keyframes fadeIn{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:translateY(0)}}
+@keyframes slideIn{from{opacity:0;transform:translateX(20px)}to{opacity:1;transform:translateX(0)}}
+@keyframes spin{from{transform:rotate(0)}to{transform:rotate(360deg)}}
+@keyframes spin2{from{transform:rotate(0)}to{transform:rotate(-360deg)}}
+@keyframes shine{0%{background-position:0% 0}100%{background-position:200% 0}}
 .hdr{display:flex;align-items:center;justify-content:space-between;padding:12px 16px;background:var(--card);box-shadow:var(--sd);position:sticky;top:0;z-index:10;padding-top:calc(12px + env(safe-area-inset-top))}
 .hdr-mid{text-align:center;flex:1;padding:0 8px;min-width:0}
 .hdr h1{font-size:16px;font-weight:700;background:linear-gradient(135deg,var(--pr),var(--pr2));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
@@ -31,20 +36,34 @@ body{font-family:Tahoma,sans-serif;background:linear-gradient(160deg,var(--bg1),
 .ibtn{background:none;border:none;font-size:20px;cursor:pointer;width:42px;height:42px;border-radius:12px;color:var(--text);display:flex;align-items:center;justify-content:center;flex-shrink:0;transition:transform .15s}
 .ibtn:active{background:var(--bd);transform:scale(.9)}
 .wrap{padding:16px 14px 90px;max-width:600px;margin:0 auto}
-.poemBox{background:var(--card);border-radius:var(--rad);padding:22px 18px;box-shadow:var(--sd);margin-bottom:18px;border:1px solid var(--bd);text-align:center;position:relative;overflow:hidden;min-height:110px;display:flex;flex-direction:column;justify-content:center}
+.profileHdr{display:flex;align-items:center;gap:14px;padding:18px;background:linear-gradient(135deg,var(--pr),var(--pr2));color:#fff;border-radius:var(--rad);margin-bottom:16px;box-shadow:0 10px 30px rgba(99,102,241,.35);cursor:pointer;transition:transform .2s;position:relative;overflow:hidden;animation:slideIn .4s ease}
+.profileHdr::before{content:'';position:absolute;top:-50%;left:-50%;width:200%;height:200%;background:radial-gradient(circle,rgba(255,255,255,.15),transparent 70%);animation:spin 20s linear infinite}
+.profileHdr:active{transform:scale(.98)}
+.profileHdr .avatar{width:64px;height:64px;border-radius:50%;background:rgba(255,255,255,.3);display:flex;align-items:center;justify-content:center;font-size:32px;font-weight:700;position:relative;flex-shrink:0;border:3px solid rgba(255,255,255,.4)}
+.profileHdr .info{flex:1;text-align:right;position:relative;z-index:1}
+.profileHdr .nm{font-size:18px;font-weight:800;margin-bottom:4px}
+.profileHdr .sub{font-size:12px;opacity:.9;margin-bottom:6px}
+.profileHdr .stats{display:flex;gap:12px;justify-content:flex-end;font-size:11px;opacity:.9}
+.profileHdr .stats span{background:rgba(255,255,255,.2);padding:3px 9px;border-radius:10px;font-weight:600}
+.poemBox{background:var(--card);border-radius:var(--rad);padding:22px 18px;box-shadow:var(--sd);margin-bottom:18px;border:1px solid var(--bd);text-align:center;position:relative;overflow:hidden;min-height:110px;display:flex;flex-direction:column;justify-content:center;animation:fadeIn .5s ease}
 .poemBox::before{content:'❝';position:absolute;top:6px;right:14px;font-size:36px;color:var(--pr);opacity:.12}
 .poemBox::after{content:'❞';position:absolute;bottom:6px;left:14px;font-size:36px;color:var(--pr);opacity:.12}
 .poemTxt{font-size:15px;font-weight:500;line-height:2;color:var(--text);margin-bottom:12px;white-space:pre-line;position:relative;z-index:1}
 .poemBy{font-size:12px;color:var(--pr);font-weight:700;position:relative;z-index:1}
 .poemBy::before{content:'— '}
-.homeGrid{display:grid;grid-template-columns:1fr 1fr;gap:14px}
-.card{background:var(--card);border:1px solid var(--bd);border-radius:var(--rad);padding:22px 12px;cursor:pointer;box-shadow:var(--sd);display:flex;flex-direction:column;align-items:center;gap:10px;color:var(--text);font-family:inherit;transition:transform .15s;-webkit-user-select:none;user-select:none}
+.sec-title-bar{display:flex;align-items:center;gap:10px;margin:24px 4px 12px;font-size:16px;font-weight:800;color:var(--text)}
+.sec-title-bar .ic{width:38px;height:38px;border-radius:12px;display:flex;align-items:center;justify-content:center;font-size:20px}
+.sec-title-bar .tt{flex:1}
+.sec-title-bar .sb{font-size:11px;color:var(--t2);font-weight:500;margin-top:2px}
+.homeGrid{display:grid;grid-template-columns:1fr 1fr;gap:14px;animation:fadeIn .6s ease}
+.card{background:var(--card);border:1px solid var(--bd);border-radius:var(--rad);padding:22px 12px;cursor:pointer;box-shadow:var(--sd);display:flex;flex-direction:column;align-items:center;gap:10px;color:var(--text);font-family:inherit;transition:all .25s;position:relative;overflow:hidden}
 .card:active{transform:scale(.94)}
-.card .ic{width:64px;height:64px;border-radius:20px;display:flex;align-items:center;justify-content:center;font-size:32px;box-shadow:0 8px 20px rgba(0,0,0,.15)}
+.card .ic{width:64px;height:64px;border-radius:20px;display:flex;align-items:center;justify-content:center;font-size:32px;box-shadow:0 8px 20px rgba(0,0,0,.15);transition:transform .3s}
+.card:active .ic{transform:scale(.9) rotate(-5deg)}
 .card .nm{font-weight:700;font-size:14px;color:var(--text)}
 .card .sb{font-size:11px;color:var(--t2)}
 .ring{display:flex;flex-direction:column;align-items:center;gap:8px;padding:20px;background:var(--card);border-radius:var(--rad);box-shadow:var(--sd);margin-bottom:16px;border:1px solid var(--bd);position:relative;overflow:hidden}
-.ring::before{content:'';position:absolute;top:0;left:0;right:0;height:3px;background:linear-gradient(90deg,var(--pr),var(--pr2),var(--pr))}
+.ring::before{content:'';position:absolute;top:0;left:0;right:0;height:3px;background:linear-gradient(90deg,var(--pr),var(--pr2),var(--pr));background-size:200% 100%;animation:shine 3s linear infinite}
 .ring svg{transform:rotate(-90deg)}
 .ring circle{fill:none;stroke-width:12;stroke-linecap:round}
 .ring .bgc{stroke:var(--bd)}
@@ -58,21 +77,23 @@ body{font-family:Tahoma,sans-serif;background:linear-gradient(160deg,var(--bg1),
 .ico{width:34px;height:34px;border-radius:11px;background:linear-gradient(135deg,var(--pr),var(--pr2));display:flex;align-items:center;justify-content:center;font-size:17px;box-shadow:0 4px 12px rgba(99,102,241,.3)}
 .stitle button{background:none;border:none;color:var(--t3);font-size:14px;cursor:pointer;padding:6px 10px;border-radius:10px}
 ul{list-style:none}
-li{background:var(--card);margin:7px 0;padding:13px 14px;border-radius:14px;box-shadow:var(--sd);display:flex;align-items:center;gap:8px;border:1px solid var(--bd);position:relative;overflow:hidden}
+li{background:var(--card);margin:7px 0;padding:13px 14px;border-radius:14px;box-shadow:var(--sd);display:flex;align-items:center;gap:8px;border:1px solid var(--bd);position:relative;overflow:hidden;transition:all .2s;animation:slideIn .3s ease}
 li.done{opacity:.5}
 li.done .txt{text-decoration:line-through;color:var(--t2)}
 li.imp{border-right:3px solid var(--gold)}
 li label{display:flex;align-items:center;gap:11px;cursor:pointer;flex:1;min-width:0}
-li input[type=checkbox]{appearance:none;-webkit-appearance:none;width:24px;height:24px;border-radius:8px;border:2px solid var(--bd);background:var(--card);cursor:pointer;flex-shrink:0;position:relative}
+li input[type=checkbox]{appearance:none;-webkit-appearance:none;width:24px;height:24px;border-radius:8px;border:2px solid var(--bd);background:var(--card);cursor:pointer;flex-shrink:0;position:relative;transition:.2s}
 li input[type=checkbox]:checked{background:linear-gradient(135deg,var(--pr),var(--pr2));border-color:transparent;box-shadow:0 2px 8px rgba(99,102,241,.4)}
 li input[type=checkbox]:checked::after{content:'✓';position:absolute;inset:0;display:flex;align-items:center;justify-content:center;color:#fff;font-size:14px;font-weight:700}
 .txt{font-size:14px;font-weight:500;flex:1;word-break:break-word;display:flex;flex-direction:column;gap:3px}
 .tm{font-size:10px;color:var(--pr);background:var(--bd);padding:2px 8px;border-radius:7px;align-self:flex-start;font-weight:600}
 .nt{font-size:11px;color:var(--t2);background:var(--bd);padding:3px 9px;border-radius:7px;align-self:flex-start;line-height:1.4}
-.mini{background:none;border:none;cursor:pointer;font-size:14px;padding:4px 6px;border-radius:8px;color:var(--t3);opacity:.6}
+.mini{background:none;border:none;cursor:pointer;font-size:14px;padding:4px 6px;border-radius:8px;color:var(--t3);opacity:.6;transition:.2s}
 .mini.on{color:var(--gold);opacity:1}
-.rbtn{display:block;width:100%;margin-top:22px;padding:13px;border:none;border-radius:14px;background:linear-gradient(135deg,#ef4444,#dc2626);color:#fff;font-family:inherit;font-size:14px;font-weight:600;cursor:pointer;box-shadow:0 8px 20px rgba(239,68,68,.25)}
-.addbtn{display:flex;align-items:center;justify-content:center;width:100%;margin-top:8px;padding:11px;border:2px dashed var(--bd);border-radius:13px;background:transparent;color:var(--t2);font-family:inherit;font-size:13px;cursor:pointer}
+.rbtn{display:block;width:100%;margin-top:22px;padding:13px;border:none;border-radius:14px;background:linear-gradient(135deg,#ef4444,#dc2626);color:#fff;font-family:inherit;font-size:14px;font-weight:600;cursor:pointer;box-shadow:0 8px 20px rgba(239,68,68,.25);transition:.2s}
+.rbtn:active{transform:scale(.97)}
+.addbtn{display:flex;align-items:center;justify-content:center;width:100%;margin-top:8px;padding:11px;border:2px dashed var(--bd);border-radius:13px;background:transparent;color:var(--t2);font-family:inherit;font-size:13px;cursor:pointer;transition:.2s}
+.addbtn:active{background:var(--bd)}
 .sec-hdr{font-size:13px;font-weight:700;color:var(--pr);margin:18px 6px 8px;display:flex;align-items:center;gap:8px;text-transform:uppercase;letter-spacing:.5px}
 .sec-hdr::after{content:'';flex:1;height:1px;background:var(--bd)}
 .slist{background:var(--card);border-radius:var(--rad);overflow:hidden;box-shadow:var(--sd);border:1px solid var(--bd);margin-bottom:14px}
@@ -99,16 +120,15 @@ li input[type=checkbox]:checked::after{content:'✓';position:absolute;inset:0;d
 .mcell.low{background:var(--bd);border:1px solid var(--pr)}
 .mchart{display:flex;align-items:flex-end;gap:3px;height:110px;margin-top:10px;padding:6px 0}
 .mcbar{flex:1;background:linear-gradient(180deg,var(--pr),var(--pr2));border-radius:4px 4px 0 0;min-height:3px}
-.mcbar.full{background:linear-gradient(180deg,#10b981,#059669)}
 .mstat{display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px;margin-top:8px}
 .mstat div{background:var(--bg1);padding:10px;border-radius:12px;text-align:center;border:1px solid var(--bd)}
 .mstat .v{font-size:20px;font-weight:700;color:var(--pr)}
 .mstat .l{font-size:10px;color:var(--t2);margin-top:2px}
-.ovl{position:fixed;inset:0;background:rgba(0,0,0,.5);display:flex;align-items:center;justify-content:center;z-index:200;padding:20px}
-.mdl{background:var(--card);border-radius:20px;padding:20px;width:100%;max-width:400px;box-shadow:0 20px 50px rgba(0,0,0,.3);max-height:85vh;overflow-y:auto}
+.ovl{position:fixed;inset:0;background:rgba(0,0,0,.5);display:flex;align-items:center;justify-content:center;z-index:200;padding:20px;animation:fadeIn .2s ease}
+.mdl{background:var(--card);border-radius:20px;padding:20px;width:100%;max-width:400px;box-shadow:0 20px 50px rgba(0,0,0,.3);max-height:85vh;overflow-y:auto;animation:slideIn .25s ease}
 .mdl h3{margin:0 0 14px;font-size:15px;color:var(--text);font-weight:700}
 .mdl input,.mdl textarea{width:100%;padding:12px 14px;font-size:14px;font-family:inherit;border:2px solid var(--bd);border-radius:12px;background:var(--bg1);color:var(--text);margin-bottom:9px;outline:none;resize:none}
-.mdl input:focus,.mdl textarea:focus{border-color:var(--pr)}
+.mdl input:focus{border-color:var(--pr)}
 .colors{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:10px}
 .colors button{width:34px;height:34px;border-radius:50%;border:3px solid transparent;cursor:pointer}
 .colors button.on{border-color:var(--text);transform:scale(1.1)}
@@ -122,10 +142,10 @@ li input[type=checkbox]:checked::after{content:'✓';position:absolute;inset:0;d
 .bd2{background:linear-gradient(135deg,#ef4444,#dc2626);color:#fff}
 .toast{position:fixed;bottom:30px;left:50%;transform:translateX(-50%) translateY(80px);background:linear-gradient(135deg,var(--pr),var(--pr2));color:#fff;padding:11px 24px;border-radius:14px;font-size:13px;font-weight:600;z-index:300;opacity:0;transition:all .3s;pointer-events:none;max-width:90%;box-shadow:0 12px 30px rgba(99,102,241,.4)}
 .toast.on{opacity:1;transform:translateX(-50%) translateY(0)}
-.fab{position:fixed;bottom:22px;left:22px;width:54px;height:54px;border-radius:18px;background:linear-gradient(135deg,var(--pr),var(--pr2));color:#fff;border:none;font-size:26px;cursor:pointer;box-shadow:0 12px 30px rgba(99,102,241,.45);z-index:50;display:flex;align-items:center;justify-content:center}
+.fab{position:fixed;bottom:22px;left:22px;width:54px;height:54px;border-radius:18px;background:linear-gradient(135deg,var(--pr),var(--pr2));color:#fff;border:none;font-size:26px;cursor:pointer;box-shadow:0 12px 30px rgba(99,102,241,.45);z-index:50;display:flex;align-items:center;justify-content:center;transition:.2s}
 .fab:active{transform:scale(.9) rotate(90deg)}
 .ach-list{display:flex;flex-direction:column;gap:8px}
-.ach{display:flex;align-items:center;gap:10px;padding:11px 13px;background:var(--bg1);border-radius:12px;border:1px solid var(--bd);opacity:.5}
+.ach{display:flex;align-items:center;gap:10px;padding:11px 13px;background:var(--bg1);border-radius:12px;border:1px solid var(--bd);opacity:.5;transition:.2s}
 .ach.on{opacity:1;border-color:var(--gold);background:linear-gradient(135deg,rgba(245,158,11,.1),transparent)}
 .ach .ai{font-size:24px}
 .ach .at{flex:1;font-size:13px;font-weight:600}
@@ -136,14 +156,37 @@ li input[type=checkbox]:checked::after{content:'✓';position:absolute;inset:0;d
 .tg.on::after{transform:translateX(-20px)}
 .goalBox{display:flex;align-items:center;gap:10px}
 .goalBox input{width:80px;padding:8px 12px;text-align:center;font-size:14px;border:2px solid var(--bd);border-radius:10px;background:var(--bg1);color:var(--text);outline:none}
-.userHdr{display:flex;align-items:center;gap:8px;padding:14px 16px;background:linear-gradient(135deg,var(--pr),var(--pr2));color:#fff;border-radius:var(--rad);margin-bottom:14px;box-shadow:0 8px 20px rgba(99,102,241,.25)}
-.userHdr .avatar{width:44px;height:44px;border-radius:50%;background:rgba(255,255,255,.25);display:flex;align-items:center;justify-content:center;font-size:22px;font-weight:700}
-.userHdr .info{flex:1;text-align:right}
-.userHdr .nm{font-size:15px;font-weight:700}
-.userHdr .sub{font-size:11px;opacity:.85;margin-top:2px}
 .ct-colors{display:grid;grid-template-columns:repeat(6,1fr);gap:10px;margin-bottom:16px}
 .ct-colors button{width:100%;aspect-ratio:1;border-radius:12px;border:3px solid transparent;cursor:pointer;transition:.2s}
-.ct-colors button:active{transform:scale(.9)}
+.pBig{display:flex;flex-direction:column;align-items:center;gap:14px;padding:28px 20px;background:linear-gradient(135deg,var(--pr),var(--pr2));color:#fff;border-radius:var(--rad);margin-bottom:18px;position:relative;overflow:hidden;box-shadow:0 15px 40px rgba(99,102,241,.35)}
+.pBig::before{content:'';position:absolute;top:-50%;right:-50%;width:200%;height:200%;background:radial-gradient(circle,rgba(255,255,255,.15),transparent 60%);animation:spin 25s linear infinite}
+.pBig .pNm{font-size:24px;font-weight:800;position:relative;z-index:1}
+.pBig .pSub{font-size:13px;opacity:.9;position:relative;z-index:1}
+.badge7{position:relative;width:170px;height:170px;margin:10px auto;z-index:1}
+.badge7 .ring1{position:absolute;inset:0;border-radius:50%;border:3px dashed rgba(255,255,255,.3);animation:spin 20s linear infinite}
+.badge7 .ring2{position:absolute;inset:14px;border-radius:50%;border:2px dotted rgba(255,255,255,.25);animation:spin2 15s linear infinite}
+.badge7 .center{position:absolute;inset:38px;border-radius:50%;background:rgba(255,255,255,.25);display:flex;align-items:center;justify-content:center;font-size:48px}
+.tick{position:absolute;top:50%;left:50%;width:30px;height:30px;margin:-15px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:14px;font-weight:800;color:#fff;box-shadow:0 4px 10px rgba(0,0,0,.4);border:2px solid rgba(255,255,255,.5)}
+.tick.t1{background:#ef4444;animation:orbit1 8s linear infinite}
+.tick.t2{background:#f59e0b;animation:orbit2 8s linear infinite}
+.tick.t3{background:#84cc16;animation:orbit3 8s linear infinite}
+.tick.t4{background:#10b981;animation:orbit4 8s linear infinite}
+.tick.t5{background:#06b6d4;animation:orbit5 8s linear infinite}
+.tick.t6{background:#3b82f6;animation:orbit6 8s linear infinite}
+.tick.t7{background:#8b5cf6;animation:orbit7 8s linear infinite}
+@keyframes orbit1{from{transform:translate(0,-75px) rotate(0)}to{transform:translate(0,-75px) rotate(360deg)}}
+@keyframes orbit2{from{transform:translate(53px,-53px) rotate(0)}to{transform:translate(53px,-53px) rotate(360deg)}}
+@keyframes orbit3{from{transform:translate(75px,0) rotate(0)}to{transform:translate(75px,0) rotate(360deg)}}
+@keyframes orbit4{from{transform:translate(53px,53px) rotate(0)}to{transform:translate(53px,53px) rotate(360deg)}}
+@keyframes orbit5{from{transform:translate(0,75px) rotate(0)}to{transform:translate(0,75px) rotate(360deg)}}
+@keyframes orbit6{from{transform:translate(-53px,53px) rotate(0)}to{transform:translate(-53px,53px) rotate(360deg)}}
+@keyframes orbit7{from{transform:translate(-75px,0) rotate(0)}to{transform:translate(-75px,0) rotate(360deg)}}
+.pStats{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:14px}
+.pStat{background:var(--card);border-radius:var(--rad);padding:18px;box-shadow:var(--sd);border:1px solid var(--bd);text-align:center;animation:fadeIn .5s ease}
+.pStat .v{font-size:26px;font-weight:800;background:linear-gradient(135deg,var(--pr),var(--pr2));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
+.pStat .l{font-size:11px;color:var(--t2);margin-top:4px;font-weight:600}
+.pStat .ic{font-size:24px;margin-bottom:4px}
+.badgeTitle{font-size:15px;font-weight:800;color:#fff;position:relative;z-index:1;text-align:center;margin-top:8px}
 </style>
 </head>
 <body>
@@ -155,16 +198,57 @@ li input[type=checkbox]:checked::after{content:'✓';position:absolute;inset:0;d
 <button class="ibtn" onclick="sndNav();openAch()">🏅</button>
 </div>
 <div class="wrap" style="padding-top:16px">
-<div class="userHdr" onclick="editName()" style="cursor:pointer">
+<div class="profileHdr" onclick="openProfile()">
 <div class="avatar" id="uAvatar">👤</div>
 <div class="info">
 <div class="nm" id="uName">کاربر عزیز</div>
 <div class="sub" id="uSub">خوش آمدی</div>
+<div class="stats"><span>🪙 <b id="hCoins">۰</b></span><span>🏆 <b id="hBest">۰</b></span></div>
 </div>
 </div>
 <div class="poemBox">
 <div class="poemTxt" id="poemTxt">—</div>
 <div class="poemBy" id="poemBy">—</div>
+</div>
+<div class="sec-title-bar">
+<div class="ic" style="background:linear-gradient(135deg,#f97316,#ec4899);color:#fff">🎮</div>
+<div class="tt">بخش سرگرمی<div class="sb">بازی‌ها و چالش‌ها</div></div>
+</div>
+<div class="homeGrid">
+<div class="card" onclick="goPage('games')">
+<div class="ic" style="background:linear-gradient(135deg,#ef4444,#f59e0b);color:#fff">🪨</div>
+<div class="nm">سنگ کاغذ قیچی</div>
+<div class="sb">با کامپیوتر مسابقه بده</div>
+</div>
+<div class="card" onclick="goPage('guess')">
+<div class="ic" style="background:linear-gradient(135deg,#10b981,#059669);color:#fff">🔢</div>
+<div class="nm">حدس عدد</div>
+<div class="sb">عدد مخفی رو پیدا کن</div>
+</div>
+<div class="card" onclick="goPage('ttt')">
+<div class="ic" style="background:linear-gradient(135deg,#3b82f6,#8b5cf6);color:#fff">❌</div>
+<div class="nm">دوز</div>
+<div class="sb">X و O روی صفحه</div>
+</div>
+<div class="card" onclick="goPage('mem')">
+<div class="ic" style="background:linear-gradient(135deg,#ec4899,#8b5cf6);color:#fff">🧠</div>
+<div class="nm">حافظه</div>
+<div class="sb">جفت کارت‌ها رو پیدا کن</div>
+</div>
+<div class="card" onclick="goPage('goat')">
+<div class="ic" style="background:linear-gradient(135deg,#10b981,#06b6d4);color:#fff">🐐</div>
+<div class="nm">بز ماجراجو</div>
+<div class="sb">بی‌نهایت و پر از ماجرا</div>
+</div>
+<div class="card" onclick="goPage('games')">
+<div class="ic" style="background:linear-gradient(135deg,#8b5cf6,#06b6d4);color:#fff">🎯</div>
+<div class="nm">همهٔ بازی‌ها</div>
+<div class="sb">مشاهدهٔ کامل</div>
+</div>
+</div>
+<div class="sec-title-bar">
+<div class="ic" style="background:linear-gradient(135deg,#6366f1,#8b5cf6);color:#fff">🔧</div>
+<div class="tt">بخش ابزارک<div class="sb">ابزارهای کاربردی</div></div>
 </div>
 <div class="homeGrid">
 <div class="card" onclick="goPage('plan')">
@@ -192,10 +276,46 @@ li input[type=checkbox]:checked::after{content:'✓';position:absolute;inset:0;d
 <div class="nm">پرسش</div>
 <div class="sb">دایرة‌المعارف</div>
 </div>
-<div class="card" onclick="goPage('games')">
-<div class="ic" style="background:linear-gradient(135deg,#f97316,#ec4899);color:#fff">🎮</div>
-<div class="nm">سرگرمی</div>
-<div class="sb">بازی‌ها</div>
+</div>
+</div>
+</div>
+
+<div id="vp" class="view">
+<div class="hdr">
+<button class="ibtn" onclick="sndNav();closeProfile()">←</button>
+<div class="hdr-mid"><h1>👤 پروفایل</h1></div>
+<div style="width:42px"></div>
+</div>
+<div class="wrap">
+<div class="pBig">
+<div class="badge7">
+<div class="ring1"></div>
+<div class="ring2"></div>
+<div class="center">🏆</div>
+<div class="tick t1">✓</div>
+<div class="tick t2">✓</div>
+<div class="tick t3">✓</div>
+<div class="tick t4">✓</div>
+<div class="tick t5">✓</div>
+<div class="tick t6">✓</div>
+<div class="tick t7">✓</div>
+</div>
+<div class="pNm" id="pName">کاربر عزیز</div>
+<div class="pSub" id="pSub">🌟 عضو از امروز</div>
+<div class="badgeTitle">✨ قهرمان هفت‌رنگ ✨</div>
+</div>
+<div class="pStats">
+<div class="pStat"><div class="ic">🪙</div><div class="v" id="pCoins">۰</div><div class="l">سکه</div></div>
+<div class="pStat"><div class="ic">🏆</div><div class="v" id="pBest">۰</div><div class="l">رکورد بز</div></div>
+<div class="pStat"><div class="ic">🔥</div><div class="v" id="pStreak">۰</div><div class="l">روز پیوسته</div></div>
+<div class="pStat"><div class="ic">🏅</div><div class="v" id="pAch">۰</div><div class="l">دستاورد</div></div>
+<div class="pStat"><div class="ic">✅</div><div class="v" id="pDone">۰</div><div class="l">کار انجام شده</div></div>
+<div class="pStat"><div class="ic">📅</div><div class="v" id="pSince">۰</div><div class="l">روز عضویت</div></div>
+</div>
+<div class="slist">
+<div class="srow-flat">
+<div class="slbl">✏️ ویرایش نام</div>
+<button class="mini" onclick="editName()" style="font-size:20px;opacity:1">✏️</button>
 </div>
 </div>
 </div>
@@ -231,7 +351,6 @@ li input[type=checkbox]:checked::after{content:'✓';position:absolute;inset:0;d
 <div style="width:42px"></div>
 </div>
 <div class="wrap">
-
 <div class="sec-hdr">👤 حساب کاربری</div>
 <div class="slist">
 <div class="srow-flat">
@@ -243,7 +362,17 @@ li input[type=checkbox]:checked::after{content:'✓';position:absolute;inset:0;d
 <span id="startDate" style="color:var(--t2);font-size:12px">—</span>
 </div>
 </div>
-
+<div class="sec-hdr">🌍 زبان</div>
+<div class="slist">
+<div class="srow-flat">
+<div class="slbl">🇮🇷 فارسی</div>
+<div class="tg" id="faTg" onclick="setLang('fa')"></div>
+</div>
+<div class="srow-flat">
+<div class="slbl">🇬🇧 English</div>
+<div class="tg" id="enTg" onclick="setLang('en')"></div>
+</div>
+</div>
 <div class="sec-hdr">🎨 ظاهر</div>
 <div class="slist">
 <div class="srow">
@@ -259,7 +388,6 @@ li input[type=checkbox]:checked::after{content:'✓';position:absolute;inset:0;d
 <div class="tg" id="autoTg" onclick="toggleAuto()"></div>
 </div>
 </div>
-
 <div class="sec-hdr">🔔 اعلان‌ها</div>
 <div class="slist">
 <div class="srow-flat">
@@ -267,12 +395,10 @@ li input[type=checkbox]:checked::after{content:'✓';position:absolute;inset:0;d
 <div class="tg" id="sndTg" onclick="toggleSound()"></div>
 </div>
 <div class="srow-flat">
-<div class="srow-flat">
 <div class="slbl">📳 لرزش</div>
 <div class="tg" id="vibTg" onclick="toggleVib()"></div>
 </div>
 </div>
-
 <div class="sec-hdr">📊 آمار و پیشرفت</div>
 <div class="slist">
 <div class="srow">
@@ -304,7 +430,6 @@ li input[type=checkbox]:checked::after{content:'✓';position:absolute;inset:0;d
 <button class="mini" onclick="sndNav();openAch()" style="font-size:13px;opacity:1;color:var(--pr);font-weight:600">مشاهده</button>
 </div>
 </div>
-
 <div class="sec-hdr">💾 داده‌ها</div>
 <div class="slist">
 <div class="srow-flat">
@@ -320,28 +445,22 @@ li input[type=checkbox]:checked::after{content:'✓';position:absolute;inset:0;d
 <button class="mini" onclick="backup()" style="font-size:20px;opacity:1">📥</button>
 </div>
 <div class="srow-flat">
-<div class="slbl">📁 بازیابی از فایل</div>
+<div class="slbl">📁 بازیابی</div>
 <button class="mini" onclick="document.getElementById('fileIn').click()" style="font-size:20px;opacity:1">📂</button>
 <input type="file" id="fileIn" accept=".json" style="display:none" onchange="restore(event)">
 </div>
 <div class="srow-flat">
 <div class="slbl" style="color:#ef4444">🗑 پاک کردن داده‌ها</div>
-<button class="mini" onclick="clearAll()" style="color:#ef4444;opacity:1;font-size:12px;font-weight:600">پاک کردن</button>
+<button class="mini" onclick="clearAll()" style="color:#ef4444;opacity:1;font-size:12px;font-weight:600">پاک</button>
 </div>
 </div>
-
 <div class="sec-hdr">ℹ️ درباره</div>
 <div class="slist">
 <div class="srow-flat">
 <div class="slbl">📱 نسخه</div>
-<span style="color:var(--t2);font-size:13px">۱۳.۰</span>
-</div>
-<div class="srow-flat">
-<div class="slbl">💡 راهنما</div>
-<button class="mini" onclick="showHelp()" style="font-size:13px;opacity:1;color:var(--pr);font-weight:600">مشاهده</button>
+<span style="color:var(--t2);font-size:13px">۱۴.۰</span>
 </div>
 </div>
-
 <p style="text-align:center;color:var(--t3);font-size:11px;margin-top:20px;margin-bottom:20px">ساخته شده با ❤️</p>
 </div>
 </div>
@@ -391,7 +510,7 @@ li input[type=checkbox]:checked::after{content:'✓';position:absolute;inset:0;d
 <h3>🎨 تم اختصاصی</h3>
 <p style="font-size:13px;color:var(--t2);margin-bottom:12px">یک رنگ اصلی انتخاب کن:</p>
 <div class="ct-colors" id="ctColors"></div>
-<p style="font-size:12px;color:var(--t2);margin-bottom:10px">یا رنگ دلخواه خودت:</p>
+<p style="font-size:12px;color:var(--t2);margin-bottom:10px">یا رنگ دلخواه:</p>
 <div style="display:flex;gap:8px;margin-bottom:16px">
 <input type="color" id="ctC1" value="#6366f1" style="width:100%;height:50px;border:none;border-radius:12px;cursor:pointer;background:transparent">
 <input type="color" id="ctC2" value="#8b5cf6" style="width:100%;height:50px;border:none;border-radius:12px;cursor:pointer;background:transparent">
@@ -406,59 +525,15 @@ li input[type=checkbox]:checked::after{content:'✓';position:absolute;inset:0;d
 <div id="toast" class="toast"></div>
 
 <script>
-var KP='plan_v21',KT='theme_v21',KD='date_v21',KS='stats_v21',KSND='sound_v21',KAUTO='auto_v21',KVIB='vib_v21',KU='user_v21',KG='goal_v21';
+var KP='plan_v23',KT='theme_v23',KD='date_v23',KS='stats_v23',KSND='sound_v23',KAUTO='auto_v23',KVIB='vib_v23',KU='user_v23',KG='goal_v23',KL='lang_v23',KC='coins_v23';
+var lang=localStorage.getItem(KL)||'fa';
 
-var THEMES=[
-{id:'light',nm:'روشن',c1:'#ffffff',c2:'#6366f1'},
-{id:'dark',nm:'تاریک',c1:'#1a1f32',c2:'#818cf8'},
-{id:'mint',nm:'نعنایی',c1:'#f0fdf4',c2:'#10b981'},
-{id:'ocean',nm:'اقیانوس',c1:'#eff6ff',c2:'#3b82f6'},
-{id:'purple',nm:'بنفش',c1:'#faf5ff',c2:'#a855f7'},
-{id:'rose',nm:'رز',c1:'#fff1f2',c2:'#e11d48'},
-{id:'midnight',nm:'نیمه‌شب',c1:'#0f172a',c2:'#38bdf8'},
-{id:'spotify',nm:'اسپاتیفای',c1:'#121212',c2:'#1db954'},
-{id:'discord',nm:'دیسکورد',c1:'#36393f',c2:'#5865f2'},
-{id:'instagram',nm:'اینستاگرام',c1:'#fff0f6',c2:'#e1306c'},
-{id:'twitter',nm:'توییتر',c1:'#ffffff',c2:'#1da1f2'},
-{id:'youtube',nm:'یوتیوب',c1:'#0f0f0f',c2:'#ff0000'},
-{id:'whatsapp',nm:'واتساپ',c1:'#111b21',c2:'#25d366'}
-];
+var THEMES=[{id:'light',nm:'روشن',c1:'#ffffff',c2:'#6366f1'},{id:'dark',nm:'تاریک',c1:'#1a1f32',c2:'#818cf8'},{id:'mint',nm:'نعنایی',c1:'#f0fdf4',c2:'#10b981'},{id:'ocean',nm:'اقیانوس',c1:'#eff6ff',c2:'#3b82f6'},{id:'purple',nm:'بنفش',c1:'#faf5ff',c2:'#a855f7'},{id:'rose',nm:'رز',c1:'#fff1f2',c2:'#e11d48'},{id:'midnight',nm:'نیمه‌شب',c1:'#0f172a',c2:'#38bdf8'},{id:'spotify',nm:'اسپاتیفای',c1:'#121212',c2:'#1db954'},{id:'discord',nm:'دیسکورد',c1:'#36393f',c2:'#5865f2'},{id:'instagram',nm:'اینستاگرام',c1:'#fff0f6',c2:'#e1306c'},{id:'twitter',nm:'توییتر',c1:'#ffffff',c2:'#1da1f2'},{id:'youtube',nm:'یوتیوب',c1:'#0f0f0f',c2:'#ff0000'},{id:'whatsapp',nm:'واتساپ',c1:'#111b21',c2:'#25d366'}];
 
 var SCOLORS=['#6366f1','#10b981','#f59e0b','#ef4444','#ec4899','#3b82f6','#8b5cf6','#06b6d4','#84cc16','#f97316'];
 var SICONS=['🌅','🌙','⭐','📚','🏫','🌤️','🍽️','🪥','💧','🏃','🚿','😴','📖','✍️','💪','🎯','🧘','🎵','🎨','💻','📱','🔬','🧪','🌿','🐐','🐱','🦁','🌸','⚡','🔥','🎁','✨'];
 
-var POEMS=[
-{t:"دوش دیدم که ملائک در میخانه زدند\nگِل آدم بسرشتند و به پیمانه زدند",p:"حافظ"},
-{t:"بنی آدم اعضای یکدیگرند\nکه در آفرینش ز یک گوهرند",p:"سعدی"},
-{t:"بشنو از نی چون حکایت می‌کند\nاز جدایی‌ها شکایت می‌کند",p:"مولانا"},
-{t:"توانا بود هر که دانا بود\nز دانش دل پیر برنا بود",p:"فردوسی"},
-{t:"برگیر پیاله و سبو ای دلجو\nکاین یک دو سه روزه عمر را خوش می‌جو",p:"خیام"},
-{t:"ای مرغ سحر چو روز شد برخیز\nوز خواب غرور خویشتن برخیز",p:"پروین اعتصامی"},
-{t:"می‌تراود مهتاب\nمی‌درخشد شب‌تاب",p:"نیما یوشیج"},
-{t:"علی ای همای رحمت تو چه آیتی خدا را\nکه به ماسوا فکندی همه سایه هما را",p:"شهریار"},
-{t:"من از نهایت شب حرف می‌زنم\nمن از نهایت تاریکی",p:"فروغ فرخزاد"},
-{t:"به راه بادیه رفتن به از نشستن باطل\nکه گر مراد نیابم به قدر وسع بکوشم",p:"سعدی"},
-{t:"از خدا جوییم توفیق ادب\nبی ادب محروم ماند از لطف رب",p:"مولانا"},
-{t:"دلا بسوز که سوز تو کارها بکند\nنیاز نیم شبی دفع صد بلا بکند",p:"حافظ"},
-{t:"هنر بیاموز که سلطنت بی هنر بسر آید\nو بی هنر سلطنت به سر ناید",p:"سعدی"},
-{t:"به نام آنکه جان را فکرت آموخت\nچراغ دل به نور جان برافروخت",p:"صائب تبریزی"},
-{t:"از خویشتن بپرس که تو کیستی\nتا واقف شوی که در چه کیشی",p:"عطار نیشابوری"},
-{t:"بیا تا گل برافشانیم و می در ساغر اندازیم\nفلک را سقف بشکافیم و طرحی نو دراندازیم",p:"حافظ"},
-{t:"با کاروان حله برفتم ز سیستان\nبا حلّهٔ تنیدهٔ زربفت راهبر",p:"حافظ"},
-{t:"آنچه در آینه جوان بیند\nپیر در خشت خام آن بیند",p:"سعدی"},
-{t:"هر که را جامه ز عشقی چاک شد\nاو ز حرص و عیب کلی پاک شد",p:"مولانا"},
-{t:"چو ایران نباشد تن من مباد\nبدین بوم و بر زنده یک تن مباد",p:"فردوسی"},
-{t:"جهان یادگار است از آن کیست هیچ\nکه را بخت یار است و آن کسش هیچ",p:"خیام"},
-{t:"سر آن ندارد امشب که برآید آفتابی\nچه خیال‌ها گذر کرد و گذر نکرد خوابی",p:"سعدی"},
-{t:"مرا عهدی است با جانان که تا جان در بدن دارم\nهواداران کویش را چو جان خویشتن دارم",p:"حافظ"},
-{t:"توانگران را نباشد به کار دیدهٔ عبرت\nکه کیسه زر و سیم است پیششان به حقیقت",p:"سعدی"},
-{t:"زندگی صحنهٔ یکتای هنرمندی ماست\nهر کسی نغمهٔ خود خواند و از صحنه رود",p:"ژاله اصفهانی"},
-{t:"مرغ سحر ناله سر کن\nداغ مرا تازه‌تر کن",p:"ملک‌الشعرا بهار"},
-{t:"ستاره‌ها همه در آسمان روشن باد\nامید من به تو ای صبح روشن باد",p:"سیمین بهبهانی"},
-{t:"عشق در دل ماند و یار از دست رفت\nدوستان دستی که کار از دست رفت",p:"مولانا"},
-{t:"اگر آن ترک شیرازی به دست آرد دل ما را\nبه خال هندویش بخشم سمرقند و بخارا را",p:"حافظ"},
-{t:"توانگران را عیب نباشد به کار دیدهٔ عبرت\nکه کیسهٔ زر و سیم است پیششان به حقیقت",p:"سعدی"}
-];
+var POEMS=[{t:"دوش دیدم که ملائک در میخانه زدند\nگِل آدم بسرشتند و به پیمانه زدند",p:"حافظ"},{t:"بنی آدم اعضای یکدیگرند\nکه در آفرینش ز یک گوهرند",p:"سعدی"},{t:"بشنو از نی چون حکایت می‌کند\nاز جدایی‌ها شکایت می‌کند",p:"مولانا"},{t:"توانا بود هر که دانا بود\nز دانش دل پیر برنا بود",p:"فردوسی"},{t:"برگیر پیاله و سبو ای دلجو\nکاین یک دو سه روزه عمر را خوش می‌جو",p:"خیام"},{t:"ای مرغ سحر چو روز شد برخیز\nوز خواب غرور خویشتن برخیز",p:"پروین اعتصامی"},{t:"می‌تراود مهتاب\nمی‌درخشد شب‌تاب",p:"نیما یوشیج"},{t:"علی ای همای رحمت تو چه آیتی خدا را\nکه به ماسوا فکندی همه سایه هما را",p:"شهریار"},{t:"من از نهایت شب حرف می‌زنم\nمن از نهایت تاریکی",p:"فروغ فرخزاد"},{t:"به راه بادیه رفتن به از نشستن باطل\nکه گر مراد نیابم به قدر وسع بکوشم",p:"سعدی"},{t:"از خدا جوییم توفیق ادب\nبی ادب محروم ماند از لطف رب",p:"مولانا"},{t:"دلا بسوز که سوز تو کارها بکند\nنیاز نیم شبی دفع صد بلا بکند",p:"حافظ"},{t:"هنر بیاموز که سلطنت بی هنر بسر آید\nو بی هنر سلطنت به سر ناید",p:"سعدی"},{t:"به نام آنکه جان را فکرت آموخت\nچراغ دل به نور جان برافروخت",p:"صائب تبریزی"},{t:"از خویشتن بپرس که تو کیستی\nتا واقف شوی که در چه کیشی",p:"عطار نیشابوری"},{t:"بیا تا گل برافشانیم و می در ساغر اندازیم\nفلک را سقف بشکافیم و طرحی نو دراندازیم",p:"حافظ"},{t:"با کاروان حله برفتم ز سیستان\nبا حلّهٔ تنیدهٔ زربفت راهبر",p:"حافظ"},{t:"آنچه در آینه جوان بیند\nپیر در خشت خام آن بیند",p:"سعدی"},{t:"هر که را جامه ز عشقی چاک شد\nاو ز حرص و عیب کلی پاک شد",p:"مولانا"},{t:"چو ایران نباشد تن من مباد\nبدین بوم و بر زنده یک تن مباد",p:"فردوسی"},{t:"جهان یادگار است از آن کیست هیچ\nکه را بخت یار است و آن کسش هیچ",p:"خیام"},{t:"سر آن ندارد امشب که برآید آفتابی\nچه خیال‌ها گذر کرد و گذر نکرد خوابی",p:"سعدی"},{t:"مرا عهدی است با جانان که تا جان در بدن دارم\nهواداران کویش را چو جان خویشتن دارم",p:"حافظ"},{t:"توانگران را نباشد به کار دیدهٔ عبرت\nکه کیسه زر و سیم است پیششان به حقیقت",p:"سعدی"},{t:"زندگی صحنهٔ یکتای هنرمندی ماست\nهر کسی نغمهٔ خود خواند و از صحنه رود",p:"ژاله اصفهانی"},{t:"مرغ سحر ناله سر کن\nداغ مرا تازه‌تر کن",p:"ملک‌الشعرا بهار"},{t:"ستاره‌ها همه در آسمان روشن باد\nامید من به تو ای صبح روشن باد",p:"سیمین بهبهانی"},{t:"عشق در دل ماند و یار از دست رفت\nدوستان دستی که کار از دست رفت",p:"مولانا"},{t:"اگر آن ترک شیرازی به دست آرد دل ما را\nبه خال هندویش بخشم سمرقند و بخارا را",p:"حافظ"},{t:"توانگران را عیب نباشد به کار دیدهٔ عبرت\nکه کیسهٔ زر و سیم است پیششان به حقیقت",p:"سعدی"}];
 
 var DEF=[{title:"🌅 صبح",items:["بیدار شدن","۱ لیوان آب","مسواک صبح","شستن صورت","صبحانه"]},{title:"🏫 مدرسه",items:["مدرسه / کلاس‌ها","ناهار","مسواک ظهر","خواب ظهر ۳۰ دقیقه"]},{title:"📚 مطالعه",items:["ریاضی","هندسه","فیزیک","شیمی"]},{title:"🌤️ عصر و ورزش",items:["میان‌وعده عصر","ورزش ۳۰–۶۰ دقیقه","حمام / بهداشت","سیبیل / موهای زائد"]},{title:"🌙 شب",items:["شام","مرور درس‌ها","حل تمرین و تست","هوای آزاد","تکمیل ۶–۸ لیوان آب","کنار گذاشتن گوشی","مسواک شب","شستن صورت شب","خواب شب"]}];
 
@@ -496,6 +571,7 @@ var soundOn=localStorage.getItem(KSND)!=='off';
 var autoOn=localStorage.getItem(KAUTO)==='on';
 var vibOn=localStorage.getItem(KVIB)==='on';
 var goal=parseInt(localStorage.getItem(KG)||'70');
+var coins=parseInt(localStorage.getItem(KC)||'0');
 
 var userName=localStorage.getItem(KU)||'';
 var startDate=localStorage.getItem(KU+'_start')||'';
@@ -534,7 +610,8 @@ else if(type==='calc'){beep(440,0.08,'square',0.06);setTimeout(function(){beep(8
 else if(type==='cal'){beep(587,0.1,'triangle',0.1);setTimeout(function(){beep(784,0.15,'triangle',0.1)},70);vibrate(25)}
 else if(type==='time'){beep(660,0.08,'sine',0.1);setTimeout(function(){beep(990,0.12,'sine',0.1)},60);vibrate(25)}
 else if(type==='ask'){beep(494,0.1,'sine',0.1);setTimeout(function(){beep(740,0.15,'sine',0.1)},70);vibrate(25)}
-else if(type==='games'){beep(587,0.1,'square',0.08);setTimeout(function(){beep(880,0.12,'square',0.08)},60);vibrate(25)}
+else if(type==='games'||type==='guess'||type==='ttt'||type==='mem'){beep(587,0.1,'square',0.08);setTimeout(function(){beep(880,0.12,'square',0.08)},60);vibrate(25)}
+else if(type==='goat'){beep(660,0.1,'triangle',0.1);setTimeout(function(){beep(990,0.15,'triangle',0.1)},70);vibrate(25)}
 else{vibrate(20)}
 }catch(e){}
 }
@@ -548,11 +625,16 @@ else if(p==='cal')location.href='calendar.html';
 else if(p==='time')location.href='stopwatch.html';
 else if(p==='ask')location.href='ask.html';
 else if(p==='games')location.href='games.html';
+else if(p==='goat')location.href='goat.html';
+else if(p==='guess')location.href='games.html';
+else if(p==='ttt')location.href='games.html';
+else if(p==='mem')location.href='games.html';
 },80);
 }
 
 function save(){try{localStorage.setItem(KP,JSON.stringify(plan))}catch(e){}}
 function saveStats(){try{localStorage.setItem(KS,JSON.stringify(stats))}catch(e){}}
+function saveCoins(){try{localStorage.setItem(KC,coins)}catch(e){}}
 
 function getAutoTheme(){var h=new Date().getHours();return (h>=19||h<7)?'midnight':'light'}
 
@@ -576,11 +658,21 @@ function toggleAuto(){autoOn=!autoOn;localStorage.setItem(KAUTO,autoOn?'on':'off
 function toggleSound(){soundOn=!soundOn;localStorage.setItem(KSND,soundOn?'on':'off');updateToggles();if(soundOn)beep(880,0.1,'sine',0.1);showToast(soundOn?'🔔 صدا روشن':'🔕 صدا خاموش')}
 function toggleVib(){vibOn=!vibOn;localStorage.setItem(KVIB,vibOn?'on':'off');updateToggles();vibrate(50);showToast(vibOn?'📳 لرزش روشن':'لرزش خاموش')}
 
+function setLang(l){
+lang=l;localStorage.setItem(KL,l);
+document.body.dir=(l==='fa')?'rtl':'ltr';
+updateToggles();
+sndAdd();
+showToast(l==='fa'?'🇮🇷 فارسی':'🇬🇧 English');
+}
+
 function updateToggles(){
 var t1=document.getElementById('autoTg');if(t1)t1.classList.toggle('on',autoOn);
 var t2=document.getElementById('sndTg');if(t2)t2.classList.toggle('on',soundOn);
 var t4=document.getElementById('vibTg');if(t4)t4.classList.toggle('on',vibOn);
 var g=document.getElementById('goalIn');if(g)g.value=goal;
+var f1=document.getElementById('faTg');if(f1)f1.classList.toggle('on',lang==='fa');
+var e1=document.getElementById('enTg');if(e1)e1.classList.toggle('on',lang==='en');
 }
 
 function setGoal(v){v=Math.max(0,Math.min(100,parseInt(v)||70));goal=v;localStorage.setItem(KG,v);sndAdd();showToast('🎯 هدف روزانه: '+fa(v)+'٪')}
@@ -727,7 +819,7 @@ function resetAll(){if(confirm('همه تیک‌ها پاک شود؟')){for(var 
 
 function clearAll(){if(confirm('همه داده‌ها پاک شود؟')){try{localStorage.removeItem(KP);localStorage.removeItem(KD);localStorage.removeItem(KS)}catch(e){}location.reload()}}
 
-function backup(){try{var data={plan:plan,stats:stats,user:userName,version:'13.0',date:new Date().toISOString()};var blob=new Blob([JSON.stringify(data,null,2)],{type:'application/json'});var url=URL.createObjectURL(blob);var a=document.createElement('a');a.href=url;var d=new Date();a.download='barnameh-'+d.getFullYear()+'-'+(d.getMonth()+1)+'-'+d.getDate()+'.json';a.click();URL.revokeObjectURL(url);stats.backups=(stats.backups||0)+1;saveStats();checkAch();sndAdd();showToast('💾 پشتیبان ذخیره شد')}catch(e){showToast('خطا')}}
+function backup(){try{var data={plan:plan,stats:stats,user:userName,version:'14.0',date:new Date().toISOString()};var blob=new Blob([JSON.stringify(data,null,2)],{type:'application/json'});var url=URL.createObjectURL(blob);var a=document.createElement('a');a.href=url;var d=new Date();a.download='barnameh-'+d.getFullYear()+'-'+(d.getMonth()+1)+'-'+d.getDate()+'.json';a.click();URL.revokeObjectURL(url);stats.backups=(stats.backups||0)+1;saveStats();checkAch();sndAdd();showToast('💾 پشتیبان ذخیره شد')}catch(e){showToast('خطا')}}
 
 function restore(e){var f=e.target.files[0];if(!f)return;var r=new FileReader();r.onload=function(ev){try{var data=JSON.parse(ev.target.result);if(!data.plan)throw new Error('invalid');if(!confirm('داده‌های فعلی جایگزین شوند؟'))return;plan=data.plan;stats=data.stats||stats;save();saveStats();location.reload()}catch(err){showToast('❌ فایل نامعتبر')}};r.readAsText(f)}
 
@@ -738,36 +830,13 @@ var cv=document.createElement('canvas');cv.width=800;cv.height=1100;
 var x=cv.getContext('2d');
 var bg=x.createLinearGradient(0,0,0,1100);bg.addColorStop(0,'#1a1f36');bg.addColorStop(1,'#0a0e1a');
 x.fillStyle=bg;x.fillRect(0,0,800,1100);
-var hg=x.createLinearGradient(0,0,800,0);hg.addColorStop(0,'#6366f1');hg.addColorStop(1,'#8b5cf6');
-x.fillStyle=hg;x.fillRect(0,0,800,8);
 x.textAlign='center';x.fillStyle='#fff';x.font='bold 46px Tahoma';
 x.fillText('📋 برنامهٔ روزانهٔ من',400,90);
-x.font='22px Tahoma';x.fillStyle='rgba(255,255,255,.7)';
-var d=new Date().toLocaleDateString('fa-IR',{weekday:'long',day:'numeric',month:'long'});
-x.fillText(d,400,135);
 var tot=0,dn=0;
 for(var i=0;i<plan.length;i++)for(var j=0;j<plan[i].tasks.length;j++){tot++;if(plan[i].tasks[j].done)dn++}
 var pct=tot?Math.round(dn/tot*100):0;
-x.fillStyle='rgba(99,102,241,.15)';
-x.beginPath();var cx=400,cy=290,r=130;
-x.arc(cx,cy,r,0,Math.PI*2);x.fill();
-x.strokeStyle='rgba(255,255,255,.15)';x.lineWidth=18;
-x.beginPath();x.arc(cx,cy,r-9,0,Math.PI*2);x.stroke();
-var gr=x.createLinearGradient(cx-r,cy-r,cx+r,cy+r);gr.addColorStop(0,'#6366f1');gr.addColorStop(1,'#8b5cf6');
-x.strokeStyle=gr;x.lineWidth=18;x.lineCap='round';
-x.beginPath();x.arc(cx,cy,r-9,-Math.PI/2,-Math.PI/2+(Math.PI*2*pct/100));x.stroke();
-x.fillStyle='#fff';x.font='bold 68px Tahoma';x.fillText(fa(pct)+'٪',cx,cy+15);
-x.font='18px Tahoma';x.fillStyle='rgba(255,255,255,.7)';x.fillText(fa(dn)+' از '+fa(tot),cx,cy+50);
-if(stats.streak>0){x.fillStyle='rgba(245,158,11,.2)';x.fillRect(300,440,200,40);x.fillStyle='#f59e0b';x.font='bold 20px Tahoma';x.fillText('🔥 '+fa(stats.streak)+' روز پیوسته',400,467)}
-x.textAlign='right';x.fillStyle='#fff';x.font='bold 22px Tahoma';
-x.fillText('🌿 برنامه‌های امروز:',770,530);
-x.font='18px Tahoma';var y=575;
-for(var si=0;si<plan.length&&y<1050;si++){
-var sec=plan[si];x.fillStyle='#8b5cf6';x.font='bold 19px Tahoma';x.fillText(sec.title,770,y);y+=32;
-for(var ti=0;ti<sec.tasks.length&&y<1050;ti++){var t=sec.tasks[ti];x.fillStyle=t.done?'rgba(255,255,255,.4)':'rgba(255,255,255,.9)';x.font='16px Tahoma';x.fillText((t.done?'✅ ':'⬜ ')+t.text,755,y);y+=26}
-y+=8;
-}
-x.textAlign='center';x.fillStyle='rgba(255,255,255,.5)';x.font='14px Tahoma';x.fillText('ساخته‌شده با برنامهٔ DailyFlow',400,1080);
+x.fillStyle='#6366f1';x.font='bold 68px Tahoma';x.fillText(fa(pct)+'٪',400,300);
+x.font='18px Tahoma';x.fillStyle='rgba(255,255,255,.7)';x.fillText(fa(dn)+' از '+fa(tot),400,340);
 cv.toBlob(function(blob){
 var file=new File([blob],'barnameh.png',{type:'image/png'});
 if(navigator.share&&navigator.canShare&&navigator.canShare({files:[file]})){
@@ -810,11 +879,33 @@ function openSet(){showView('vs');updateWeek();updateMonth();updateChart();updat
 function closeSet(){showView('vh')}
 function openAch(){renderAch();showView('va')}
 function closeAch(){showView('vh')}
+function openProfile(){updateProfile();showView('vp')}
+function closeProfile(){showView('vh')}
+
+function updateProfile(){
+document.getElementById('pName').textContent=userName||'کاربر عزیز';
+var h=new Date().getHours();
+var greet=h<12?'صبح بخیر':h<17?'ظهر بخیر':h<20?'عصر بخیر':'شب بخیر';
+document.getElementById('pSub').textContent=greet+' 🌟 عضو از '+startDate;
+document.getElementById('pCoins').textContent=toFa(coins);
+var best=parseInt(localStorage.getItem('goatBest4')||'0');
+document.getElementById('pBest').textContent=toFa(best);
+document.getElementById('pStreak').textContent=toFa(stats.streak||0);
+document.getElementById('pAch').textContent=toFa(stats.achievements.length);
+document.getElementById('pDone').textContent=toFa(stats.totalDone||0);
+try{
+var d1=new Date(startDate.split('/').reverse().join('-'));
+var d2=new Date();
+var days=Math.floor((d2-d1)/86400000)+1;
+document.getElementById('pSince').textContent=toFa(days);
+}catch(e){document.getElementById('pSince').textContent='۱';}
+}
 
 function showView(id){
 document.querySelectorAll('.view').forEach(function(v){v.classList.remove('active')});
 document.getElementById(id).classList.add('active');
 if(id==='vm'){render();updateWeek();updateMonth();updateChart()}
+if(id==='vp'){updateProfile()}
 window.scrollTo(0,0);
 }
 
@@ -824,6 +915,7 @@ var v=document.getElementById('nmIn').value.trim();
 userName=v;localStorage.setItem(KU,v);
 document.getElementById('nm').style.display='none';
 updateUserHdr();
+updateProfile();
 sndAdd();
 showToast('✅ نام ذخیره شد');
 }
@@ -834,6 +926,9 @@ var h=new Date().getHours();
 var greet=h<12?'صبح بخیر':h<17?'ظهر بخیر':h<20?'عصر بخیر':'شب بخیر';
 document.getElementById('uSub').textContent=greet+' 🌟';
 document.getElementById('uAvatar').textContent=userName?userName.charAt(0):'👤';
+document.getElementById('hCoins').textContent=toFa(coins);
+var best=parseInt(localStorage.getItem('goatBest4')||'0');
+document.getElementById('hBest').textContent=toFa(best);
 }
 
 function loadPoem(){
@@ -843,10 +938,6 @@ var idx=doy%POEMS.length;
 var p=POEMS[idx];
 document.getElementById('poemTxt').textContent=p.t;
 document.getElementById('poemBy').textContent=p.p;
-}
-
-function showHelp(){
-alert('📖 راهنما\n\n🏠 خانه: ابزارها\n📋 برنامه روزانه: تیک زدن کارها\n🧮 ماشین حساب: محاسبات\n🗓 تقویم: تقویم شمسی\n⏱ کرنومتر: شمارش زمان\n💬 پرسش: دایرة‌المعارف\n🎮 سرگرمی: بازی‌ها\n\n☰ تنظیمات بالا-چپ\n🏅 دستاوردها بالا-راست\n🎨 تم اختصاصی در تنظیمات');
 }
 
 (function init(){
