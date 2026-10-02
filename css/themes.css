@@ -1,0 +1,138 @@
+/* ===== themes.css - تم‌های رنگی ستاره ===== */
+
+/* ---------- تم بنفش (پیش‌فرض) ---------- */
+body[data-theme="theme_purple"],
+body:not([data-theme]) {
+  --bg1: #1a1a2e;
+  --bg2: #16213e;
+  --bg3: #0f3460;
+  --pr: #6C5CE7;
+  --pr2: #0984E3;
+  --gold: #FDCB6E;
+  --text: #ffffff;
+  --text2: #b8b8d0;
+  --text3: #8080a0;
+}
+
+/* ---------- تم طلایی ---------- */
+body[data-theme="theme_gold"] {
+  --bg1: #2d1b00;
+  --bg2: #4a2800;
+  --bg3: #6b3a00;
+  --pr: #FDCB6E;
+  --pr2: #E17055;
+  --gold: #FFD93D;
+  --text: #fff8e7;
+  --text2: #e0c9a0;
+  --text3: #a08860;
+}
+
+/* ---------- تم اقیانوس ---------- */
+body[data-theme="theme_ocean"] {
+  --bg1: #001a2e;
+  --bg2: #002b47;
+  --bg3: #003d5c;
+  --pr: #00CEC9;
+  --pr2: #0984E3;
+  --gold: #74B9FF;
+  --text: #e8f8ff;
+  --text2: #a8d8f0;
+  --text3: #6fa8c8;
+}
+
+/* ---------- تم غروب ---------- */
+body[data-theme="theme_sunset"] {
+  --bg1: #2e0f1f;
+  --bg2: #4a1a30;
+  --bg3: #6b2440;
+  --pr: #FD79A8;
+  --pr2: #FDCB6E;
+  --gold: #FFB347;
+  --text: #fff0f5;
+  --text2: #f0b8c8;
+  --text3: #b08090;
+}
+
+/* ---------- تم تیره ---------- */
+body[data-theme="theme_dark"] {
+  --bg1: #000000;
+  --bg2: #0a0a0a;
+  --bg3: #151515;
+  --pr: #888888;
+  --pr2: #444444;
+  --gold: #cccccc;
+  --text: #eeeeee;
+  --text2: #999999;
+  --text3: #666666;
+}
+
+/* ---------- انیمیشن تغییر تم ---------- */
+body {
+  transition: background 0.6s ease, color 0.4s ease;
+}
+
+body.theme-changing {
+  animation: themeFlash 0.6s ease;
+}
+
+@keyframes themeFlash {
+  0%   { filter: brightness(1); }
+  50%  { filter: brightness(1.3); }
+  100% { filter: brightness(1); }
+}
+
+/* ---------- کارت‌های ویژهٔ تم ---------- */
+body[data-theme="theme_gold"] .card,
+body[data-theme="theme_gold"] .hdr-coins {
+  border-color: rgba(253, 203, 110, 0.3);
+}
+
+body[data-theme="theme_ocean"] .card,
+body[data-theme="theme_ocean"] .hdr-coins {
+  border-color: rgba(0, 206, 201, 0.3);
+}
+
+body[data-theme="theme_sunset"] .card,
+body[data-theme="theme_sunset"] .hdr-coins {
+  border-color: rgba(253, 121, 168, 0.3);
+}
+
+body[data-theme="theme_dark"] .card,
+body[data-theme="theme_dark"] .hdr-coins {
+  border-color: rgba(255, 255, 255, 0.08);
+}
+
+/* ---------- لوگوی خاص هر تم ---------- */
+body[data-theme="theme_gold"] .hdr-logo {
+  background: linear-gradient(135deg, #FFD93D, #E17055);
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+body[data-theme="theme_ocean"] .hdr-logo {
+  background: linear-gradient(135deg, #00CEC9, #74B9FF);
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+body[data-theme="theme_sunset"] .hdr-logo {
+  background: linear-gradient(135deg, #FD79A8, #FDCB6E);
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+body[data-theme="theme_dark"] .hdr-logo {
+  background: linear-gradient(135deg, #cccccc, #888888);
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+/* ---------- درخشش عناصر فعال ---------- */
+body[data-theme="theme_gold"] .nav-btn.active { color: #FFD93D; }
+body[data-theme="theme_ocean"] .nav-btn.active { color: #74B9FF; }
+body[data-theme="theme_sunset"] .nav-btn.active { color: #FFB347; }
+body[data-theme="theme_dark"] .nav-btn.active { color: #cccccc; }
