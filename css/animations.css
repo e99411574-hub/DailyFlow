@@ -1,66 +1,139 @@
 /* ===== animations.css - انیمیشن‌های پیشرفته ستاره ===== */
 
-/* ---------- ۱. انیمیشن ورود صفحات ---------- */
-@keyframes slideInRight {
-  from { opacity: 0; transform: translateX(30px); }
-  to   { opacity: 1; transform: translateX(0); }
-}
-
-@keyframes slideInLeft {
-  from { opacity: 0; transform: translateX(-30px); }
-  to   { opacity: 1; transform: translateX(0); }
+/* ============ ۱. ورود صفحات ============ */
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(10px); }
+  to   { opacity: 1; transform: translateY(0); }
 }
 
 @keyframes slideInUp {
-  from { opacity: 0; transform: translateY(20px); }
+  from { opacity: 0; transform: translateY(30px); }
   to   { opacity: 1; transform: translateY(0); }
 }
 
 @keyframes slideInDown {
-  from { opacity: 0; transform: translateY(-20px); }
+  from { opacity: 0; transform: translateY(-30px); }
   to   { opacity: 1; transform: translateY(0); }
 }
 
-/* ---------- ۲. انیمیشن‌های تاکیدی ---------- */
-@keyframes pop {
-  0%   { transform: scale(0.8); opacity: 0; }
-  50%  { transform: scale(1.1); opacity: 1; }
-  100% { transform: scale(1); }
+@keyframes slideInRight {
+  from { opacity: 0; transform: translateX(40px); }
+  to   { opacity: 1; transform: translateX(0); }
+}
+
+@keyframes slideInLeft {
+  from { opacity: 0; transform: translateX(-40px); }
+  to   { opacity: 1; transform: translateX(0); }
+}
+
+/* ============ ۲. پاپ و بانس ============ */
+@keyframes popIn {
+  0%   { transform: scale(0); opacity: 0; }
+  60%  { transform: scale(1.15); opacity: 1; }
+  100% { transform: scale(1); opacity: 1; }
+}
+
+@keyframes popOut {
+  0%   { transform: scale(1); opacity: 1; }
+  100% { transform: scale(0); opacity: 0; }
 }
 
 @keyframes bounceIn {
   0%   { transform: scale(0.3); opacity: 0; }
-  50%  { transform: scale(1.05); opacity: 1; }
-  70%  { transform: scale(0.9); }
+  50%  { transform: scale(1.08); opacity: 1; }
+  70%  { transform: scale(0.92); }
   100% { transform: scale(1); }
 }
 
-@keyframes shake {
-  0%, 100% { transform: translateX(0); }
-  25%      { transform: translateX(-8px); }
-  75%      { transform: translateX(8px); }
+@keyframes bounce {
+  0%, 100% { transform: translateY(0); }
+  50%      { transform: translateY(-14px); }
 }
 
-@keyframes wiggle {
-  0%, 100% { transform: rotate(0deg); }
-  25%      { transform: rotate(-6deg); }
-  75%      { transform: rotate(6deg); }
+@keyframes heartbeat {
+  0%, 100% { transform: scale(1); }
+  14%      { transform: scale(1.18); }
+  28%      { transform: scale(1); }
+  42%      { transform: scale(1.18); }
+  70%      { transform: scale(1); }
 }
 
-/* ---------- ۳. چرخش و درخشش ---------- */
-@keyframes rotate {
+/* ============ ۳. چرخش و تکان ============ */
+@keyframes spin {
   from { transform: rotate(0deg); }
   to   { transform: rotate(360deg); }
 }
 
+@keyframes spinReverse {
+  from { transform: rotate(360deg); }
+  to   { transform: rotate(0deg); }
+}
+
+@keyframes wiggle {
+  0%, 100% { transform: rotate(0deg); }
+  25%      { transform: rotate(-8deg); }
+  75%      { transform: rotate(8deg); }
+}
+
+@keyframes shake {
+  0%, 100% { transform: translateX(0); }
+  20%      { transform: translateX(-8px); }
+  40%      { transform: translateX(8px); }
+  60%      { transform: translateX(-6px); }
+  80%      { transform: translateX(6px); }
+}
+
+@keyframes swing {
+  0%, 100% { transform: rotate(-6deg); }
+  50%      { transform: rotate(6deg); }
+}
+
+/* ============ ۴. شناوری و پالس ============ */
+@keyframes float {
+  0%, 100% { transform: translateY(0); }
+  50%      { transform: translateY(-10px); }
+}
+
+@keyframes floatSlow {
+  0%, 100% { transform: translateY(0); }
+  50%      { transform: translateY(-16px); }
+}
+
+@keyframes pulse {
+  0%, 100% { opacity: 0.5; transform: scale(1); }
+  50%      { opacity: 1; transform: scale(1.06); }
+}
+
+@keyframes pulseSoft {
+  0%, 100% { transform: scale(1); opacity: 1; }
+  50%      { transform: scale(1.04); opacity: 0.9; }
+}
+
+@keyframes breathe {
+  0%, 100% { transform: scale(1); }
+  50%      { transform: scale(1.1); }
+}
+
+/* ============ ۵. درخشش و نور ============ */
 @keyframes glow {
   0%, 100% {
-    box-shadow: 0 0 8px rgba(253, 203, 110, 0.3),
-                0 0 16px rgba(108, 92, 231, 0.2);
+    box-shadow: 0 0 12px rgba(139, 92, 246, 0.3),
+                0 0 24px rgba(139, 92, 246, 0.15);
   }
   50% {
-    box-shadow: 0 0 20px rgba(253, 203, 110, 0.6),
-                0 0 40px rgba(108, 92, 231, 0.5);
+    box-shadow: 0 0 24px rgba(139, 92, 246, 0.6),
+                0 0 48px rgba(139, 92, 246, 0.3);
+  }
+}
+
+@keyframes glowGold {
+  0%, 100% {
+    box-shadow: 0 0 12px rgba(253, 203, 110, 0.3),
+                0 0 24px rgba(253, 203, 110, 0.15);
+  }
+  50% {
+    box-shadow: 0 0 24px rgba(253, 203, 110, 0.7),
+                0 0 48px rgba(253, 203, 110, 0.35);
   }
 }
 
@@ -69,37 +142,17 @@
   100% { background-position: 200% 0; }
 }
 
-/* ---------- ۴. شناوری و پالس ---------- */
-@keyframes float {
-  0%, 100% { transform: translateY(0); }
-  50%      { transform: translateY(-8px); }
-}
-
-@keyframes pulse {
-  0%, 100% { transform: scale(1); opacity: 1; }
-  50%      { transform: scale(1.08); opacity: 0.85; }
-}
-
-@keyframes heartbeat {
-  0%, 100% { transform: scale(1); }
-  14%      { transform: scale(1.15); }
-  28%      { transform: scale(1); }
-  42%      { transform: scale(1.15); }
-  70%      { transform: scale(1); }
-}
-
-/* ---------- ۵. نوارهای متحرک ---------- */
-@keyframes progressFill {
-  from { width: 0%; }
-  to   { width: var(--target, 100%); }
-}
-
 @keyframes shine {
-  0%   { transform: translateX(-100%); }
-  100% { transform: translateX(200%); }
+  0%   { transform: translateX(-100%) rotate(25deg); }
+  100% { transform: translateX(200%) rotate(25deg); }
 }
 
-/* ---------- ۶. ذرات (برای برد و برد و جشن) ---------- */
+@keyframes twinkle {
+  0%, 100% { opacity: 1; transform: scale(1); }
+  50%      { opacity: 0.4; transform: scale(0.85); }
+}
+
+/* ============ ۶. جشن و کانفتی ============ */
 @keyframes confettiFall {
   0% {
     transform: translateY(-100vh) rotate(0deg);
@@ -113,25 +166,86 @@
 
 @keyframes sparkle {
   0%, 100% { transform: scale(0) rotate(0deg); opacity: 0; }
-  50%      { transform: scale(1) rotate(180deg); opacity: 1; }
+  50%      { transform: scale(1.2) rotate(180deg); opacity: 1; }
 }
 
-/* ---------- ۷. کلاس‌های آماده ---------- */
-.anim-pop        { animation: pop 0.4s cubic-bezier(0.34, 1.56, 0.64, 1); }
-.anim-bounce     { animation: bounceIn 0.6s ease-out; }
-.anim-shake      { animation: shake 0.4s ease; }
-.anim-wiggle     { animation: wiggle 0.5s ease; }
-.anim-float      { animation: float 3s ease-in-out infinite; }
-.anim-pulse      { animation: pulse 2s ease-in-out infinite; }
-.anim-heartbeat  { animation: heartbeat 1.5s ease-in-out infinite; }
-.anim-glow       { animation: glow 2.5s ease-in-out infinite; }
-.anim-rotate     { animation: rotate 2s linear infinite; }
-.anim-slide-up   { animation: slideInUp 0.4s ease; }
-.anim-slide-down { animation: slideInDown 0.4s ease; }
-.anim-slide-rtl  { animation: slideInRight 0.4s ease; }
-.anim-slide-ltr  { animation: slideInLeft 0.4s ease; }
+@keyframes firework {
+  0%   { transform: scale(0); opacity: 1; }
+  100% { transform: scale(2.5); opacity: 0; }
+}
 
-/* ---------- ۸. تاخیرهای آبشاری (برای لیست‌ها) ---------- */
+@keyframes starBurst {
+  0%   { transform: scale(0); opacity: 1; }
+  50%  { transform: scale(1.5); opacity: 0.8; }
+  100% { transform: scale(0); opacity: 0; }
+}
+
+/* ============ ۷. رنگ‌ها ============ */
+@keyframes colorShift {
+  0%, 100% { filter: hue-rotate(0deg); }
+  50%      { filter: hue-rotate(30deg); }
+}
+
+@keyframes rainbow {
+  0%   { background-position: 0% 50%; }
+  50%  { background-position: 100% 50%; }
+  100% { background-position: 0% 50%; }
+}
+
+/* ============ ۸. حرکات ویژه ============ */
+@keyframes typewriter {
+  from { width: 0; }
+  to   { width: 100%; }
+}
+
+@keyframes blink {
+  0%, 50%   { opacity: 1; }
+  51%, 100% { opacity: 0; }
+}
+
+@keyframes progressFill {
+  from { width: 0%; }
+  to   { width: var(--target, 100%); }
+}
+
+@keyframes ripple {
+  0%   { transform: scale(0); opacity: 0.6; }
+  100% { transform: scale(3); opacity: 0; }
+}
+
+@keyframes wave {
+  0%   { transform: translateX(0); }
+  100% { transform: translateX(-50%); }
+}
+
+/* ============ ۹. کلاس‌های آماده ============ */
+.anim-fade-in       { animation: fadeIn 0.4s ease both; }
+.anim-slide-up      { animation: slideInUp 0.45s ease both; }
+.anim-slide-down    { animation: slideInDown 0.45s ease both; }
+.anim-slide-right   { animation: slideInRight 0.45s ease both; }
+.anim-slide-left    { animation: slideInLeft 0.45s ease both; }
+.anim-pop           { animation: popIn 0.4s cubic-bezier(0.34, 1.56, 0.64, 1) both; }
+.anim-pop-out       { animation: popOut 0.3s ease both; }
+.anim-bounce-in     { animation: bounceIn 0.6s ease-out both; }
+.anim-bounce        { animation: bounce 1.5s ease-in-out infinite; }
+.anim-heartbeat     { animation: heartbeat 1.5s ease-in-out infinite; }
+.anim-spin          { animation: spin 2s linear infinite; }
+.anim-spin-slow     { animation: spin 6s linear infinite; }
+.anim-spin-rev      { animation: spinReverse 2s linear infinite; }
+.anim-wiggle        { animation: wiggle 0.6s ease-in-out infinite; }
+.anim-shake         { animation: shake 0.5s ease; }
+.anim-swing         { animation: swing 2s ease-in-out infinite; }
+.anim-float         { animation: float 3s ease-in-out infinite; }
+.anim-float-slow    { animation: floatSlow 5s ease-in-out infinite; }
+.anim-pulse         { animation: pulse 2s ease-in-out infinite; }
+.anim-pulse-soft    { animation: pulseSoft 2.5s ease-in-out infinite; }
+.anim-breathe       { animation: breathe 3s ease-in-out infinite; }
+.anim-glow          { animation: glow 2.5s ease-in-out infinite; }
+.anim-glow-gold     { animation: glowGold 2.5s ease-in-out infinite; }
+.anim-twinkle       { animation: twinkle 2s ease-in-out infinite; }
+.anim-color-shift   { animation: colorShift 6s ease-in-out infinite; }
+
+/* ============ ۱۰. تاخیرهای آبشاری ============ */
 .delay-1 { animation-delay: 0.05s; }
 .delay-2 { animation-delay: 0.1s; }
 .delay-3 { animation-delay: 0.15s; }
@@ -140,64 +254,43 @@
 .delay-6 { animation-delay: 0.3s; }
 .delay-7 { animation-delay: 0.35s; }
 .delay-8 { animation-delay: 0.4s; }
+.delay-9 { animation-delay: 0.45s; }
+.delay-10 { animation-delay: 0.5s; }
 
-/* ---------- ۹. هاور (فقط دسکتاپ) ---------- */
-@media (hover: hover) {
-  .hover-lift {
-    transition: transform 0.25s ease;
-  }
-  .hover-lift:hover {
-    transform: translateY(-4px);
-  }
-
-  .hover-scale {
-    transition: transform 0.25s ease;
-  }
-  .hover-scale:hover {
-    transform: scale(1.05);
-  }
-
-  .hover-glow {
-    transition: box-shadow 0.3s ease;
-  }
-  .hover-glow:hover {
-    box-shadow: 0 0 24px rgba(253, 203, 110, 0.4);
-  }
-}
-
-/* ---------- ۱۰. انیمیشن فشردن (کلیک) ---------- */
+/* ============ ۱۱. فشار (کلیک) ============ */
 .press {
   transition: transform 0.1s ease;
 }
 .press:active {
-  transform: scale(0.94);
+  transform: scale(0.93);
 }
 
-/* ---------- ۱۱. جلوهٔ درخشش روی سکه ---------- */
-.coin-icon {
-  display: inline-block;
-  animation: wiggle 2s ease-in-out infinite;
+.press-big {
+  transition: transform 0.15s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+.press-big:active {
+  transform: scale(0.88);
 }
 
-/* ---------- ۱۲. روبان جشن ---------- */
-.confetti-piece {
-  position: fixed;
-  width: 10px;
-  height: 10px;
-  top: -20px;
-  z-index: 9999;
-  pointer-events: none;
-  animation: confettiFall 2.5s linear forwards;
-}
-
-/* ---------- ۱۳. درخشش متن ---------- */
+/* ============ ۱۲. درخشش روی متن ============ */
 .text-shine {
   background: linear-gradient(
     90deg,
     var(--text) 0%,
+    var(--pr) 25%,
     var(--gold) 50%,
+    var(--pr) 75%,
     var(--text) 100%
   );
+  background-size: 200% auto;
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+  animation: shimmer 4s linear infinite;
+}
+
+.text-gold {
+  background: linear-gradient(135deg, var(--gold), #E17055, var(--gold));
   background-size: 200% auto;
   -webkit-background-clip: text;
   background-clip: text;
@@ -205,11 +298,49 @@
   animation: shimmer 3s linear infinite;
 }
 
-/* ---------- ۱۴. احترام به تنظیم کاهش حرکت ---------- */
+/* ============ ۱۳. روبان جشن ============ */
+.confetti-piece {
+  position: fixed;
+  width: 10px;
+  height: 14px;
+  top: -20px;
+  z-index: 9999;
+  pointer-events: none;
+  border-radius: 2px;
+  animation: confettiFall 3s linear forwards;
+}
+
+/* ============ ۱۴. اسپارکل ============ */
+.sparkle {
+  position: absolute;
+  pointer-events: none;
+  animation: sparkle 1s ease-in-out infinite;
+  z-index: 10;
+}
+
+/* ============ ۱۵. رنگ‌آمیزی انیمیشنی کارت‌های رنگی ============ */
+.tile.color-purple .tile-icon { animation: float 3s ease-in-out infinite; }
+.tile.color-pink   .tile-icon { animation: float 3.5s ease-in-out infinite; }
+.tile.color-blue   .tile-icon { animation: float 4s ease-in-out infinite; }
+.tile.color-green  .tile-icon { animation: float 3.2s ease-in-out infinite; }
+.tile.color-yellow .tile-icon { animation: float 3.7s ease-in-out infinite; }
+.tile.color-orange .tile-icon { animation: float 3.3s ease-in-out infinite; }
+
+/* ============ ۱۶. سکه‌ی چرخان ============ */
+@keyframes coinFlip {
+  0%   { transform: rotateY(0deg); }
+  100% { transform: rotateY(360deg); }
+}
+.anim-coin-flip {
+  animation: coinFlip 1.5s ease-in-out infinite;
+  transform-style: preserve-3d;
+}
+
+/* ============ ۱۷. احترام به کاهش حرکت ============ */
 @media (prefers-reduced-motion: reduce) {
   *, *::before, *::after {
     animation-duration: 0.01ms !important;
     animation-iteration-count: 1 !important;
     transition-duration: 0.01ms !important;
   }
-    }
+  }
