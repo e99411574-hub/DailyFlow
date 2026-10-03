@@ -252,6 +252,10 @@ var QA = {
       type: hasImage ? 'image' : 'text'
     };
     if (hasImage) userMsg.uploadedImage = this.aiSelectedImage;
+
+    // ثبت رویداد ماموریت — سؤال از AI
+    if (typeof MISSIONS !== 'undefined') MISSIONS.trackAI();
+
     chat.messages.push(userMsg);
     chat.updatedAt = Date.now();
 
@@ -640,10 +644,10 @@ var QA = {
     html += '<button class="qa-tab ' + (this.activeTab === 'ai' ? 'active' : '') + '" onclick="QA.setTab(\'ai\')">🤖 هوشمند</button>';
     html += '</div>';
 
-    if (this.activeTab === 'questions') {
+        if (this.activeTab === 'questions') {
       html += this._renderQuestions();
     } else {
-            html += this._renderAI();
+      html += this._renderAI();
     }
 
     html += '</div>';
