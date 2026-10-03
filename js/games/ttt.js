@@ -1,4 +1,4 @@
-// ===== games/ttt.js - بازی دوز =====
+// ===== games/ttt.js - بازی دوز (نسخهٔ جدید) =====
 
 var TTT = {
   gameId: 'ttt',
@@ -12,6 +12,7 @@ var TTT = {
   losses: 0,
   draws: 0,
   winLine: null,
+  aiThinking: false,
 
   levelLabels: {
     easy:   '😊 آسون',
@@ -19,11 +20,10 @@ var TTT = {
     hard:   '🔥 سخت'
   },
 
-  // ترکیب‌های برنده
   winPatterns: [
-    [0,1,2], [3,4,5], [6,7,8],  // ردیف‌ها
-    [0,3,6], [1,4,7], [2,5,8],  // ستون‌ها
-    [0,4,8], [2,4,6]            // قطرها
+    [0,1,2], [3,4,5], [6,7,8],
+    [0,3,6], [1,4,7], [2,5,8],
+    [0,4,8], [2,4,6]
   ],
 
   // ========== شروع ==========
@@ -32,6 +32,7 @@ var TTT = {
     this.turn = 'player';
     this.isPlaying = true;
     this.winLine = null;
+    this.aiThinking = false;
     this.refresh();
     if (typeof playSnd === 'function') playSnd('tap');
   },
@@ -47,30 +48,40 @@ var TTT = {
   clickCell: function(idx) {
     if (!this.isPlaying) return;
     if (this.turn !== 'player') return;
+    if (this.aiThinking) return;
     if (this.board[idx] !== '') return;
 
     this.board[idx] = this.playerSymbol;
     if (typeof playSnd === 'function') playSnd('click');
-    this.refresh();
+
+    // آپدیت فقط خونهٔ کلیک‌شده
+    this._updateCellUI(idx);
+    this._updateTurnUI();
 
     // چک برد
     var win = this._checkWin(this.playerSymbol);
     if (win) {
-      this._win('player', win);
+      this.winLine = win;
+      setTimeout(this._highlightWin.bind(this, win), 300);
+      setTimeout(this._win.bind(this, 'player'), 800);
       return;
     }
 
-    // چک مساوی
+    // مساوی
     if (this._isFull()) {
-      this._draw();
+      setTimeout(this._draw.bind(this), 500);
       return;
     }
 
     // نوبت AI
     this.turn = 'ai';
-    this.refresh();
+    this.aiThinking = true;
+    this._updateTurnUI();
+
     var self = this;
-    setTimeout(function() { self._aiTurn(); }, 500);
+    setTimeout(function() {
+      self._aiTurn();
+    }, 800);
   },
 
   // ========== نوبت AI ==========
@@ -81,52 +92,95 @@ var TTT = {
     if (this.level === 'easy') {
       move = this._randomMove();
     } else if (this.level === 'medium') {
-      // ۵۰٪ هوشمند
       if (Math.random() < 0.5) move = this._smartMove();
       else move = this._randomMove();
     } else {
-      // hard - همیشه بهترین
       move = this._bestMove();
     }
 
     if (move === -1) {
-      // پر
+      this.aiThinking = false;
       if (this._isFull()) this._draw();
       return;
     }
 
     this.board[move] = this.aiSymbol;
     if (typeof playSnd === 'function') playSnd('click');
-    this.refresh();
 
+    // آپدیت فقط خونهٔ AI
+    this._updateCellUI(move);
+    this.aiThinking = false;
+
+    // چک برد
     var win = this._checkWin(this.aiSymbol);
     if (win) {
-      this._win('ai', win);
+      this.winLine = win;
+      setTimeout(this._highlightWin.bind(this, win), 300);
+      setTimeout(this._win.bind(this, 'ai'), 800);
       return;
     }
 
     if (this._isFull()) {
-      this._draw();
+      setTimeout(this._draw.bind(this), 500);
       return;
     }
 
     this.turn = 'player';
-    this.refresh();
+    this._updateTurnUI();
   },
 
-  // ========== حرکت تصادفی ==========
+  // ========== آپدیت فقط یه خونه ==========
+  _updateCellUI: function(idx) {
+    var cell = document.getElementById('tttCell' + idx);
+    if (!cell) return;
+
+    var val = this.board[idx];
+    if (val === 'X') {
+      cell.classList.add('x', 'filled');
+      cell.innerHTML = '<span class="symbol">❌</span>';
+    } else if (val === 'O') {
+      cell.classList.add('o', 'filled');
+      cell.innerHTML = '<span class="symbol">⭕</span>';
+    }
+  },
+
+  // ========== آپدیت نوار نوبت ==========
+  _updateTurnUI: function() {
+    var el = document.getElementById('tttTurn');
+    if (!el) return;
+
+    if (this.turn === 'player') {
+      el.className = 'ttt-turn player';
+      el.innerHTML = '<span class="emoji">❌</span> نوبت تو';
+    } else {
+      el.className = 'ttt-turn ai';
+      el.innerHTML = '<span class="emoji">⭕</span> حریف داره فکر می‌کنه...';
+    }
+  },
+
+  // ========== هایلایت خط برنده ==========
+  _highlightWin: function(line) {
+    if (!line) return;
+    for (var i = 0; i < line.length; i++) {
+      var cell = document.getElementById('tttCell' + line[i]);
+      if (!cell) continue;
+      var val = this.board[line[i]];
+      if (val === this.playerSymbol) cell.classList.add('win');
+      else cell.classList.add('lose');
+    }
+    if (typeof playSnd === 'function') playSnd('success');
+  },
+
+  // ========== حرکت‌های AI ==========
   _randomMove: function() {
     var empty = [];
-    for (var i = 0; i < 9; i++) {
-      if (this.board[i] === '') empty.push(i);
-    }
+    for (var i = 0; i < 9; i++) if (this.board[i] === '') empty.push(i);
     if (empty.length === 0) return -1;
     return empty[Math.floor(Math.random() * empty.length)];
   },
 
-  // ========== حرکت هوشمند ==========
   _smartMove: function() {
-    // ۱. ببر (اگه می‌تونی)
+    // ۱. ببر
     for (var i = 0; i < 9; i++) {
       if (this.board[i] === '') {
         var test = this.board.slice();
@@ -134,7 +188,7 @@ var TTT = {
         if (this._checkWinOn(test, this.aiSymbol)) return i;
       }
     }
-    // ۲. جلوگیری از برد کاربر
+    // ۲. جلوگیری
     for (var j = 0; j < 9; j++) {
       if (this.board[j] === '') {
         var test2 = this.board.slice();
@@ -142,17 +196,13 @@ var TTT = {
         if (this._checkWinOn(test2, this.playerSymbol)) return j;
       }
     }
-    // ۳. وسط
     if (this.board[4] === '') return 4;
-    // ۴. تصادفی
     return this._randomMove();
   },
 
-  // ========== بهترین حرکت (Minimax) ==========
   _bestMove: function() {
     var bestScore = -Infinity;
     var bestMove = -1;
-    var self = this;
     for (var i = 0; i < 9; i++) {
       if (this.board[i] === '') {
         this.board[i] = this.aiSymbol;
@@ -206,7 +256,6 @@ var TTT = {
     return null;
   },
 
-  // ========== چک‌ها ==========
   _checkWin: function(symbol) {
     for (var i = 0; i < this.winPatterns.length; i++) {
       var p = this.winPatterns[i];
@@ -220,9 +269,7 @@ var TTT = {
   _checkWinOn: function(board, symbol) {
     for (var i = 0; i < this.winPatterns.length; i++) {
       var p = this.winPatterns[i];
-      if (board[p[0]] === symbol && board[p[1]] === symbol && board[p[2]] === symbol) {
-        return true;
-      }
+      if (board[p[0]] === symbol && board[p[1]] === symbol && board[p[2]] === symbol) return true;
     }
     return false;
   },
@@ -234,9 +281,8 @@ var TTT = {
   },
 
   // ========== برد ==========
-  _win: function(who, line) {
+  _win: function(who) {
     this.isPlaying = false;
-    this.winLine = line;
 
     if (who === 'player') {
       this.wins++;
@@ -258,19 +304,19 @@ var TTT = {
         STATE.save('games');
       }
 
-      this.refresh();
+      this._lastReward = { coins: coins, gems: gems };
       var self = this;
       setTimeout(function() {
         self._showModal('win', { coins: coins, gems: gems });
-      }, 700);
+      }, 400);
     } else {
       this.losses++;
       if (typeof playSnd === 'function') playSnd('error');
-      this.refresh();
+      this._lastReward = null;
       var self2 = this;
       setTimeout(function() {
         self2._showModal('lose', {});
-      }, 700);
+      }, 400);
     }
   },
 
@@ -278,11 +324,10 @@ var TTT = {
     this.isPlaying = false;
     this.draws++;
     if (typeof playSnd === 'function') playSnd('click');
-    this.refresh();
     var self = this;
     setTimeout(function() {
       self._showModal('draw', {});
-    }, 500);
+    }, 400);
   },
 
   // ========== مودال ==========
@@ -348,30 +393,26 @@ var TTT = {
 
     // نوار نوبت
     var turnCls = 'ttt-turn ' + (this.turn === 'player' ? 'player' : 'ai');
-    var turnTxt = (this.turn === 'player') ? '🎯 نوبت تو (❌)' : '🤖 نوبت حریف (⭕)';
-    var turnEmoji = (this.turn === 'player') ? '❌' : '⭕';
-    html += '<div class="' + turnCls + '"><span class="emoji">' + turnEmoji + '</span>' + turnTxt + '</div>';
+    var turnTxt = (this.turn === 'player') ? '<span class="emoji">❌</span> نوبت تو' : '<span class="emoji">⭕</span> حریف داره فکر می‌کنه...';
+    html += '<div class="' + turnCls + '" id="tttTurn">' + turnTxt + '</div>';
 
     // تخته
-    html += '<div class="ttt-board">';
+    html += '<div class="ttt-board" id="tttBoard">';
     for (var i = 0; i < 9; i++) {
       var val = this.board[i];
       var cls = 'ttt-cell';
       if (val === 'X') cls += ' x filled';
       if (val === 'O') cls += ' o filled';
 
-      // اگه خط برنده داریم
       if (this.winLine && this.winLine.indexOf(i) >= 0) {
         cls += (val === this.playerSymbol) ? ' win' : ' lose';
       }
 
       var sym = '';
-      if (val === 'X') sym = '❌';
-      else if (val === 'O') sym = '⭕';
+      if (val === 'X') sym = '<span class="symbol">❌</span>';
+      else if (val === 'O') sym = '<span class="symbol">⭕</span>';
 
-      html += '<button class="' + cls + '" onclick="TTT.clickCell(' + i + ')">';
-      if (sym) html += '<span class="symbol">' + sym + '</span>';
-      html += '</button>';
+      html += '<button class="' + cls + '" id="tttCell' + i + '" onclick="TTT.clickCell(' + i + ')">' + sym + '</button>';
     }
     html += '</div>';
 
@@ -389,7 +430,7 @@ var TTT = {
     if (typeof ROUTER !== 'undefined') ROUTER.go('games');
   },
 
-  // ========== بروزرسانی ==========
+  // ========== بروزرسانی کامل ==========
   refresh: function() {
     var c = document.getElementById('gamesContent');
     if (c) c.innerHTML = this.render();
