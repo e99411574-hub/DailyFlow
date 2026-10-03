@@ -1,0 +1,358 @@
+/* ===== profile.css - استایل صفحهٔ پروفایل ===== */
+
+.profile-page {
+  padding-bottom: 20px;
+}
+
+/* ---------- کارت هیرو ---------- */
+.profile-hero {
+  background: linear-gradient(135deg, var(--pr), var(--pr2));
+  border-radius: 24px;
+  padding: 24px 20px;
+  margin-bottom: 18px;
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  position: relative;
+  overflow: hidden;
+  box-shadow: 0 8px 32px rgba(139, 92, 246, 0.3);
+  animation: slideInUp 0.5s ease both;
+}
+
+.profile-hero::before {
+  content: '';
+  position: absolute;
+  top: -50%;
+  right: -30%;
+  width: 200%;
+  height: 200%;
+  background: radial-gradient(circle, rgba(255,255,255,0.15) 0%, transparent 60%);
+  animation: pulse 5s ease-in-out infinite;
+  pointer-events: none;
+}
+
+.hero-avatar {
+  width: 80px;
+  height: 80px;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.25);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 42px;
+  border: 3px solid rgba(255, 255, 255, 0.5);
+  flex-shrink: 0;
+  position: relative;
+  z-index: 2;
+  overflow: hidden;
+  transition: transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+.hero-avatar:active {
+  transform: scale(0.94);
+}
+
+.hero-avatar img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.hero-info {
+  flex: 1;
+  color: white;
+  position: relative;
+  z-index: 2;
+  min-width: 0;
+}
+
+.hero-name {
+  font-size: 20px;
+  font-weight: 800;
+  margin-bottom: 6px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.hero-bio {
+  font-size: 13px;
+  opacity: 0.9;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+/* ---------- دکمه‌های سریع ---------- */
+.profile-quick {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 10px;
+  margin-bottom: 18px;
+}
+
+.quick-item {
+  background: var(--card);
+  border: 1px solid var(--card-b);
+  border-radius: 18px;
+  padding: 16px 8px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+  cursor: pointer;
+  transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+  box-shadow: var(--sd2);
+  animation: slideInUp 0.4s ease both;
+}
+
+.quick-item:nth-child(1) { animation-delay: 0.1s; }
+.quick-item:nth-child(2) { animation-delay: 0.15s; }
+.quick-item:nth-child(3) { animation-delay: 0.2s; }
+
+.quick-item:active {
+  transform: scale(0.93);
+  background: var(--pr-soft);
+}
+
+.quick-icon {
+  font-size: 28px;
+  animation: float 3s ease-in-out infinite;
+}
+
+.quick-item:nth-child(2) .quick-icon { animation-delay: 0.5s; }
+.quick-item:nth-child(3) .quick-icon { animation-delay: 1s; }
+
+.quick-label {
+  font-size: 12px;
+  font-weight: 700;
+  color: var(--text2);
+  text-align: center;
+}
+
+/* ---------- لیست ---------- */
+.profile-list {
+  background: var(--card);
+  border: 1px solid var(--card-b);
+  border-radius: 20px;
+  overflow: hidden;
+  margin-bottom: 18px;
+  box-shadow: var(--sd2);
+  animation: slideInUp 0.5s ease both;
+}
+
+.profile-item {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  padding: 16px 18px;
+  cursor: pointer;
+  border-bottom: 1px solid var(--card-b);
+  transition: background 0.15s ease;
+}
+
+.profile-item:last-child {
+  border-bottom: none;
+}
+
+.profile-item:active {
+  background: var(--pr-soft);
+}
+
+.item-icon {
+  font-size: 22px;
+  width: 28px;
+  text-align: center;
+  flex-shrink: 0;
+}
+
+.item-text {
+  flex: 1;
+  font-size: 15px;
+  font-weight: 700;
+  color: var(--text);
+}
+
+.item-value {
+  font-size: 13px;
+  color: var(--text3);
+  margin-inline-end: 6px;
+}
+
+.item-chevron {
+  color: var(--text3);
+  font-size: 24px;
+  font-weight: 300;
+  line-height: 1;
+  opacity: 0.6;
+}
+
+.profile-item.danger .item-text {
+  color: #E84393;
+}
+
+/* ---------- فرم ورودی ---------- */
+.profile-input-row {
+  padding: 14px 16px;
+  display: flex;
+  gap: 8px;
+  align-items: center;
+  animation: slideInDown 0.3s ease;
+}
+
+.profile-input-row input,
+.profile-input-row textarea {
+  flex: 1;
+  background: var(--card2);
+  border: 2px solid var(--card-b);
+  border-radius: 12px;
+  padding: 12px 14px;
+  color: var(--text);
+  font-family: inherit;
+  font-size: 14px;
+  outline: none;
+  resize: none;
+  transition: border-color 0.2s ease;
+}
+
+.profile-input-row input:focus,
+.profile-input-row textarea:focus {
+  border-color: var(--pr);
+}
+
+.profile-input-row button {
+  width: 42px;
+  height: 42px;
+  border-radius: 12px;
+  border: none;
+  cursor: pointer;
+  font-size: 18px;
+  flex-shrink: 0;
+  transition: transform 0.2s ease;
+}
+
+.profile-input-row button:active {
+  transform: scale(0.9);
+}
+
+.btn-save {
+  background: linear-gradient(135deg, var(--pr), var(--pr2));
+  color: white;
+  box-shadow: 0 4px 12px var(--pr-soft);
+}
+
+.btn-cancel {
+  background: var(--card2);
+  color: var(--text2);
+  border: 1px solid var(--card-b) !important;
+}
+
+/* ---------- انتخاب آواتار ---------- */
+.avatar-picker {
+  display: flex;
+  gap: 14px;
+  padding: 20px;
+  justify-content: center;
+  animation: slideInDown 0.3s ease;
+}
+
+.avatar-opt {
+  width: 64px;
+  height: 64px;
+  border-radius: 50%;
+  background: var(--card2);
+  border: 3px solid transparent;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 34px;
+  cursor: pointer;
+  transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+  overflow: hidden;
+  position: relative;
+}
+
+.avatar-opt:active {
+  transform: scale(0.9);
+}
+
+.avatar-opt.active {
+  border-color: var(--pr);
+  box-shadow: 0 0 0 4px var(--pr-soft), 0 0 20px rgba(139, 92, 246, 0.4);
+  animation: pulseSoft 2s ease-in-out infinite;
+}
+
+.avatar-opt img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+/* ---------- انتخاب تیک ---------- */
+.tick-picker {
+  display: flex;
+  gap: 12px;
+  padding: 20px;
+  flex-wrap: wrap;
+  justify-content: center;
+  animation: slideInDown 0.3s ease;
+}
+
+.tick-opt {
+  width: 60px;
+  height: 60px;
+  border-radius: 16px;
+  background: var(--card2);
+  border: 3px solid transparent;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+  padding: 6px;
+}
+
+.tick-opt:active {
+  transform: scale(0.9);
+}
+
+.tick-opt.active {
+  border-color: var(--pr);
+  box-shadow: 0 0 0 4px var(--pr-soft), 0 0 20px rgba(139, 92, 246, 0.4);
+  animation: pulseSoft 2s ease-in-out infinite;
+}
+
+/* ---------- آمار ---------- */
+.stats-row {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  padding: 22px 16px;
+  gap: 10px;
+}
+
+.stat-cell {
+  text-align: center;
+}
+
+.stat-num {
+  font-size: 24px;
+  font-weight: 900;
+  background: linear-gradient(135deg, var(--pr), var(--pr2));
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+  line-height: 1.2;
+}
+
+.stat-lbl {
+  font-size: 11px;
+  color: var(--text3);
+  margin-top: 4px;
+  font-weight: 700;
+}
+
+/* ---------- انیمیشن ---------- */
+@keyframes slideInDown {
+  from { opacity: 0; transform: translateY(-10px); }
+  to   { opacity: 1; transform: translateY(0); }
+    }
