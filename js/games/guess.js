@@ -1,4 +1,4 @@
-// ===== games/guess.js - بازی حدس عدد (نسخهٔ جدید) =====
+// ===== games/guess.js - بازی حدس عدد (نسخهٔ نهایی) =====
 
 var GUESS = {
   gameId: 'guess',
@@ -15,7 +15,7 @@ var GUESS = {
   bestTime: null,
   lastPickedNum: null,
 
-  // ========== شروع بازی ==========
+  // ========== شروع ==========
   start: function() {
     this.target = Math.floor(Math.random() * 60) + 1;
     this.lastLow = null;
@@ -75,7 +75,6 @@ var GUESS = {
       return;
     }
 
-    // راهنما
     if (num < this.target) {
       this.lastLow = num;
     } else {
@@ -87,7 +86,6 @@ var GUESS = {
     this._updateHintText();
   },
 
-  // ========== بروزرسانی فقط یه خونه ==========
   _updatePickedCell: function(num) {
     var cell = document.getElementById('guessCell' + num);
     if (!cell) return;
@@ -102,7 +100,6 @@ var GUESS = {
     }, 500);
   },
 
-  // ========== بروزرسانی خونه‌های بالا ==========
   _updateHintsUI: function() {
     var lowEl = document.getElementById('guessHintLow');
     var midEl = document.getElementById('guessHintMid');
@@ -117,7 +114,6 @@ var GUESS = {
     }
   },
 
-  // ========== بروزرسانی متن راهنما ==========
   _updateHintText: function() {
     var el = document.getElementById('guessHintText');
     if (!el) return;
@@ -146,6 +142,12 @@ var GUESS = {
     if (this.timerInterval) clearInterval(this.timerInterval);
     this.wins++;
 
+    // ثبت رویداد ماموریت‌ها
+    if (typeof MISSIONS !== 'undefined') {
+      MISSIONS.trackGame();
+      MISSIONS.trackWin();
+    }
+
     var timeTaken = this.totalTime - this.timeLeft;
     if (this.bestTime === null || timeTaken < this.bestTime) {
       this.bestTime = timeTaken;
@@ -166,7 +168,6 @@ var GUESS = {
       hintEl.className = 'guess-hint-text win';
     }
 
-    // بروزرسانی خونهٔ برنده
     var winCell = document.getElementById('guessCell' + this.target);
     if (winCell) {
       winCell.classList.remove('used', 'low', 'high');
@@ -276,7 +277,6 @@ var GUESS = {
   render: function() {
     var html = '<div class="guess-page">';
 
-    // نوار بالا
     var timerCls = 'guess-timer';
     if (this.timeLeft <= 10) timerCls += ' danger';
     else if (this.timeLeft <= 20) timerCls += ' warn';
@@ -293,7 +293,6 @@ var GUESS = {
     html += '<div class="' + timerCls + '" id="guessTimer">' + timerTxt + '</div>';
     html += '</div>';
 
-    // نمایشگر
     html += '<div class="guess-display">';
     html += '<div class="guess-display-info">';
     html += '<div class="guess-display-label">عدد بین</div>';
@@ -305,7 +304,6 @@ var GUESS = {
     html += '</div>';
     html += '</div>';
 
-    // خونه‌های بالا
     var lowVal = this.lastLow !== null ? (typeof toFa === 'function' ? toFa(this.lastLow) : this.lastLow) : '?';
     var highVal = this.lastHigh !== null ? (typeof toFa === 'function' ? toFa(this.lastHigh) : this.lastHigh) : '?';
     var midVal = '?';
@@ -324,7 +322,6 @@ var GUESS = {
     html += '<div class="guess-hint-box low" id="guessHintLow">' + lowVal + '</div>';
     html += '</div>';
 
-    // شبکه
     html += '<div class="guess-grid" id="guessGrid">';
     for (var i = 1; i <= 60; i++) {
       var used = this.usedNumbers.indexOf(i) >= 0;
@@ -343,7 +340,6 @@ var GUESS = {
     }
     html += '</div>';
 
-    // راهنما
     var hintText = '🎯 حدست رو به هدف نزدیک کن!';
     var hintCls = 'guess-hint-text';
     if (this.usedNumbers.length > 0) {
@@ -374,7 +370,7 @@ var GUESS = {
     if (typeof ROUTER !== 'undefined') ROUTER.go('games');
   },
 
-  // ========== بروزرسانی کامل ==========
+  // ========== بروزرسانی ==========
   refresh: function() {
     var c = document.getElementById('gamesContent');
     if (c) c.innerHTML = this.render();
