@@ -1,9 +1,11 @@
-/* ===== rps.css - بازی سنگ کاغذ قیچی ===== */
+/* ===== rps.css - بازی سنگ کاغذ قیچی (نسخهٔ جدید) ===== */
 
-/* ---------- کانتینر اصلی ---------- */
 .rps-page {
   padding-bottom: 20px;
   animation: fadeIn 0.4s ease;
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
 }
 
 /* ---------- نوار بالا ---------- */
@@ -11,7 +13,7 @@
   display: flex;
   align-items: center;
   gap: 12px;
-  padding: 6px 4px 18px;
+  padding: 6px 4px 4px;
 }
 
 .rps-back {
@@ -29,6 +31,7 @@
   box-shadow: var(--sd2);
   transition: transform 0.2s ease;
   font-weight: 300;
+  flex-shrink: 0;
 }
 
 .rps-back:active {
@@ -37,7 +40,7 @@
 
 .rps-title {
   flex: 1;
-  font-size: 20px;
+  font-size: 19px;
   font-weight: 800;
   color: var(--text);
 }
@@ -57,7 +60,6 @@
 .rps-levels {
   display: flex;
   gap: 8px;
-  margin-bottom: 16px;
   overflow-x: auto;
   padding: 4px 0;
   scrollbar-width: none;
@@ -68,10 +70,10 @@
 .rps-level {
   flex: 1;
   min-width: 90px;
-  padding: 10px 12px;
+  padding: 11px 12px;
   background: var(--card);
   border: 2px solid var(--card-b);
-  border-radius: 14px;
+  border-radius: 16px;
   color: var(--text);
   font-family: inherit;
   font-size: 13px;
@@ -98,13 +100,12 @@
   display: flex;
   align-items: center;
   justify-content: space-around;
-  padding: 24px 12px;
-  background: var(--card);
-  border-radius: 24px;
+  padding: 26px 12px;
+  background: linear-gradient(135deg, #f8f5ff, #ede5ff);
+  border-radius: 28px;
   border: 1px solid var(--card-b);
   box-shadow: var(--sd2);
-  margin-bottom: 16px;
-  min-height: 180px;
+  min-height: 200px;
   position: relative;
   overflow: hidden;
 }
@@ -128,41 +129,44 @@
 }
 
 .rps-avatar {
-  width: 90px;
-  height: 90px;
+  width: 100px;
+  height: 100px;
   border-radius: 50%;
   background: var(--card2);
-  border: 3px solid var(--card-b);
+  border: 4px solid var(--card-b);
   display: flex;
   align-items: center;
   justify-content: center;
-  font-size: 52px;
-  transition: all 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+  font-size: 58px;
+  transition: all 0.5s cubic-bezier(0.34, 1.56, 0.64, 1);
   box-shadow: 0 8px 24px rgba(0, 0, 0, 0.08);
+  position: relative;
 }
 
 .rps-avatar.player {
-  background: linear-gradient(135deg, #d0e0f8, #b8c8f0);
-  border-color: #8b5cf6;
+  background: linear-gradient(135deg, #d0e0f8, #a8c8f0);
+  border-color: #0984E3;
 }
 
 .rps-avatar.ai {
-  background: linear-gradient(135deg, #f8d5e8, #f0c8dd);
+  background: linear-gradient(135deg, #f8d5e8, #f0a8c8);
   border-color: #E84393;
 }
 
+/* انیمیشن برد */
 .rps-avatar.win {
-  animation: winnerPop 0.8s cubic-bezier(0.34, 1.56, 0.64, 1) infinite;
-  box-shadow: 0 0 0 6px rgba(253, 203, 110, 0.4), 0 0 40px rgba(253, 203, 110, 0.6);
+  animation: winnerPop 1s cubic-bezier(0.34, 1.56, 0.64, 1) infinite;
+  box-shadow: 0 0 0 8px rgba(253, 203, 110, 0.45), 0 0 50px rgba(253, 203, 110, 0.6);
 }
 
 .rps-avatar.lose {
-  opacity: 0.45;
-  transform: scale(0.88);
+  opacity: 0.4;
+  transform: scale(0.85);
 }
 
+/* VS */
 .rps-vs {
-  font-size: 32px;
+  font-size: 36px;
   font-weight: 900;
   background: linear-gradient(135deg, var(--pr), var(--gold));
   -webkit-background-clip: text;
@@ -180,7 +184,7 @@
   font-weight: 700;
 }
 
-/* ---------- انیمیشن برنده ---------- */
+/* ---------- انیمیشن‌ها ---------- */
 @keyframes winnerPop {
   0%, 100% { transform: scale(1) rotate(0deg); }
   25%      { transform: scale(1.08) rotate(-4deg); }
@@ -189,22 +193,42 @@
 
 @keyframes attackLeft {
   0%   { transform: translateX(0) scale(1); }
-  50%  { transform: translateX(40px) scale(1.15); }
+  50%  { transform: translateX(55px) scale(1.15) rotate(-8deg); }
   100% { transform: translateX(0) scale(1); }
 }
 
 @keyframes attackRight {
   0%   { transform: translateX(0) scale(1); }
-  50%  { transform: translateX(-40px) scale(1.15); }
+  50%  { transform: translateX(-55px) scale(1.15) rotate(8deg); }
   100% { transform: translateX(0) scale(1); }
 }
 
+@keyframes revealBounce {
+  0%   { transform: scale(0) rotate(-180deg); opacity: 0; }
+  60%  { transform: scale(1.25) rotate(10deg); opacity: 1; }
+  100% { transform: scale(1) rotate(0deg); opacity: 1; }
+}
+
+@keyframes thinking {
+  0%, 100% { transform: scale(1); opacity: 0.6; }
+  50%      { transform: scale(1.1); opacity: 1; }
+}
+
+/* کلاس‌های حمله — آهسته‌تر (۱ ثانیه) */
 .rps-avatar.attack-left {
-  animation: attackLeft 0.5s ease-in-out;
+  animation: attackLeft 1s cubic-bezier(0.34, 1.56, 0.64, 1);
 }
 
 .rps-avatar.attack-right {
-  animation: attackRight 0.5s ease-in-out;
+  animation: attackRight 1s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+.rps-avatar.reveal {
+  animation: revealBounce 0.7s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+.rps-avatar.thinking {
+  animation: thinking 0.8s ease-in-out infinite;
 }
 
 /* ---------- دکمه‌های انتخاب ---------- */
@@ -212,27 +236,26 @@
   display: grid;
   grid-template-columns: repeat(3, 1fr);
   gap: 12px;
-  margin-bottom: 16px;
 }
 
 .rps-choice {
-  padding: 22px 12px;
-  border-radius: 22px;
+  aspect-ratio: 1;
+  border-radius: 24px;
   border: none;
   cursor: pointer;
   display: flex;
-  flex-direction: column;
   align-items: center;
-  gap: 10px;
+  justify-content: center;
   font-family: inherit;
-  transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+  transition: all 0.35s cubic-bezier(0.34, 1.56, 0.64, 1);
   position: relative;
   overflow: hidden;
-  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.08);
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.1);
+  padding: 0;
 }
 
-.rps-choice:active {
-  transform: scale(0.92);
+.rps-choice:active:not([disabled]) {
+  transform: scale(0.9);
 }
 
 .rps-choice[disabled] {
@@ -241,49 +264,49 @@
 }
 
 .rps-choice.rock {
-  background: linear-gradient(135deg, #f8d5c8, #f0c0b0);
+  background: linear-gradient(135deg, #f8d5c8, #f0a898);
 }
 
 .rps-choice.paper {
-  background: linear-gradient(135deg, #e0d5f8, #d5c8f0);
+  background: linear-gradient(135deg, #e0d5f8, #c8b8f0);
 }
 
 .rps-choice.scissors {
-  background: linear-gradient(135deg, #d5e8f8, #c8dcf0);
+  background: linear-gradient(135deg, #d5e8f8, #a8ccf0);
 }
 
 .rps-choice.selected {
-  box-shadow: 0 0 0 4px var(--pr), 0 8px 32px var(--pr-soft);
-  transform: translateY(-4px);
+  box-shadow: 0 0 0 5px var(--pr), 0 10px 36px var(--pr-soft);
+  transform: translateY(-6px);
 }
 
 .rps-choice-icon {
-  font-size: 52px;
+  font-size: 62px;
   line-height: 1;
-  filter: drop-shadow(0 4px 8px rgba(0, 0, 0, 0.15));
-  transition: transform 0.3s ease;
+  filter: drop-shadow(0 6px 12px rgba(0, 0, 0, 0.2));
+  transition: transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+  pointer-events: none;
 }
 
 .rps-choice:active .rps-choice-icon {
-  transform: scale(1.15);
-}
-
-.rps-choice-label {
-  font-size: 13px;
-  font-weight: 800;
-  color: var(--text);
+  transform: scale(1.2);
 }
 
 /* ---------- نتیجه ---------- */
 .rps-result {
-  background: var(--card);
-  border-radius: 20px;
+  background: linear-gradient(135deg, var(--card), var(--card2));
+  border-radius: 22px;
   padding: 20px;
   border: 1px solid var(--card-b);
   box-shadow: var(--sd2);
   text-align: center;
-  margin-bottom: 16px;
   animation: slideInUp 0.4s ease;
+}
+
+.rps-result-icon {
+  font-size: 44px;
+  margin-bottom: 8px;
+  animation: bounce 1.5s ease-in-out infinite;
 }
 
 .rps-result-text {
@@ -307,7 +330,14 @@
 .rps-result-reward {
   font-size: 14px;
   color: var(--text2);
-  font-weight: 700;
+  font-weight: 800;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 8px 16px;
+  background: rgba(253, 203, 110, 0.25);
+  border-radius: 999px;
+  margin-top: 4px;
 }
 
 /* ---------- آمار ---------- */
@@ -341,4 +371,19 @@
   color: var(--text3);
   margin-top: 4px;
   font-weight: 700;
+}
+
+/* ---------- موبایل کوچیک ---------- */
+@media (max-width: 380px) {
+  .rps-avatar {
+    width: 80px;
+    height: 80px;
+    font-size: 46px;
   }
+  .rps-choice-icon {
+    font-size: 50px;
+  }
+  .rps-vs {
+    font-size: 28px;
+  }
+    }
