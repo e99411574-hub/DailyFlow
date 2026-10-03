@@ -1,6 +1,6 @@
 // ===== sw.js - Service Worker ستاره =====
 
-var CACHE_VERSION = 'setareh-v1.0.0';
+var CACHE_VERSION = 'setareh-v2.0.0';
 var CACHE_NAME = CACHE_VERSION;
 
 var ASSETS = [
