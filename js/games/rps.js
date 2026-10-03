@@ -1,4 +1,4 @@
-// ===== games/rps.js - بازی سنگ کاغذ قیچی (نسخهٔ جدید) =====
+// ===== games/rps.js - بازی سنگ کاغذ قیچی (نسخهٔ نهایی) =====
 
 var RPS = {
   gameId: 'rps',
@@ -10,6 +10,7 @@ var RPS = {
   draws: 0,
   isPlaying: false,
   showResult: false,
+  _lastReward: null,
 
   choices: [
     { id: 'rock',     icon: '🪨' },
@@ -30,26 +31,19 @@ var RPS = {
     this.refresh();
   },
 
-  // ========== انتخاب AI بر اساس سطح ==========
+  // ========== انتخاب AI ==========
   _aiPick: function() {
     var c = this.choices;
     var r = Math.random();
-
     if (this.level === 'easy') {
       return c[Math.floor(Math.random() * 3)];
     }
-
     if (this.level === 'medium') {
-      if (r < 0.5 && this.userChoice) {
-        return this._getBeater(this.userChoice.id);
-      }
+      if (r < 0.5 && this.userChoice) return this._getBeater(this.userChoice.id);
       return c[Math.floor(Math.random() * 3)];
     }
-
     // hard
-    if (r < 0.8 && this.userChoice) {
-      return this._getBeater(this.userChoice.id);
-    }
+    if (r < 0.8 && this.userChoice) return this._getBeater(this.userChoice.id);
     return c[Math.floor(Math.random() * 3)];
   },
 
@@ -77,7 +71,9 @@ var RPS = {
     if (typeof playSnd === 'function') playSnd('tap');
 
     // مرحله ۱: نمایش انتخاب کاربر
-    this.refresh();
+    this._updateBattle();
+    this._updateChoices();
+
     var pAvatar = document.getElementById('rpsPlayerAvatar');
     if (pAvatar) {
       pAvatar.classList.add('reveal');
@@ -100,10 +96,10 @@ var RPS = {
         setTimeout(function() { aAvatar.classList.remove('reveal'); }, 700);
       }
       if (typeof playSnd === 'function') playSnd('click');
-      self.refresh();
+      self._updateBattle();
     }, 1400);
 
-    // مرحله ۴: انیمیشن حمله (بعد از انتخاب AI)
+    // مرحله ۴: انیمیشن حمله
     setTimeout(function() {
       var pA = document.getElementById('rpsPlayerAvatar');
       var aA = document.getElementById('rpsAiAvatar');
@@ -127,7 +123,12 @@ var RPS = {
       self._giveReward(result);
       self.showResult = true;
       self.isPlaying = false;
-      self.refresh();
+
+      // آپدیت فقط بخش‌های لازم
+      self._updateBattle();
+      self._updateResult();
+      self._updateChoices();
+      self._updateStats();
 
       if (typeof playSnd === 'function') {
         if (result === 'win') playSnd('success');
@@ -177,18 +178,113 @@ var RPS = {
     this.isPlaying = false;
     this.showResult = false;
     if (typeof playSnd === 'function') playSnd('tap');
-    this.refresh();
+
+    this._updateBattle();
+    this._updateResult();
+    this._updateChoices();
+  },
+
+  // ========== آپدیت بخش نبرد ==========
+  _updateBattle: function() {
+    var pAvatar = document.getElementById('rpsPlayerAvatar');
+    var aAvatar = document.getElementById('rpsAiAvatar');
+    if (!pAvatar || !aAvatar) return;
+
+    var pIcon = this.userChoice ? this.userChoice.icon : '❔';
+    var aIcon = this.aiChoice ? this.aiChoice.icon : '❔';
+
+    if (pAvatar.textContent !== pIcon) pAvatar.textContent = pIcon;
+    if (aAvatar.textContent !== aIcon) aAvatar.textContent = aIcon;
+
+    var pCls = 'rps-avatar player';
+    var aCls = 'rps-avatar ai';
+
+    if (this.userChoice && this.aiChoice) {
+      var r = this._checkResult(this.userChoice, this.aiChoice);
+      if (r === 'win')  { pCls += ' win'; aCls += ' lose'; }
+      if (r === 'lose') { aCls += ' win'; pCls += ' lose'; }
+    }
+
+    pAvatar.className = pCls;
+    aAvatar.className = aCls;
+  },
+
+  // ========== آپدیت بخش نتیجه ==========
+  _updateResult: function() {
+    var resultContainer = document.getElementById('rpsResultContainer');
+    if (!resultContainer) return;
+
+    if (this.showResult && this.userChoice && this.aiChoice) {
+      var res = this._checkResult(this.userChoice, this.aiChoice);
+      var icon = res === 'win' ? '🏆' : (res === 'lose' ? '💔' : '🤝');
+      var txt = res === 'win' ? '🎉 بردی!' : (res === 'lose' ? '😢 باختی' : '🤝 مساوی');
+      var cls = res === 'win' ? 'win' : (res === 'lose' ? 'lose' : 'draw');
+
+      var html = '<div class="rps-result">';
+      html += '<div class="rps-result-icon">' + icon + '</div>';
+      html += '<div class="rps-result-text ' + cls + '">' + txt + '</div>';
+      if (res === 'win' && this._lastReward) {
+        html += '<div class="rps-result-reward">🪙 ' + fmtNum(this._lastReward.coins);
+        if (this._lastReward.gems) html += '  💎 ' + fmtNum(this._lastReward.gems);
+        html += '</div>';
+      }
+      html += '<button class="rps-choice" style="margin-top:12px;width:100%;aspect-ratio:auto;padding:14px;background:linear-gradient(135deg,var(--pr),var(--pr2));color:white;font-size:15px;font-weight:800;border-radius:16px" onclick="RPS.reset()">🔄 بازی جدید</button>';
+      html += '</div>';
+
+      resultContainer.innerHTML = html;
+      resultContainer.style.display = 'block';
+    } else {
+      resultContainer.innerHTML = '';
+      resultContainer.style.display = 'none';
+    }
+  },
+
+  // ========== آپدیت دکمه‌های انتخاب ==========
+  _updateChoices: function() {
+    var choices = document.getElementById('rpsChoicesContainer');
+    if (!choices) return;
+
+    if (this.showResult) {
+      choices.style.display = 'none';
+      return;
+    }
+
+    choices.style.display = 'grid';
+
+    for (var i = 0; i < this.choices.length; i++) {
+      var c = this.choices[i];
+      var el = document.getElementById('rpsChoice' + c.id);
+      if (!el) continue;
+
+      var selected = (this.userChoice && this.userChoice.id === c.id) ? 'selected' : '';
+      var baseCls = 'rps-choice ' + c.id + ' ' + selected;
+      el.className = baseCls;
+      el.disabled = this.isPlaying;
+    }
+  },
+
+  // ========== آپدیت آمار ==========
+  _updateStats: function() {
+    var wEl = document.getElementById('rpsWins');
+    var dEl = document.getElementById('rpsDraws');
+    var lEl = document.getElementById('rpsLosses');
+    var sEl = document.getElementById('rpsScore');
+
+    if (wEl) wEl.textContent = fmtNum(this.wins);
+    if (dEl) dEl.textContent = fmtNum(this.draws);
+    if (lEl) lEl.textContent = fmtNum(this.losses);
+    if (sEl) sEl.textContent = fmtNum(this.wins) + ' / ' + fmtNum(this.losses);
   },
 
   // ========== رندر ==========
   render: function() {
-    var html = '<div class="rps-page">';
+    var html = '<div class="rps-page" id="rpsRoot">';
 
     // نوار بالا
     html += '<div class="rps-topbar">';
     html += '<button class="rps-back" onclick="RPS.back()">›</button>';
     html += '<div class="rps-title">✊ سنگ کاغذ قیچی</div>';
-    html += '<div class="rps-score-badge">' + fmtNum(this.wins) + ' / ' + fmtNum(this.losses) + '</div>';
+    html += '<div class="rps-score-badge" id="rpsScore">' + fmtNum(this.wins) + ' / ' + fmtNum(this.losses) + '</div>';
     html += '</div>';
 
     // سطوح
@@ -222,7 +318,8 @@ var RPS = {
     html += '</div>';
     html += '</div>';
 
-    // نتیجه
+    // نتیجه (container)
+    html += '<div id="rpsResultContainer" style="' + (this.showResult ? '' : 'display:none') + '">';
     if (this.showResult && this.userChoice && this.aiChoice) {
       var res = this._checkResult(this.userChoice, this.aiChoice);
       var icon = res === 'win' ? '🏆' : (res === 'lose' ? '💔' : '🤝');
@@ -240,26 +337,25 @@ var RPS = {
       html += '<button class="rps-choice" style="margin-top:12px;width:100%;aspect-ratio:auto;padding:14px;background:linear-gradient(135deg,var(--pr),var(--pr2));color:white;font-size:15px;font-weight:800;border-radius:16px" onclick="RPS.reset()">🔄 بازی جدید</button>';
       html += '</div>';
     }
+    html += '</div>';
 
-    // دکمه‌های انتخاب (فقط وقتی نتیجه نشون داده نشده)
-    if (!this.showResult) {
-      html += '<div class="rps-choices">';
-      for (var i = 0; i < this.choices.length; i++) {
-        var c = this.choices[i];
-        var selected = (this.userChoice && this.userChoice.id === c.id) ? 'selected' : '';
-        var dis = this.isPlaying ? 'disabled' : '';
-        html += '<button class="rps-choice ' + c.id + ' ' + selected + '" ' + dis + ' onclick="RPS.play(\'' + c.id + '\')">';
-        html += '<span class="rps-choice-icon">' + c.icon + '</span>';
-        html += '</button>';
-      }
-      html += '</div>';
+    // دکمه‌های انتخاب
+    html += '<div class="rps-choices" id="rpsChoicesContainer" style="' + (this.showResult ? 'display:none' : '') + '">';
+    for (var i = 0; i < this.choices.length; i++) {
+      var c = this.choices[i];
+      var selected = (this.userChoice && this.userChoice.id === c.id) ? 'selected' : '';
+      var dis = this.isPlaying ? 'disabled' : '';
+      html += '<button class="rps-choice ' + c.id + ' ' + selected + '" id="rpsChoice' + c.id + '" ' + dis + ' onclick="RPS.play(\'' + c.id + '\')">';
+      html += '<span class="rps-choice-icon">' + c.icon + '</span>';
+      html += '</button>';
     }
+    html += '</div>';
 
     // آمار
     html += '<div class="rps-stats">';
-    html += '<div class="rps-stat"><div class="rps-stat-num">' + fmtNum(this.wins) + '</div><div class="rps-stat-lbl">🏆 برد</div></div>';
-    html += '<div class="rps-stat"><div class="rps-stat-num">' + fmtNum(this.draws) + '</div><div class="rps-stat-lbl">🤝 مساوی</div></div>';
-    html += '<div class="rps-stat"><div class="rps-stat-num">' + fmtNum(this.losses) + '</div><div class="rps-stat-lbl">💔 باخت</div></div>';
+    html += '<div class="rps-stat"><div class="rps-stat-num" id="rpsWins">' + fmtNum(this.wins) + '</div><div class="rps-stat-lbl">🏆 برد</div></div>';
+    html += '<div class="rps-stat"><div class="rps-stat-num" id="rpsDraws">' + fmtNum(this.draws) + '</div><div class="rps-stat-lbl">🤝 مساوی</div></div>';
+    html += '<div class="rps-stat"><div class="rps-stat-num" id="rpsLosses">' + fmtNum(this.losses) + '</div><div class="rps-stat-lbl">💔 باخت</div></div>';
     html += '</div>';
 
     html += '</div>';
@@ -272,16 +368,38 @@ var RPS = {
     if (typeof ROUTER !== 'undefined') ROUTER.go('games');
   },
 
-  // ========== بروزرسانی ==========
+  // ========== بروزرسانی هوشمند ==========
   refresh: function() {
     var c = document.getElementById('gamesContent');
-    if (c) c.innerHTML = this.render();
+    if (!c) return;
+
+    var existing = document.getElementById('rpsRoot');
+    if (!existing) {
+      // اگه هنوز رندر نشده، کل صفحه رو بساز
+      c.innerHTML = this.render();
+      return;
+    }
+
+    // فقط بخش‌های لازم رو آپدیت کن
+    this._updateBattle();
+    this._updateResult();
+    this._updateChoices();
+    this._updateStats();
+
+    // آپدیت سطوح (چون ممکنه عوض شده باشه)
+    var levels = document.querySelectorAll('.rps-level');
+    if (levels && levels.length === 3) {
+      levels[0].classList.toggle('active', this.level === 'easy');
+      levels[1].classList.toggle('active', this.level === 'medium');
+      levels[2].classList.toggle('active', this.level === 'hard');
+    }
   }
 };
 
 // تابع سراسری
 function startGame_rps() {
   RPS.reset();
+  RPS.refresh();
 }
 
 window.RPS = RPS;
