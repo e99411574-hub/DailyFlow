@@ -1,0 +1,482 @@
+/* ===== planner.css - برنامه روزانه و هفتگی ===== */
+
+.planner-page {
+  padding-bottom: 20px;
+  animation: fadeIn 0.4s ease;
+}
+
+/* ---------- نوار بالا ---------- */
+.planner-topbar {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 6px 4px 16px;
+}
+
+.planner-back {
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+  background: var(--card);
+  border: 1px solid var(--card-b);
+  color: var(--text);
+  font-size: 22px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: var(--sd2);
+  transition: transform 0.2s ease;
+  font-weight: 300;
+  flex-shrink: 0;
+}
+
+.planner-back:active {
+  transform: scale(0.9);
+}
+
+.planner-title {
+  flex: 1;
+  font-size: 18px;
+  font-weight: 800;
+  color: var(--text);
+}
+
+/* ---------- تب‌ها ---------- */
+.planner-tabs {
+  display: flex;
+  gap: 8px;
+  padding: 6px;
+  background: var(--card);
+  border-radius: 18px;
+  border: 1px solid var(--card-b);
+  box-shadow: var(--sd2);
+  margin-bottom: 16px;
+}
+
+.planner-tab {
+  flex: 1;
+  padding: 12px 14px;
+  border-radius: 14px;
+  background: transparent;
+  border: none;
+  color: var(--text2);
+  font-family: inherit;
+  font-size: 14px;
+  font-weight: 800;
+  cursor: pointer;
+  transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+}
+
+.planner-tab:active {
+  transform: scale(0.96);
+}
+
+.planner-tab.active {
+  background: linear-gradient(135deg, var(--pr), var(--pr2));
+  color: white;
+  box-shadow: 0 4px 14px var(--pr-soft);
+}
+
+/* ---------- کارت روز ---------- */
+.planner-day-card {
+  background: var(--card);
+  border-radius: 22px;
+  border: 1px solid var(--card-b);
+  box-shadow: var(--sd2);
+  padding: 16px;
+  margin-bottom: 14px;
+  animation: slideInUp 0.4s ease both;
+}
+
+.planner-day-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 14px;
+  padding-bottom: 12px;
+  border-bottom: 1px solid var(--card-b);
+}
+
+.planner-day-name {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 16px;
+  font-weight: 800;
+  color: var(--text);
+}
+
+.planner-day-name .icon {
+  font-size: 20px;
+}
+
+.planner-day-date {
+  font-size: 11px;
+  color: var(--text3);
+  font-weight: 700;
+}
+
+.planner-day-badge {
+  padding: 6px 12px;
+  background: var(--pr-soft);
+  color: var(--pr);
+  border-radius: 999px;
+  font-size: 11px;
+  font-weight: 800;
+}
+
+/* ---------- نوار پیشرفت ---------- */
+.planner-progress {
+  margin-bottom: 14px;
+}
+
+.planner-progress-bar {
+  height: 8px;
+  background: var(--card2);
+  border-radius: 999px;
+  overflow: hidden;
+  margin-bottom: 6px;
+}
+
+.planner-progress-fill {
+  height: 100%;
+  background: linear-gradient(90deg, var(--pr), var(--gold));
+  border-radius: 999px;
+  transition: width 0.6s cubic-bezier(0.34, 1.56, 0.64, 1);
+  animation: progressFill 1s ease both;
+}
+
+.planner-progress-text {
+  display: flex;
+  justify-content: space-between;
+  font-size: 11px;
+  color: var(--text3);
+  font-weight: 700;
+}
+
+/* ---------- آیتم کار ---------- */
+.planner-item {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 12px 14px;
+  background: var(--card2);
+  border-radius: 16px;
+  margin-bottom: 8px;
+  transition: all 0.3s ease;
+  border: 2px solid transparent;
+  animation: slideInUp 0.3s ease both;
+}
+
+.planner-item:active {
+  transform: scale(0.98);
+}
+
+.planner-item.done {
+  background: linear-gradient(135deg, rgba(85, 239, 196, 0.15), rgba(0, 184, 148, 0.15));
+  border-color: rgba(0, 184, 148, 0.3);
+}
+
+.planner-item.done .planner-item-title {
+  text-decoration: line-through;
+  opacity: 0.6;
+}
+
+/* چک‌باکس */
+.planner-check {
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  border: 2.5px solid var(--card-b);
+  background: white;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+  flex-shrink: 0;
+  font-size: 14px;
+  font-weight: 900;
+  color: transparent;
+}
+
+.planner-check:active {
+  transform: scale(0.85);
+}
+
+.planner-check.checked {
+  background: linear-gradient(135deg, #55EFC4, #00B894);
+  border-color: transparent;
+  color: white;
+  animation: popIn 0.35s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+/* اطلاعات کار */
+.planner-item-info {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+}
+
+.planner-item-time {
+  font-size: 11px;
+  color: var(--pr);
+  font-weight: 800;
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.planner-item-title {
+  font-size: 14px;
+  font-weight: 700;
+  color: var(--text);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+/* دکمه‌های اکشن */
+.planner-item-actions {
+  display: flex;
+  gap: 4px;
+  flex-shrink: 0;
+}
+
+.planner-icon-btn {
+  width: 32px;
+  height: 32px;
+  border-radius: 10px;
+  background: transparent;
+  border: none;
+  color: var(--text3);
+  font-size: 15px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.2s ease;
+}
+
+.planner-icon-btn:active {
+  transform: scale(0.85);
+  background: var(--card-b);
+}
+
+/* ---------- افزودن کار ---------- */
+.planner-add-btn {
+  width: 100%;
+  padding: 12px;
+  background: transparent;
+  border: 2px dashed var(--card-b);
+  border-radius: 14px;
+  color: var(--text3);
+  font-family: inherit;
+  font-size: 13px;
+  font-weight: 800;
+  cursor: pointer;
+  transition: all 0.25s ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+}
+
+.planner-add-btn:active {
+  transform: scale(0.97);
+  background: var(--pr-soft);
+  border-color: var(--pr);
+  color: var(--pr);
+}
+
+/* ---------- فرم افزودن ---------- */
+.planner-form {
+  background: var(--card2);
+  border-radius: 16px;
+  padding: 14px;
+  margin-bottom: 8px;
+  border: 2px solid var(--pr);
+  animation: slideInUp 0.3s ease;
+}
+
+.planner-form-row {
+  display: flex;
+  gap: 8px;
+  margin-bottom: 8px;
+}
+
+.planner-form-row:last-child {
+  margin-bottom: 0;
+}
+
+.planner-input {
+  flex: 1;
+  padding: 10px 12px;
+  border-radius: 10px;
+  border: 1px solid var(--card-b);
+  background: var(--card);
+  color: var(--text);
+  font-family: inherit;
+  font-size: 14px;
+  outline: none;
+  transition: border-color 0.2s ease;
+  min-width: 0;
+}
+
+.planner-input:focus {
+  border-color: var(--pr);
+}
+
+.planner-input-time {
+  flex: 0 0 90px;
+  padding: 10px 8px;
+  border-radius: 10px;
+  border: 1px solid var(--card-b);
+  background: var(--card);
+  color: var(--text);
+  font-family: inherit;
+  font-size: 13px;
+  outline: none;
+  text-align: center;
+}
+
+.planner-input-time:focus {
+  border-color: var(--pr);
+}
+
+.planner-form-btn {
+  padding: 10px 16px;
+  border-radius: 10px;
+  border: none;
+  font-family: inherit;
+  font-size: 13px;
+  font-weight: 800;
+  cursor: pointer;
+  transition: transform 0.15s ease;
+  white-space: nowrap;
+}
+
+.planner-form-btn:active {
+  transform: scale(0.94);
+}
+
+.planner-form-btn.save {
+  background: linear-gradient(135deg, var(--pr), var(--pr2));
+  color: white;
+  flex: 1;
+}
+
+.planner-form-btn.cancel {
+  background: var(--card);
+  color: var(--text2);
+  border: 1px solid var(--card-b);
+}
+
+/* ---------- آمار ---------- */
+.planner-stats {
+  background: var(--card);
+  border-radius: 22px;
+  border: 1px solid var(--card-b);
+  box-shadow: var(--sd2);
+  padding: 16px;
+  margin-top: 16px;
+  animation: slideInUp 0.5s ease both;
+}
+
+.planner-stats-title {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 15px;
+  font-weight: 800;
+  color: var(--text);
+  margin-bottom: 14px;
+}
+
+.planner-stats-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 10px;
+}
+
+.planner-stat-box {
+  background: var(--card2);
+  border-radius: 14px;
+  padding: 12px;
+  text-align: center;
+  transition: transform 0.2s ease;
+}
+
+.planner-stat-box:active {
+  transform: scale(0.97);
+}
+
+.planner-stat-icon {
+  font-size: 22px;
+  margin-bottom: 4px;
+}
+
+.planner-stat-num {
+  font-size: 18px;
+  font-weight: 900;
+  background: linear-gradient(135deg, var(--pr), var(--pr2));
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+  line-height: 1.1;
+}
+
+.planner-stat-lbl {
+  font-size: 10px;
+  color: var(--text3);
+  font-weight: 700;
+  margin-top: 2px;
+}
+
+/* ---------- حالت خالی ---------- */
+.planner-empty {
+  text-align: center;
+  padding: 30px 20px;
+  color: var(--text3);
+}
+
+.planner-empty-icon {
+  font-size: 48px;
+  margin-bottom: 10px;
+  opacity: 0.5;
+}
+
+.planner-empty-text {
+  font-size: 13px;
+  font-weight: 700;
+}
+
+/* ---------- انیمیشن ---------- */
+@keyframes progressFill {
+  from { width: 0%; }
+}
+
+/* ---------- موبایل کوچیک ---------- */
+@media (max-width: 380px) {
+  .planner-item {
+    padding: 10px 12px;
+    gap: 10px;
+  }
+  .planner-item-title {
+    font-size: 13px;
+  }
+  .planner-check {
+    width: 26px;
+    height: 26px;
+  }
+  .planner-input-time {
+    flex: 0 0 80px;
+  }
+}
