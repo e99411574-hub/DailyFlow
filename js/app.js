@@ -18,6 +18,8 @@ var APP = {
     document.body.setAttribute('data-theme', theme);
 
     if (typeof SETTINGS !== 'undefined' && SETTINGS.init) SETTINGS.init();
+    if (typeof PROFILE !== 'undefined' && PROFILE.init) PROFILE.init();
+if (typeof SHOP !== 'undefined' && SHOP.init) SHOP.init();
 
     if (typeof initAudio === 'function') {
       document.addEventListener('click', function once() {
