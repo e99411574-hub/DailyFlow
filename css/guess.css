@@ -1,0 +1,359 @@
+/* ===== guess.css - بازی حدس عدد ===== */
+
+.guess-page {
+  padding-bottom: 20px;
+  animation: fadeIn 0.4s ease;
+}
+
+/* ---------- نوار بالا ---------- */
+.guess-topbar {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 6px 4px 16px;
+}
+
+.guess-back {
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+  background: var(--card);
+  border: 1px solid var(--card-b);
+  color: var(--text);
+  font-size: 22px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: var(--sd2);
+  transition: transform 0.2s ease;
+  font-weight: 300;
+  flex-shrink: 0;
+}
+
+.guess-back:active {
+  transform: scale(0.9);
+}
+
+.guess-title {
+  flex: 1;
+  font-size: 18px;
+  font-weight: 800;
+  color: var(--text);
+}
+
+.guess-timer {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 8px 12px;
+  background: var(--card);
+  border: 1px solid var(--card-b);
+  border-radius: 999px;
+  font-size: 14px;
+  font-weight: 800;
+  color: var(--text);
+  box-shadow: var(--sd2);
+  flex-shrink: 0;
+}
+
+.guess-timer.warn {
+  background: linear-gradient(135deg, #f8d5c8, #f0c0b0);
+  color: #E17055;
+  animation: pulseSoft 1s ease-in-out infinite;
+}
+
+.guess-timer.danger {
+  background: linear-gradient(135deg, #f8c0c8, #f0a0b0);
+  color: #E84393;
+  animation: pulseSoft 0.5s ease-in-out infinite;
+}
+
+/* ---------- خونه‌های بالا ---------- */
+.guess-hints {
+  display: grid;
+  grid-template-columns: 1fr auto 1fr auto 1fr;
+  align-items: center;
+  gap: 6px;
+  margin-bottom: 16px;
+  padding: 12px;
+  background: var(--card);
+  border-radius: 22px;
+  border: 1px solid var(--card-b);
+  box-shadow: var(--sd2);
+}
+
+.guess-hint {
+  height: 56px;
+  border-radius: 16px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 22px;
+  font-weight: 900;
+  color: var(--text);
+  transition: all 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+  position: relative;
+}
+
+.guess-hint.left {
+  background: linear-gradient(135deg, #d5e8f8, #c8dcf0);
+  color: #0984E3;
+}
+
+.guess-hint.middle {
+  background: linear-gradient(135deg, #f8f0d5, #f0e8c8);
+  color: #E17055;
+}
+
+.guess-hint.right {
+  background: linear-gradient(135deg, #f8d5e8, #f0c8dd);
+  color: #E84393;
+}
+
+.guess-hint.win {
+  background: linear-gradient(135deg, #d5f8e0, #b8f0c8) !important;
+  color: #00B894 !important;
+  animation: winnerPop 0.8s cubic-bezier(0.34, 1.56, 0.64, 1) infinite;
+  box-shadow: 0 0 0 4px rgba(0, 184, 148, 0.3), 0 0 30px rgba(0, 184, 148, 0.5);
+}
+
+.guess-arrow {
+  font-size: 20px;
+  font-weight: 900;
+  color: var(--text3);
+  opacity: 0.5;
+}
+
+/* ---------- شبکهٔ اعداد ---------- */
+.guess-grid {
+  display: grid;
+  grid-template-columns: repeat(10, 1fr);
+  gap: 6px;
+  padding: 14px;
+  background: var(--card);
+  border-radius: 22px;
+  border: 1px solid var(--card-b);
+  box-shadow: var(--sd2);
+  margin-bottom: 16px;
+}
+
+.guess-cell {
+  aspect-ratio: 1;
+  border-radius: 12px;
+  background: linear-gradient(135deg, #e0e8f8, #d0dcf0);
+  border: none;
+  font-family: inherit;
+  font-size: 14px;
+  font-weight: 800;
+  color: #3a4a68;
+  cursor: pointer;
+  transition: all 0.25s cubic-bezier(0.34, 1.56, 0.64, 1);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0;
+  position: relative;
+  overflow: hidden;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.06);
+}
+
+.guess-cell:active {
+  transform: scale(0.9);
+  box-shadow: 0 0 0 3px var(--pr-soft);
+}
+
+.guess-cell.used {
+  background: var(--card2);
+  color: var(--text3);
+  opacity: 0.4;
+  cursor: not-allowed;
+  box-shadow: none;
+}
+
+.guess-cell.low {
+  background: linear-gradient(135deg, #d5e8f8, #c8dcf0);
+  color: #0984E3;
+  opacity: 0.75;
+}
+
+.guess-cell.high {
+  background: linear-gradient(135deg, #f8d5e8, #f0c8dd);
+  color: #E84393;
+  opacity: 0.75;
+}
+
+.guess-cell.win {
+  background: linear-gradient(135deg, #55EFC4, #00B894);
+  color: white;
+  transform: scale(1.15);
+  box-shadow: 0 0 0 3px rgba(0, 184, 148, 0.4), 0 6px 20px rgba(0, 184, 148, 0.5);
+  animation: pulseSoft 0.6s ease-in-out infinite;
+  z-index: 2;
+}
+
+.guess-cell.disabled {
+  pointer-events: none;
+}
+
+/* ---------- راهنما ---------- */
+.guess-hint-text {
+  text-align: center;
+  padding: 12px 16px;
+  background: var(--card);
+  border-radius: 16px;
+  border: 1px solid var(--card-b);
+  box-shadow: var(--sd2);
+  font-size: 14px;
+  font-weight: 700;
+  color: var(--text2);
+  min-height: 46px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  transition: all 0.3s ease;
+}
+
+.guess-hint-text.up {
+  background: linear-gradient(135deg, #f8d5e8, #f0c8dd);
+  color: #E84393;
+}
+
+.guess-hint-text.down {
+  background: linear-gradient(135deg, #d5e8f8, #c8dcf0);
+  color: #0984E3;
+}
+
+.guess-hint-text.win {
+  background: linear-gradient(135deg, #55EFC4, #00B894);
+  color: white;
+}
+
+/* ---------- مودال نتیجه ---------- */
+.guess-modal {
+  position: fixed;
+  inset: 0;
+  background: rgba(45, 27, 78, 0.55);
+  backdrop-filter: blur(6px);
+  z-index: 500;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 24px;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.3s ease;
+}
+
+.guess-modal.show {
+  opacity: 1;
+  pointer-events: auto;
+}
+
+.guess-modal-box {
+  background: linear-gradient(160deg, #fff8e7, #fde8c8);
+  border-radius: 28px;
+  padding: 30px 24px;
+  max-width: 360px;
+  width: 100%;
+  text-align: center;
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.35);
+  transform: scale(0.5) rotate(-10deg);
+  transition: transform 0.5s cubic-bezier(0.34, 1.56, 0.64, 1);
+  position: relative;
+  overflow: hidden;
+}
+
+.guess-modal.show .guess-modal-box {
+  transform: scale(1) rotate(0);
+}
+
+.guess-modal-stars {
+  font-size: 42px;
+  margin-bottom: 8px;
+  animation: bounce 1.5s ease-in-out infinite;
+}
+
+.guess-modal-title {
+  font-size: 26px;
+  font-weight: 900;
+  color: #E84393;
+  margin-bottom: 8px;
+  font-family: 'Vazirmatn', sans-serif;
+}
+
+.guess-modal-title.win {
+  color: #00B894;
+}
+
+.guess-modal-desc {
+  font-size: 14px;
+  color: #6b5b8a;
+  margin-bottom: 18px;
+  font-weight: 700;
+}
+
+.guess-modal-reward {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 10px 20px;
+  background: rgba(253, 203, 110, 0.25);
+  border-radius: 999px;
+  font-size: 16px;
+  font-weight: 800;
+  color: #E17055;
+  margin-bottom: 18px;
+}
+
+.guess-modal-btn {
+  padding: 14px 32px;
+  background: linear-gradient(135deg, #E84393, #FD79A8);
+  border: none;
+  border-radius: 16px;
+  color: white;
+  font-family: inherit;
+  font-size: 16px;
+  font-weight: 800;
+  cursor: pointer;
+  box-shadow: 0 8px 24px rgba(232, 67, 147, 0.4);
+  transition: transform 0.2s ease;
+}
+
+.guess-modal-btn:active {
+  transform: scale(0.94);
+}
+
+.guess-modal-btn.green {
+  background: linear-gradient(135deg, #00B894, #55EFC4);
+  box-shadow: 0 8px 24px rgba(0, 184, 148, 0.4);
+}
+
+/* ---------- انیمیشن ---------- */
+@keyframes winnerPop {
+  0%, 100% { transform: scale(1.15) rotate(0deg); }
+  25%      { transform: scale(1.25) rotate(-5deg); }
+  75%      { transform: scale(1.25) rotate(5deg); }
+}
+
+@keyframes bounce {
+  0%, 100% { transform: translateY(0); }
+  50%      { transform: translateY(-12px); }
+}
+
+/* ---------- موبایل کوچیک ---------- */
+@media (max-width: 380px) {
+  .guess-grid {
+    gap: 4px;
+    padding: 10px;
+  }
+  .guess-cell {
+    font-size: 12px;
+    border-radius: 10px;
+  }
+  .guess-hint {
+    height: 48px;
+    font-size: 18px;
+  }
+  }
