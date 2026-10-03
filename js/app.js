@@ -2,6 +2,7 @@
 
 var APP = {
   version: '2.0.0',
+  _poemsCache: null,
 
   // ============ راه‌اندازی ============
   init: function() {
@@ -162,13 +163,38 @@ var APP = {
   },
 
   _getPoemOfDay: function() {
-    var poems = [
-      { poet: 'حافظ', text: 'دوش دیدم که ملائک در میخانه زدند\nگل آدم بسرشتند و به پیمانه زدند' },
-      { poet: 'سعدی', text: 'بنی آدم اعضای یک پیکرند\nکه در آفرینش ز یک گوهرند' },
-      { poet: 'مولانا', text: 'بشنو این نی چون شکایت می‌کند\nاز جدایی‌ها حکایت می‌کند' },
-      { poet: 'فردوسی', text: 'توانا بود هر که دانا بود\nز دانش دل پیر برنا بود' },
-      { poet: 'خیام', text: 'این کوزه چو من عاشق زاری بوده است\nدر بند سر زلف نگاری بوده است' }
-    ];
+    // اگه قبلاً لود شده، از کش استفاده کن
+    var poems = this._poemsCache;
+
+    // اگه لود نشده، یه بار fetch کن (async)
+    if (!poems) {
+      var self = this;
+      fetch('assets/poems.json')
+        .then(function(r) { return r.json(); })
+        .then(function(data) {
+          if (data && data.poems && data.poems.length > 0) {
+            self._poemsCache = data.poems;
+            // رندر مجدد اگه لازمه
+            if (document.getElementById('homeContent') &&
+                document.getElementById('homeContent').innerHTML.indexOf('poem-card') >= 0) {
+              self.renderHome();
+            }
+          }
+        })
+        .catch(function(e) {
+          console.warn('Poems load error:', e);
+        });
+
+      // فوری از لیست پیش‌فرض استفاده کن
+      poems = [
+        { poet: 'حافظ', text: 'دوش دیدم که ملائک در میخانه زدند\nگل آدم بسرشتند و به پیمانه زدند' },
+        { poet: 'سعدی', text: 'بنی آدم اعضای یک پیکرند\nکه در آفرینش ز یک گوهرند' },
+        { poet: 'مولانا', text: 'بشنو این نی چون شکایت می‌کند\nاز جدایی‌ها حکایت می‌کند' },
+        { poet: 'فردوسی', text: 'توانا بود هر که دانا بود\nز دانش دل پیر برنا بود' },
+        { poet: 'خیام', text: 'این کوزه چو من عاشق زاری بوده است\nدر بند سر زلف نگاری بوده است' }
+      ];
+    }
+
     var hours12 = Math.floor(Date.now() / (12 * 60 * 60 * 1000));
     var idx = hours12 % poems.length;
     return poems[idx];
