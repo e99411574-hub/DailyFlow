@@ -4,8 +4,8 @@
   "description": "بازی کن، بساز، بدرخش",
   "lang": "fa",
   "dir": "rtl",
-  "start_url": "/DailyFlow/",
-  "scope": "/DailyFlow/",
+  "start_url": "/Setareh/",
+  "scope": "/Setareh/",
   "display": "standalone",
   "orientation": "portrait",
   "theme_color": "#8b5cf6",
@@ -36,21 +36,21 @@
       "name": "بازی‌ها",
       "short_name": "بازی",
       "description": "ورود به بخش بازی‌ها",
-      "url": "/DailyFlow/#games",
+      "url": "/Setareh/#games",
       "icons": [{ "src": "icon.svg", "sizes": "192x192" }]
     },
     {
       "name": "فروشگاه",
       "short_name": "فروشگاه",
       "description": "خرید از فروشگاه",
-      "url": "/DailyFlow/#shop",
+      "url": "/Setareh/#shop",
       "icons": [{ "src": "icon.svg", "sizes": "192x192" }]
     },
     {
       "name": "گردونهٔ شانس",
       "short_name": "گردونه",
       "description": "چرخاندن گردونه",
-      "url": "/DailyFlow/#home",
+      "url": "/Setareh/#home",
       "icons": [{ "src": "icon.svg", "sizes": "192x192" }]
     }
   ]
