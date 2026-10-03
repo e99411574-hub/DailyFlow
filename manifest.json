@@ -1,19 +1,57 @@
 {
-  "name": "اپ من",
-  "short_name": "اپ من",
-  "start_url": "./index.html",
-  "display": "fullscreen",
-  "orientation": "portrait",
-  "background_color": "#0a0e1a",
-  "theme_color": "#6366f1",
+  "name": "ستاره | Setareh",
+  "short_name": "ستاره",
+  "description": "بازی کن، بساز، بدرخش",
   "lang": "fa",
   "dir": "rtl",
+  "start_url": "/DailyFlow/",
+  "scope": "/DailyFlow/",
+  "display": "standalone",
+  "orientation": "portrait",
+  "theme_color": "#8b5cf6",
+  "background_color": "#8b5cf6",
+  "categories": ["games", "education", "entertainment"],
   "icons": [
     {
       "src": "icon.svg",
-      "sizes": "192x192 512x512",
+      "sizes": "any",
       "type": "image/svg+xml",
       "purpose": "any"
+    },
+    {
+      "src": "icon.svg",
+      "sizes": "192x192",
+      "type": "image/svg+xml",
+      "purpose": "maskable"
+    },
+    {
+      "src": "icon.svg",
+      "sizes": "512x512",
+      "type": "image/svg+xml",
+      "purpose": "maskable"
+    }
+  ],
+  "shortcuts": [
+    {
+      "name": "بازی‌ها",
+      "short_name": "بازی",
+      "description": "ورود به بخش بازی‌ها",
+      "url": "/DailyFlow/#games",
+      "icons": [{ "src": "icon.svg", "sizes": "192x192" }]
+    },
+    {
+      "name": "فروشگاه",
+      "short_name": "فروشگاه",
+      "description": "خرید از فروشگاه",
+      "url": "/DailyFlow/#shop",
+      "icons": [{ "src": "icon.svg", "sizes": "192x192" }]
+    },
+    {
+      "name": "گردونهٔ شانس",
+      "short_name": "گردونه",
+      "description": "چرخاندن گردونه",
+      "url": "/DailyFlow/#home",
+      "icons": [{ "src": "icon.svg", "sizes": "192x192" }]
     }
   ]
 }
