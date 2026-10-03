@@ -1,8 +1,8 @@
-// ===== games/memory.js - بازی حافظه =====
+// ===== games/memory.js - بازی حافظه (نسخهٔ جدید) =====
 
 var MEMORY = {
   gameId: 'memory',
-  cards: [],           // [{id, symbol, flipped, matched}]
+  cards: [],
   firstCard: null,
   secondCard: null,
   lockBoard: false,
@@ -11,11 +11,11 @@ var MEMORY = {
   matches: 0,
   totalPairs: 8,
   timeLeft: 120,
+  totalTime: 120,
   timerInterval: null,
   wins: 0,
   bestTime: null,
 
-  // ایموجی‌های کارت‌ها
   symbols: ['🍎', '🍌', '🍇', '🍓', '🍊', '🍉', '🍒', '🥝'],
 
   // ========== شروع ==========
@@ -42,7 +42,6 @@ var MEMORY = {
       var tmp = deck[j]; deck[j] = deck[k]; deck[k] = tmp;
     }
 
-    // تبدیل به کارت
     for (var m = 0; m < deck.length; m++) {
       this.cards.push({
         id: deck[m].id,
@@ -64,23 +63,31 @@ var MEMORY = {
     this.timerInterval = setInterval(function() {
       if (!self.isPlaying) return;
       self.timeLeft--;
-      var el = document.getElementById('memTimer');
-      if (el) el.textContent = self._fmtTime(self.timeLeft);
+      self._updateTimerUI();
       if (self.timeLeft <= 0) {
         self._lose('timeout');
       }
     }, 1000);
   },
 
-  _fmtTime: function(sec) {
-    var m = Math.floor(sec / 60);
-    var s = sec % 60;
+  _updateTimerUI: function() {
+    var el = document.getElementById('memTimer');
+    if (!el) return;
+    var m = Math.floor(this.timeLeft / 60);
+    var s = this.timeLeft % 60;
     if (s < 10) s = '0' + s;
     var fa = (typeof toFa === 'function');
-    return (fa ? toFa(m) : m) + ':' + (fa ? toFa(s) : s);
+    el.textContent = (fa ? toFa(m) : m) + ':' + (fa ? toFa(s) : s);
+
+    var box = document.getElementById('memTimerBox');
+    if (box) {
+      box.classList.remove('warn', 'danger');
+      if (this.timeLeft <= 15) box.classList.add('danger');
+      else if (this.timeLeft <= 30) box.classList.add('warn');
+    }
   },
 
-  // ========== کلیک کارت ==========
+  // ========== کلیک روی کارت ==========
   flipCard: function(idx) {
     if (this.lockBoard) return;
     if (!this.isPlaying) return;
@@ -89,52 +96,81 @@ var MEMORY = {
 
     card.flipped = true;
     if (typeof playSnd === 'function') playSnd('click');
-    this.refresh();
 
-    if (!this.firstCard) {
+    // آپدیت فقط همون کارت
+    var el = document.getElementById('memCard' + idx);
+    if (el) el.classList.add('flipped');
+
+    if (this.firstCard === null) {
       this.firstCard = idx;
       return;
     }
 
-    // کارت دوم
     this.secondCard = idx;
     this.moves++;
+    this._updateMovesUI();
     this._checkMatch();
   },
 
+  _updateMovesUI: function() {
+    var el = document.getElementById('memMoves');
+    if (el) el.textContent = fmtNum(this.moves);
+  },
+
+  _updateMatchesUI: function() {
+    var el = document.getElementById('memMatches');
+    if (el) el.textContent = fmtNum(this.matches);
+  },
+
+  // ========== بررسی جفت ==========
   _checkMatch: function() {
     var self = this;
     var c1 = this.cards[this.firstCard];
     var c2 = this.cards[this.secondCard];
+    var i1 = this.firstCard;
+    var i2 = this.secondCard;
 
     if (c1.id === c2.id) {
       // جفت پیدا شد
       setTimeout(function() {
         c1.matched = true;
         c2.matched = true;
+
+        var el1 = document.getElementById('memCard' + i1);
+        var el2 = document.getElementById('memCard' + i2);
+        if (el1) el1.classList.add('matched');
+        if (el2) el2.classList.add('matched');
+
         self.matches++;
+        self._updateMatchesUI();
         self.firstCard = null;
         self.secondCard = null;
         self.lockBoard = false;
+
         if (typeof playSnd === 'function') playSnd('success');
-        self.refresh();
 
         if (self.matches === self.totalPairs) {
           self._win();
         }
-      }, 400);
+      }, 500);
     } else {
       // غلط
       this.lockBoard = true;
       if (typeof playSnd === 'function') playSnd('error');
+
       setTimeout(function() {
         c1.flipped = false;
         c2.flipped = false;
+
+        var el1 = document.getElementById('memCard' + i1);
+        var el2 = document.getElementById('memCard' + i2);
+        if (el1) el1.classList.remove('flipped');
+        if (el2) el2.classList.remove('flipped');
+
         self.firstCard = null;
         self.secondCard = null;
         self.lockBoard = false;
-        self.refresh();
-      }, 900);
+      }, 1100);
     }
   },
 
@@ -144,12 +180,12 @@ var MEMORY = {
     if (this.timerInterval) clearInterval(this.timerInterval);
     this.wins++;
 
-    var timeTaken = 120 - this.timeLeft;
+    var timeTaken = this.totalTime - this.timeLeft;
     if (this.bestTime === null || timeTaken < this.bestTime) {
       this.bestTime = timeTaken;
     }
 
-    // محاسبهٔ ستاره‌ها
+    // ستاره‌ها
     var stars = 1;
     if (this.moves <= 16) stars = 3;
     else if (this.moves <= 22) stars = 2;
@@ -177,7 +213,6 @@ var MEMORY = {
     }
 
     if (typeof playSnd === 'function') playSnd('success');
-    this.refresh();
 
     var self = this;
     setTimeout(function() {
@@ -193,8 +228,10 @@ var MEMORY = {
     this.isPlaying = false;
     if (this.timerInterval) clearInterval(this.timerInterval);
     if (typeof playSnd === 'function') playSnd('error');
-    this.refresh();
-    this._showModal('lose', { matches: this.matches });
+    var self = this;
+    setTimeout(function() {
+      self._showModal('lose', { matches: self.matches });
+    }, 400);
   },
 
   // ========== مودال ==========
@@ -219,13 +256,13 @@ var MEMORY = {
       html += '<div class="mem-modal-desc">' +
         '⏱ زمان: ' + fmtNum(data.time) + ' ثانیه<br>' +
         '🎯 حرکت: ' + fmtNum(data.moves) + '<br>' +
-        '🏆 ' + data.stars + ' ستاره' +
+        '🏆 ' + fmtNum(data.stars) + ' ستاره' +
         '</div>';
       html += '<div class="mem-modal-reward">🪙 ' + fmtNum(data.coins) + '  💎 ' + fmtNum(data.gems) + '</div>';
       html += '<button class="mem-modal-btn" onclick="MEMORY.closeModal();MEMORY.start()">بازی جدید</button>';
     } else {
       html += '<div class="mem-modal-icon">⏰</div>';
-      html += '<div class="mem-modal-title" style="color:#E84393">زمان تموم شد!</div>';
+      html += '<div class="mem-modal-title lose">زمان تموم شد!</div>';
       html += '<div class="mem-modal-desc">' + fmtNum(data.matches) + ' از ' + fmtNum(this.totalPairs) + ' جفت پیدا کردی</div>';
       html += '<button class="mem-modal-btn" style="background:linear-gradient(135deg,#E84393,#FD79A8)" onclick="MEMORY.closeModal();MEMORY.start()">تلاش دوباره</button>';
     }
@@ -248,14 +285,36 @@ var MEMORY = {
     html += '<div class="mem-topbar">';
     html += '<button class="mem-back" onclick="MEMORY.back()">›</button>';
     html += '<div class="mem-title">🃏 حافظه</div>';
-    html += '<div class="mem-info"><span class="pairs">✓ ' + fmtNum(this.matches) + '/' + fmtNum(this.totalPairs) + '</span></div>';
+    html += '<div class="mem-info">✓ ' + fmtNum(this.matches) + '/' + fmtNum(this.totalPairs) + '</div>';
     html += '</div>';
 
     // آمار
+    var m = Math.floor(this.timeLeft / 60);
+    var s = this.timeLeft % 60;
+    if (s < 10) s = '0' + s;
+    var fa = (typeof toFa === 'function');
+    var timerTxt = (fa ? toFa(m) : m) + ':' + (fa ? toFa(s) : s);
+
+    var timerCls = 'mem-stat-box';
+    if (this.timeLeft <= 15) timerCls += ' danger';
+    else if (this.timeLeft <= 30) timerCls += ' warn';
+
     html += '<div class="mem-stats">';
-    html += '<div class="mem-stat"><div class="mem-stat-num" id="memTimer">' + this._fmtTime(this.timeLeft) + '</div><div class="mem-stat-lbl">⏱ زمان</div></div>';
-    html += '<div class="mem-stat"><div class="mem-stat-num">' + fmtNum(this.moves) + '</div><div class="mem-stat-lbl">🎯 حرکت</div></div>';
-    html += '<div class="mem-stat"><div class="mem-stat-num">' + fmtNum(this.wins) + '</div><div class="mem-stat-lbl">🏆 برد</div></div>';
+    html += '<div class="' + timerCls + '" id="memTimerBox">';
+    html += '<div class="icon">⏱</div>';
+    html += '<div class="num" id="memTimer">' + timerTxt + '</div>';
+    html += '<div class="lbl">زمان</div>';
+    html += '</div>';
+    html += '<div class="mem-stat-box">';
+    html += '<div class="icon">🎯</div>';
+    html += '<div class="num" id="memMoves">' + fmtNum(this.moves) + '</div>';
+    html += '<div class="lbl">حرکت</div>';
+    html += '</div>';
+    html += '<div class="mem-stat-box">';
+    html += '<div class="icon">🏆</div>';
+    html += '<div class="num">' + fmtNum(this.wins) + '</div>';
+    html += '<div class="lbl">برد</div>';
+    html += '</div>';
     html += '</div>';
 
     // تخته
@@ -266,7 +325,7 @@ var MEMORY = {
       if (c.flipped || c.matched) cls += ' flipped';
       if (c.matched) cls += ' matched';
 
-      html += '<button class="' + cls + '" onclick="MEMORY.flipCard(' + i + ')">';
+      html += '<button class="' + cls + '" id="memCard' + i + '" onclick="MEMORY.flipCard(' + i + ')">';
       html += '<div class="mem-card-inner">';
       html += '<div class="mem-card-back"></div>';
       html += '<div class="mem-card-front">' + c.symbol + '</div>';
@@ -290,7 +349,7 @@ var MEMORY = {
     if (typeof ROUTER !== 'undefined') ROUTER.go('games');
   },
 
-  // ========== بروزرسانی ==========
+  // ========== بروزرسانی کامل ==========
   refresh: function() {
     var c = document.getElementById('gamesContent');
     if (c) c.innerHTML = this.render();
