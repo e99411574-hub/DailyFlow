@@ -1,4 +1,43 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 192 192">
-  <rect width="192" height="192" rx="38" fill="#27ae60"/>
-  <path d="M50 100 l25 25 l60 -60" stroke="#fff" stroke-width="16" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" width="512" height="512">
+  <defs>
+    <linearGradient id="bgGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#8b5cf6;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#a78bfa;stop-opacity:1" />
+    </linearGradient>
+    <linearGradient id="starGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#FDCB6E;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#FFD93D;stop-opacity:1" />
+    </linearGradient>
+    <filter id="glow" x="-50%" y="-50%" width="200%" height="200%">
+      <feGaussianBlur stdDeviation="8" result="coloredBlur"/>
+      <feMerge>
+        <feMergeNode in="coloredBlur"/>
+        <feMergeNode in="SourceGraphic"/>
+      </feMerge>
+    </filter>
+  </defs>
+
+  <!-- پس‌زمینه -->
+  <rect width="512" height="512" rx="120" ry="120" fill="url(#bgGrad)"/>
+
+  <!-- دایره‌های تزئینی -->
+  <circle cx="80" cy="80" r="20" fill="#FDCB6E" opacity="0.3"/>
+  <circle cx="430" cy="100" r="14" fill="#FDCB6E" opacity="0.4"/>
+  <circle cx="450" cy="400" r="18" fill="#FDCB6E" opacity="0.3"/>
+  <circle cx="70" cy="420" r="12" fill="#FDCB6E" opacity="0.4"/>
+
+  <!-- ستاره اصلی -->
+  <g filter="url(#glow)">
+    <path d="M 256 80 L 305 220 L 460 220 L 335 310 L 380 450 L 256 365 L 132 450 L 177 310 L 52 220 L 207 220 Z"
+          fill="url(#starGrad)" stroke="#ffffff" stroke-width="4" stroke-linejoin="round"/>
+  </g>
+
+  <!-- نقطه‌های تزئینی -->
+  <circle cx="160" cy="160" r="6" fill="#ffffff" opacity="0.8"/>
+  <circle cx="360" cy="180" r="4" fill="#ffffff" opacity="0.7"/>
+  <circle cx="380" cy="350" r="5" fill="#ffffff" opacity="0.6"/>
+
+  <!-- درخشش -->
+  <circle cx="256" cy="256" r="40" fill="#ffffff" opacity="0.15"/>
 </svg>
