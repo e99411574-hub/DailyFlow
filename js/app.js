@@ -19,7 +19,7 @@ var APP = {
 
     if (typeof SETTINGS !== 'undefined' && SETTINGS.init) SETTINGS.init();
     if (typeof PROFILE !== 'undefined' && PROFILE.init) PROFILE.init();
-if (typeof SHOP !== 'undefined' && SHOP.init) SHOP.init();
+    if (typeof SHOP !== 'undefined' && SHOP.init) SHOP.init();
 
     if (typeof initAudio === 'function') {
       document.addEventListener('click', function once() {
@@ -131,19 +131,19 @@ if (typeof SHOP !== 'undefined' && SHOP.init) SHOP.init();
     html += '</div>';
     html += '</div>';
 
-    // بخش ۱: شعر روز
+    // بخش شعر روز
     html += this._renderPoemSection();
 
-    // بخش ۲: بازی‌های فکری
+    // بخش بازی‌ها
     html += this._renderGamesSection();
 
-    // بخش ۳: ابزارها
+    // بخش ابزارها
     html += this._renderToolsSection();
 
-    // بخش ۴: ماموریت‌ها
+    // بخش ماموریت‌ها
     html += this._renderMissionsSection();
 
-    // بخش ۵: چیزهای من
+    // بخش چیزهای من
     html += this._renderMyThingsSection();
 
     c.innerHTML = html;
@@ -165,7 +165,6 @@ if (typeof SHOP !== 'undefined' && SHOP.init) SHOP.init();
   },
 
   _getPoemOfDay: function() {
-    // TODO: بعداً از assets/poems.json
     var poems = [
       { poet: 'حافظ', text: 'دوش دیدم که ملائک در میخانه زدند\nگل آدم بسرشتند و به پیمانه زدند' },
       { poet: 'سعدی', text: 'بنی آدم اعضای یک پیکرند\nکه در آفرینش ز یک گوهرند' },
@@ -183,8 +182,9 @@ if (typeof SHOP !== 'undefined' && SHOP.init) SHOP.init();
     var games = [
       { id: 'rps',    icon: '✊', label: 'سنگ کاغذ قیچی', color: 'purple' },
       { id: 'guess',  icon: '🔢', label: 'حدس عدد',      color: 'blue' },
+      { id: 'snake',  icon: '🐍', label: 'مارپله',        color: 'green' },
       { id: 'ttt',    icon: '❌', label: 'دوز',          color: 'pink' },
-      { id: 'memory', icon: '🃏', label: 'حافظه',        color: 'green' }
+      { id: 'memory', icon: '🃏', label: 'حافظه',        color: 'orange' }
     ];
     var html = '<div class="section anim-slide-up delay-2">';
     html += '<div class="section-header">';
@@ -304,8 +304,9 @@ if (typeof SHOP !== 'undefined' && SHOP.init) SHOP.init();
     var games = [
       { id: 'rps',    icon: '✊', label: 'سنگ کاغذ قیچی', color: 'purple' },
       { id: 'guess',  icon: '🔢', label: 'حدس عدد',      color: 'blue' },
+      { id: 'snake',  icon: '🐍', label: 'مارپله',        color: 'green' },
       { id: 'ttt',    icon: '❌', label: 'دوز',          color: 'pink' },
-      { id: 'memory', icon: '🃏', label: 'حافظه',        color: 'green' }
+      { id: 'memory', icon: '🃏', label: 'حافظه',        color: 'orange' }
     ];
     for (var i = 0; i < games.length; i++) {
       var g = games[i];
