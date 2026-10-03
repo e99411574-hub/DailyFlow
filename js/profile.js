@@ -1,49 +1,63 @@
-// ===== profile.js - پروفایل و حریم خصوصی =====
+// ===== profile.js - صفحهٔ پروفایل ستاره =====
 
 var PROFILE = {
+  _avatarMode: false,
+  _tickMode: false,
+  _nameMode: false,
+  _bioMode: false,
 
-  // ---------- ویرایش نام ----------
-  editName: function() {
-    var u = SHOP.getUser();
-    var input = document.getElementById('pNameInput');
-    var wrap = document.getElementById('pNameWrap');
-    if (input) input.value = u.name || '';
-    if (wrap) wrap.style.display = 'flex';
-    if (input) input.focus();
+  // ========== رفتن به تنظیمات ==========
+  goSettings: function() {
+    ROUTER.go('settings');
   },
 
+  // ========== نام ==========
+  editName: function() {
+    this._nameMode = true;
+    this._bioMode = false;
+    this.refresh();
+    setTimeout(function() {
+      var i = document.getElementById('pNameInput');
+      if (i) i.focus();
+    }, 100);
+  },
+  cancelName: function() {
+    this._nameMode = false;
+    this.refresh();
+  },
   saveName: function() {
     var input = document.getElementById('pNameInput');
     if (!input) return;
     var name = input.value.trim();
     if (!name) {
-      playSnd('error');
-      showToast('❌ ' + t('nameEmpty'));
+      if (typeof playSnd === 'function') playSnd('error');
+      if (typeof showToast === 'function') showToast('❌ ' + t('nameEmpty'));
       return;
     }
     var u = SHOP.getUser();
     u.name = name;
     SHOP.saveUser(u);
+    this._nameMode = false;
     this.refresh();
-    playSnd('success');
-    showToast('✅ ' + t('nameSaved'));
+    if (typeof playSnd === 'function') playSnd('success');
+    if (typeof showToast === 'function') showToast('✅ ' + t('nameSaved'));
+    if (typeof APP !== 'undefined' && APP.updateHeader) APP.updateHeader();
   },
 
-  cancelName: function() {
-    var wrap = document.getElementById('pNameWrap');
-    if (wrap) wrap.style.display = 'none';
-  },
-
-  // ---------- ویرایش بیو ----------
+  // ========== بیو ==========
   editBio: function() {
-    var u = SHOP.getUser();
-    var input = document.getElementById('pBioInput');
-    var wrap = document.getElementById('pBioWrap');
-    if (input) input.value = u.bio || '';
-    if (wrap) wrap.style.display = 'flex';
-    if (input) input.focus();
+    this._bioMode = true;
+    this._nameMode = false;
+    this.refresh();
+    setTimeout(function() {
+      var i = document.getElementById('pBioInput');
+      if (i) i.focus();
+    }, 100);
   },
-
+  cancelBio: function() {
+    this._bioMode = false;
+    this.refresh();
+  },
   saveBio: function() {
     var input = document.getElementById('pBioInput');
     if (!input) return;
@@ -52,17 +66,19 @@ var PROFILE = {
     var u = SHOP.getUser();
     u.bio = bio;
     SHOP.saveUser(u);
+    this._bioMode = false;
     this.refresh();
-    playSnd('success');
-    showToast('✅ ' + t('bioSaved'));
+    if (typeof playSnd === 'function') playSnd('success');
+    if (typeof showToast === 'function') showToast('✅ ' + t('bioSaved'));
   },
 
-  cancelBio: function() {
-    var wrap = document.getElementById('pBioWrap');
-    if (wrap) wrap.style.display = 'none';
+  // ========== آواتار ==========
+  toggleAvatarMode: function() {
+    this._avatarMode = !this._avatarMode;
+    this._tickMode = false;
+    if (typeof playSnd === 'function') playSnd('tap');
+    this.refresh();
   },
-
-  // ---------- تغییر آواتار ----------
   setAvatar: function(type) {
     var u = SHOP.getUser();
     if (type === 'male' || type === 'female') {
@@ -70,17 +86,15 @@ var PROFILE = {
       u.avatarImage = '';
       SHOP.saveUser(u);
       this.refresh();
-      playSnd('click');
+      if (typeof playSnd === 'function') playSnd('click');
     }
   },
-
-  // ---------- آپلود تصویر ----------
   uploadImage: function(evt) {
     var file = evt.target.files[0];
     if (!file) return;
     if (file.size > 500000) {
-      playSnd('error');
-      showToast('❌ ' + t('imgTooBig'));
+      if (typeof playSnd === 'function') playSnd('error');
+      if (typeof showToast === 'function') showToast('❌ ' + t('imgTooBig'));
       return;
     }
     var reader = new FileReader();
@@ -91,98 +105,33 @@ var PROFILE = {
       u.avatar = 'custom';
       SHOP.saveUser(u);
       self.refresh();
-      playSnd('success');
-      showToast('✅ ' + t('imgSaved'));
+      if (typeof playSnd === 'function') playSnd('success');
+      if (typeof showToast === 'function') showToast('✅ ' + t('imgSaved'));
     };
     reader.readAsDataURL(file);
   },
 
-  // ---------- انتخاب تیک ----------
+  // ========== تیک ==========
+  toggleTickMode: function() {
+    this._tickMode = !this._tickMode;
+    this._avatarMode = false;
+    if (typeof playSnd === 'function') playSnd('tap');
+    this.refresh();
+  },
   setTick: function(tickId) {
     var u = SHOP.getUser();
     if ((u.ownedTicks || []).indexOf(tickId) < 0) {
-      playSnd('error');
-      showToast('❌ ' + t('tickNotOwned'));
+      if (typeof playSnd === 'function') playSnd('error');
+      if (typeof showToast === 'function') showToast('❌ ' + t('tickNotOwned'));
       return;
     }
     u.selectedTick = tickId;
     SHOP.saveUser(u);
     this.refresh();
-    playSnd('click');
+    if (typeof playSnd === 'function') playSnd('click');
   },
 
-  // ---------- رندر پروفایل ----------
-  render: function() {
-    var u = SHOP.getUser();
-    var html = '';
-
-    html += '<div class="profile-header">';
-    html += '<div class="profile-avatar">' + this.renderAvatar(u) + '</div>';
-    html += '<div class="profile-info">';
-    html += '<div class="profile-name">' + (u.name || t('noName')) + '</div>';
-    html += '<div class="profile-bio">' + (u.bio || t('noBio')) + '</div>';
-    html += '</div></div>';
-
-    html += '<div class="profile-section">';
-    html += '<button class="profile-btn" onclick="PROFILE.editName()">✏️ ' + t('editName') + '</button>';
-    html += '<div id="pNameWrap" class="profile-input-wrap" style="display:none">';
-    html += '<input id="pNameInput" class="profile-input" type="text" maxlength="20" placeholder="' + t('namePlaceholder') + '">';
-    html += '<button class="profile-save" onclick="PROFILE.saveName()">✓</button>';
-    html += '<button class="profile-cancel" onclick="PROFILE.cancelName()">✕</button>';
-    html += '</div></div>';
-
-    html += '<div class="profile-section">';
-    html += '<button class="profile-btn" onclick="PROFILE.editBio()">📝 ' + t('editBio') + '</button>';
-    html += '<div id="pBioWrap" class="profile-input-wrap" style="display:none">';
-    html += '<textarea id="pBioInput" class="profile-input" maxlength="150" rows="2" placeholder="' + t('bioPlaceholder') + '"></textarea>';
-    html += '<button class="profile-save" onclick="PROFILE.saveBio()">✓</button>';
-    html += '<button class="profile-cancel" onclick="PROFILE.cancelBio()">✕</button>';
-    html += '</div></div>';
-
-    html += '<div class="profile-section">';
-    html += '<div class="profile-label">👤 ' + t('chooseAvatar') + '</div>';
-    html += '<div class="avatar-grid">';
-    html += this.avatarOption('male', '👨', u);
-    html += this.avatarOption('female', '👩', u);
-    html += '<label class="avatar-option ' + (u.avatar === 'custom' ? 'active' : '') + '">';
-    html += '<span class="avatar-icon">🖼️</span>';
-    html += '<span class="avatar-lbl">' + t('gallery') + '</span>';
-    html += '<input type="file" accept="image/*" style="display:none" onchange="PROFILE.uploadImage(event)">';
-    html += '</label>';
-    html += '</div></div>';
-
-    html += '<div class="profile-section">';
-    html += '<div class="profile-label">✓ ' + t('chooseTick') + '</div>';
-    html += '<div class="tick-grid">';
-    var ticks = (u.ownedTicks || ['star_black']);
-    for (var i = 0; i < ticks.length; i++) {
-      var tid = ticks[i];
-      var active = (u.selectedTick === tid) ? 'active' : '';
-      html += '<div class="tick-option ' + active + '" onclick="PROFILE.setTick(\'' + tid + '\')">';
-      html += renderTick(tid, 40);
-      html += '</div>';
-    }
-    html += '</div></div>';
-
-    html += '<div class="profile-section">';
-    html += '<div class="profile-stats">';
-    html += '<div class="stat-box"><div class="stat-num">' + fmtNum(u.coins || 0) + '</div><div class="stat-lbl">🪙 ' + t('coins') + '</div></div>';
-    html += '<div class="stat-box"><div class="stat-num">' + fmtNum(u.streak || 0) + '</div><div class="stat-lbl">🔥 ' + t('streak') + '</div></div>';
-    html += '<div class="stat-box"><div class="stat-num">' + fmtNum(u.level || 1) + '</div><div class="stat-lbl">⭐ ' + t('level') + '</div></div>';
-    html += '</div></div>';
-
-    return html;
-  },
-
-  avatarOption: function(type, emoji, u) {
-    var active = (u.avatar === type) ? 'active' : '';
-    var lbl = (type === 'male') ? t('male') : t('female');
-    return '<div class="avatar-option ' + active + '" onclick="PROFILE.setAvatar(\'' + type + '\')">' +
-      '<span class="avatar-icon">' + emoji + '</span>' +
-      '<span class="avatar-lbl">' + lbl + '</span>' +
-      '</div>';
-  },
-
+  // ========== آواتار رندر ==========
   renderAvatar: function(u) {
     if (u.avatar === 'custom' && u.avatarImage) {
       return '<img src="' + u.avatarImage + '" alt="avatar">';
@@ -191,10 +140,126 @@ var PROFILE = {
     return '👨';
   },
 
+  // ========== رندر ==========
+  render: function() {
+    var u = SHOP.getUser();
+    var html = '<div class="profile-page">';
+
+    // کارت هیرو
+    html += '<div class="profile-hero">';
+    html += '<div class="hero-avatar">' + this.renderAvatar(u) + '</div>';
+    html += '<div class="hero-info">';
+    html += '<div class="hero-name">' + (u.name || t('noName')) + '</div>';
+    html += '<div class="hero-bio">' + (u.bio || t('noBio')) + '</div>';
+    html += '</div>';
+    html += '</div>';
+
+    // دکمه‌های سریع
+    html += '<div class="profile-quick">';
+    html += '<div class="quick-item" onclick="PROFILE.editName()">';
+    html += '<div class="quick-icon">✏️</div>';
+    html += '<div class="quick-label">' + t('editName') + '</div>';
+    html += '</div>';
+    html += '<div class="quick-item" onclick="PROFILE.editBio()">';
+    html += '<div class="quick-icon">📝</div>';
+    html += '<div class="quick-label">' + t('editBio') + '</div>';
+    html += '</div>';
+    html += '<div class="quick-item" onclick="PROFILE.toggleAvatarMode()">';
+    html += '<div class="quick-icon">👤</div>';
+    html += '<div class="quick-label">' + t('chooseAvatar') + '</div>';
+    html += '</div>';
+    html += '</div>';
+
+    // فرم نام
+    if (this._nameMode) {
+      html += '<div class="profile-list"><div class="profile-input-row">';
+      html += '<input id="pNameInput" type="text" maxlength="20" placeholder="' + t('namePlaceholder') + '" value="' + (u.name || '') + '">';
+      html += '<button class="btn-save" onclick="PROFILE.saveName()">✓</button>';
+      html += '<button class="btn-cancel" onclick="PROFILE.cancelName()">✕</button>';
+      html += '</div></div>';
+    }
+
+    // فرم بیو
+    if (this._bioMode) {
+      html += '<div class="profile-list"><div class="profile-input-row">';
+      html += '<textarea id="pBioInput" maxlength="150" rows="2" placeholder="' + t('bioPlaceholder') + '">' + (u.bio || '') + '</textarea>';
+      html += '<button class="btn-save" onclick="PROFILE.saveBio()">✓</button>';
+      html += '<button class="btn-cancel" onclick="PROFILE.cancelBio()">✕</button>';
+      html += '</div></div>';
+    }
+
+    // پیکر آواتار
+    if (this._avatarMode) {
+      html += '<div class="profile-list"><div class="avatar-picker">';
+      html += '<div class="avatar-opt ' + (u.avatar === 'male' ? 'active' : '') + '" onclick="PROFILE.setAvatar(\'male\')">👨</div>';
+      html += '<div class="avatar-opt ' + (u.avatar === 'female' ? 'active' : '') + '" onclick="PROFILE.setAvatar(\'female\')">👩</div>';
+      html += '<label class="avatar-opt ' + (u.avatar === 'custom' ? 'active' : '') + '">🖼️';
+      html += '<input type="file" accept="image/*" style="display:none" onchange="PROFILE.uploadImage(event)">';
+      html += '</label>';
+      html += '</div></div>';
+    }
+
+    // پیکر تیک
+    if (this._tickMode) {
+      html += '<div class="profile-list"><div class="tick-picker">';
+      var ticks = u.ownedTicks || ['star_black'];
+      for (var i = 0; i < ticks.length; i++) {
+        var tid = ticks[i];
+        var active = (u.selectedTick === tid) ? 'active' : '';
+        html += '<div class="tick-opt ' + active + '" onclick="PROFILE.setTick(\'' + tid + '\')">';
+        html += (typeof renderTick === 'function') ? renderTick(tid, 40) : '✓';
+        html += '</div>';
+      }
+      html += '</div></div>';
+    }
+
+    // لیست اطلاعات
+    html += '<div class="profile-list">';
+    html += '<div class="profile-item" onclick="PROFILE.toggleTickMode()">';
+    html += '<span class="item-icon">✓</span>';
+    html += '<span class="item-text">' + t('chooseTick') + '</span>';
+    html += '<span class="item-value">' + (t(u.selectedTick) || '') + '</span>';
+    html += '<span class="item-chevron">‹</span>';
+    html += '</div>';
+    html += '<div class="profile-item" onclick="ROUTER.go(\'shop\')">';
+    html += '<span class="item-icon">🪙</span>';
+    html += '<span class="item-text">' + t('coins') + '</span>';
+    html += '<span class="item-value">' + fmtNum(u.coins || 0) + '</span>';
+    html += '<span class="item-chevron">‹</span>';
+    html += '</div>';
+    html += '<div class="profile-item" onclick="ROUTER.go(\'shop\')">';
+    html += '<span class="item-icon">💎</span>';
+    html += '<span class="item-text">جم</span>';
+    html += '<span class="item-value">' + fmtNum(u.gems || 0) + '</span>';
+    html += '<span class="item-chevron">‹</span>';
+    html += '</div>';
+    html += '<div class="profile-item" onclick="PROFILE.goSettings()">';
+    html += '<span class="item-icon">⚙️</span>';
+    html += '<span class="item-text">' + t('settings') + '</span>';
+    html += '<span class="item-chevron">‹</span>';
+    html += '</div>';
+    html += '</div>';
+
+    // آمار
+    html += '<div class="profile-list"><div class="stats-row">';
+    html += '<div class="stat-cell"><div class="stat-num">' + fmtNum(u.coins || 0) + '</div><div class="stat-lbl">🪙 ' + t('coins') + '</div></div>';
+    html += '<div class="stat-cell"><div class="stat-num">' + fmtNum(u.streak || 0) + '</div><div class="stat-lbl">🔥 ' + t('streak') + '</div></div>';
+    html += '<div class="stat-cell"><div class="stat-num">' + fmtNum(u.level || 1) + '</div><div class="stat-lbl">⭐ ' + t('level') + '</div></div>';
+    html += '</div></div>';
+
+    html += '</div>';
+    return html;
+  },
+
   refresh: function() {
     var c = document.getElementById('profileContent');
-    if (c) c.innerHTML = this.render();
-    if (typeof updateUserHdr === 'function') updateUserHdr();
+    if (c) {
+      c.innerHTML = this.render();
+      c.classList.remove('anim-fade-in');
+      void c.offsetWidth;
+      c.classList.add('anim-fade-in');
+    }
+    if (typeof APP !== 'undefined' && APP.updateHeader) APP.updateHeader();
   },
 
   init: function() {
@@ -202,6 +267,7 @@ var PROFILE = {
     if (!u.ownedTicks) u.ownedTicks = ['star_black'];
     if (!u.selectedTick) u.selectedTick = 'star_black';
     if (!u.avatar) u.avatar = 'male';
+    if (u.gems === undefined) u.gems = 0;
     SHOP.saveUser(u);
   }
 };
