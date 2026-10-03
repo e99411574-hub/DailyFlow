@@ -21,6 +21,7 @@ var APP = {
     if (typeof PROFILE !== 'undefined' && PROFILE.init) PROFILE.init();
     if (typeof SHOP !== 'undefined' && SHOP.init) SHOP.init();
     if (typeof WHEEL !== 'undefined' && WHEEL.init) WHEEL.init();
+    if (typeof MISSIONS !== 'undefined' && MISSIONS.init) MISSIONS.init();
 
     if (typeof initAudio === 'function') {
       document.addEventListener('click', function once() {
@@ -138,6 +139,11 @@ var APP = {
     // ۳. گردونهٔ شانس
     if (typeof WHEEL !== 'undefined' && WHEEL.renderSection) {
       html += WHEEL.renderSection();
+    }
+
+    // ۴. ماموریت‌های روزانه
+    if (typeof MISSIONS !== 'undefined' && MISSIONS.render) {
+      html += '<div id="missionsContainer">' + MISSIONS.render() + '</div>';
     }
 
     html += '</div>';
