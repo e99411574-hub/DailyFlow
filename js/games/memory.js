@@ -1,4 +1,4 @@
-// ===== games/memory.js - بازی حافظه (نسخهٔ جدید) =====
+// ===== games/memory.js - بازی حافظه (نسخهٔ نهایی) =====
 
 var MEMORY = {
   gameId: 'memory',
@@ -29,14 +29,12 @@ var MEMORY = {
     this.matches = 0;
     this.timeLeft = 120;
 
-    // ساخت جفت‌ها
     var deck = [];
     for (var i = 0; i < this.symbols.length; i++) {
       deck.push({ id: i, symbol: this.symbols[i] });
       deck.push({ id: i, symbol: this.symbols[i] });
     }
 
-    // شافل
     for (var j = deck.length - 1; j > 0; j--) {
       var k = Math.floor(Math.random() * (j + 1));
       var tmp = deck[j]; deck[j] = deck[k]; deck[k] = tmp;
@@ -97,7 +95,6 @@ var MEMORY = {
     card.flipped = true;
     if (typeof playSnd === 'function') playSnd('click');
 
-    // آپدیت فقط همون کارت
     var el = document.getElementById('memCard' + idx);
     if (el) el.classList.add('flipped');
 
@@ -131,7 +128,6 @@ var MEMORY = {
     var i2 = this.secondCard;
 
     if (c1.id === c2.id) {
-      // جفت پیدا شد
       setTimeout(function() {
         c1.matched = true;
         c2.matched = true;
@@ -154,7 +150,6 @@ var MEMORY = {
         }
       }, 500);
     } else {
-      // غلط
       this.lockBoard = true;
       if (typeof playSnd === 'function') playSnd('error');
 
@@ -180,17 +175,21 @@ var MEMORY = {
     if (this.timerInterval) clearInterval(this.timerInterval);
     this.wins++;
 
+    // ثبت رویداد ماموریت‌ها
+    if (typeof MISSIONS !== 'undefined') {
+      MISSIONS.trackGame();
+      MISSIONS.trackWin();
+    }
+
     var timeTaken = this.totalTime - this.timeLeft;
     if (this.bestTime === null || timeTaken < this.bestTime) {
       this.bestTime = timeTaken;
     }
 
-    // ستاره‌ها
     var stars = 1;
     if (this.moves <= 16) stars = 3;
     else if (this.moves <= 22) stars = 2;
 
-    // جایزه
     var coins = 20;
     var gems = 2;
     if (stars === 3) coins += 15;
@@ -227,6 +226,12 @@ var MEMORY = {
   _lose: function(reason) {
     this.isPlaying = false;
     if (this.timerInterval) clearInterval(this.timerInterval);
+
+    // ثبت رویداد ماموریت (بازی انجام شد ولی نبرد)
+    if (typeof MISSIONS !== 'undefined') {
+      MISSIONS.trackGame();
+    }
+
     if (typeof playSnd === 'function') playSnd('error');
     var self = this;
     setTimeout(function() {
@@ -281,14 +286,12 @@ var MEMORY = {
   render: function() {
     var html = '<div class="mem-page">';
 
-    // نوار بالا
     html += '<div class="mem-topbar">';
     html += '<button class="mem-back" onclick="MEMORY.back()">›</button>';
     html += '<div class="mem-title">🃏 حافظه</div>';
     html += '<div class="mem-info">✓ ' + fmtNum(this.matches) + '/' + fmtNum(this.totalPairs) + '</div>';
     html += '</div>';
 
-    // آمار
     var m = Math.floor(this.timeLeft / 60);
     var s = this.timeLeft % 60;
     if (s < 10) s = '0' + s;
@@ -317,7 +320,6 @@ var MEMORY = {
     html += '</div>';
     html += '</div>';
 
-    // تخته
     html += '<div class="mem-board">';
     for (var i = 0; i < this.cards.length; i++) {
       var c = this.cards[i];
@@ -334,7 +336,6 @@ var MEMORY = {
     }
     html += '</div>';
 
-    // دکمهٔ بازی جدید
     html += '<button class="mem-new-btn" onclick="MEMORY.start()">🔄 بازی جدید</button>';
 
     html += '</div>';
@@ -349,7 +350,7 @@ var MEMORY = {
     if (typeof ROUTER !== 'undefined') ROUTER.go('games');
   },
 
-  // ========== بروزرسانی کامل ==========
+  // ========== بروزرسانی ==========
   refresh: function() {
     var c = document.getElementById('gamesContent');
     if (c) c.innerHTML = this.render();
