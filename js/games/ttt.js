@@ -1,4 +1,4 @@
-// ===== games/ttt.js - بازی دوز (نسخهٔ جدید) =====
+// ===== games/ttt.js - بازی دوز (نسخهٔ نهایی) =====
 
 var TTT = {
   gameId: 'ttt',
@@ -54,11 +54,9 @@ var TTT = {
     this.board[idx] = this.playerSymbol;
     if (typeof playSnd === 'function') playSnd('click');
 
-    // آپدیت فقط خونهٔ کلیک‌شده
     this._updateCellUI(idx);
     this._updateTurnUI();
 
-    // چک برد
     var win = this._checkWin(this.playerSymbol);
     if (win) {
       this.winLine = win;
@@ -67,13 +65,11 @@ var TTT = {
       return;
     }
 
-    // مساوی
     if (this._isFull()) {
       setTimeout(this._draw.bind(this), 500);
       return;
     }
 
-    // نوبت AI
     this.turn = 'ai';
     this.aiThinking = true;
     this._updateTurnUI();
@@ -107,11 +103,9 @@ var TTT = {
     this.board[move] = this.aiSymbol;
     if (typeof playSnd === 'function') playSnd('click');
 
-    // آپدیت فقط خونهٔ AI
     this._updateCellUI(move);
     this.aiThinking = false;
 
-    // چک برد
     var win = this._checkWin(this.aiSymbol);
     if (win) {
       this.winLine = win;
@@ -129,7 +123,6 @@ var TTT = {
     this._updateTurnUI();
   },
 
-  // ========== آپدیت فقط یه خونه ==========
   _updateCellUI: function(idx) {
     var cell = document.getElementById('tttCell' + idx);
     if (!cell) return;
@@ -144,7 +137,6 @@ var TTT = {
     }
   },
 
-  // ========== آپدیت نوار نوبت ==========
   _updateTurnUI: function() {
     var el = document.getElementById('tttTurn');
     if (!el) return;
@@ -158,7 +150,6 @@ var TTT = {
     }
   },
 
-  // ========== هایلایت خط برنده ==========
   _highlightWin: function(line) {
     if (!line) return;
     for (var i = 0; i < line.length; i++) {
@@ -180,7 +171,6 @@ var TTT = {
   },
 
   _smartMove: function() {
-    // ۱. ببر
     for (var i = 0; i < 9; i++) {
       if (this.board[i] === '') {
         var test = this.board.slice();
@@ -188,7 +178,6 @@ var TTT = {
         if (this._checkWinOn(test, this.aiSymbol)) return i;
       }
     }
-    // ۲. جلوگیری
     for (var j = 0; j < 9; j++) {
       if (this.board[j] === '') {
         var test2 = this.board.slice();
@@ -284,6 +273,12 @@ var TTT = {
   _win: function(who) {
     this.isPlaying = false;
 
+    // ثبت رویداد ماموریت‌ها
+    if (typeof MISSIONS !== 'undefined') {
+      MISSIONS.trackGame();
+      if (who === 'player') MISSIONS.trackWin();
+    }
+
     if (who === 'player') {
       this.wins++;
       if (typeof playSnd === 'function') playSnd('success');
@@ -323,6 +318,12 @@ var TTT = {
   _draw: function() {
     this.isPlaying = false;
     this.draws++;
+
+    // ثبت رویداد ماموریت (بازی انجام شده ولی مساوی)
+    if (typeof MISSIONS !== 'undefined') {
+      MISSIONS.trackGame();
+    }
+
     if (typeof playSnd === 'function') playSnd('click');
     var self = this;
     setTimeout(function() {
@@ -374,7 +375,6 @@ var TTT = {
   render: function() {
     var html = '<div class="ttt-page">';
 
-    // نوار بالا
     html += '<div class="ttt-topbar">';
     html += '<button class="ttt-back" onclick="TTT.back()">›</button>';
     html += '<div class="ttt-title">❌ دوز</div>';
@@ -384,19 +384,16 @@ var TTT = {
     html += '</div>';
     html += '</div>';
 
-    // سطوح
     html += '<div class="ttt-levels">';
     html += '<div class="ttt-level ' + (this.level === 'easy' ? 'active' : '') + '" onclick="TTT.setLevel(\'easy\')">' + this.levelLabels.easy + '</div>';
     html += '<div class="ttt-level ' + (this.level === 'medium' ? 'active' : '') + '" onclick="TTT.setLevel(\'medium\')">' + this.levelLabels.medium + '</div>';
     html += '<div class="ttt-level ' + (this.level === 'hard' ? 'active' : '') + '" onclick="TTT.setLevel(\'hard\')">' + this.levelLabels.hard + '</div>';
     html += '</div>';
 
-    // نوار نوبت
     var turnCls = 'ttt-turn ' + (this.turn === 'player' ? 'player' : 'ai');
     var turnTxt = (this.turn === 'player') ? '<span class="emoji">❌</span> نوبت تو' : '<span class="emoji">⭕</span> حریف داره فکر می‌کنه...';
     html += '<div class="' + turnCls + '" id="tttTurn">' + turnTxt + '</div>';
 
-    // تخته
     html += '<div class="ttt-board" id="tttBoard">';
     for (var i = 0; i < 9; i++) {
       var val = this.board[i];
@@ -416,7 +413,6 @@ var TTT = {
     }
     html += '</div>';
 
-    // دکمهٔ بازی جدید
     html += '<button class="ttt-new-btn" onclick="TTT.start()">🔄 بازی جدید</button>';
 
     html += '</div>';
@@ -430,7 +426,7 @@ var TTT = {
     if (typeof ROUTER !== 'undefined') ROUTER.go('games');
   },
 
-  // ========== بروزرسانی کامل ==========
+  // ========== بروزرسانی ==========
   refresh: function() {
     var c = document.getElementById('gamesContent');
     if (c) c.innerHTML = this.render();
