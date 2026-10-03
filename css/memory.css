@@ -1,8 +1,11 @@
-/* ===== memory.css - بازی حافظه ===== */
+/* ===== memory.css - بازی حافظه (نسخهٔ جدید) ===== */
 
 .mem-page {
   padding-bottom: 20px;
   animation: fadeIn 0.4s ease;
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
 }
 
 /* ---------- نوار بالا ---------- */
@@ -10,7 +13,7 @@
   display: flex;
   align-items: center;
   gap: 10px;
-  padding: 6px 4px 16px;
+  padding: 6px 4px 4px;
 }
 
 .mem-back {
@@ -45,41 +48,40 @@
 .mem-info {
   display: flex;
   gap: 6px;
-  padding: 8px 12px;
+  padding: 8px 14px;
   background: var(--card);
   border: 1px solid var(--card-b);
   border-radius: 999px;
   font-size: 13px;
   font-weight: 800;
-  color: var(--text);
+  color: #8b5cf6;
   box-shadow: var(--sd2);
 }
 
-.mem-info .pairs { color: #8b5cf6; }
-.mem-info .moves { color: #E84393; }
-
-/* ---------- نوار آمار ---------- */
+/* ---------- آمار ---------- */
 .mem-stats {
-  display: flex;
-  align-items: center;
-  justify-content: space-around;
-  padding: 12px;
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 8px;
+}
+
+.mem-stat-box {
   background: var(--card);
-  border-radius: 20px;
   border: 1px solid var(--card-b);
+  border-radius: 18px;
+  padding: 12px 8px;
+  text-align: center;
   box-shadow: var(--sd2);
-  margin-bottom: 16px;
+  transition: all 0.3s ease;
 }
 
-.mem-stat {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 2px;
-}
-
-.mem-stat-num {
+.mem-stat-box .icon {
   font-size: 20px;
+  margin-bottom: 4px;
+}
+
+.mem-stat-box .num {
+  font-size: 18px;
   font-weight: 900;
   background: linear-gradient(135deg, var(--pr), var(--pr2));
   -webkit-background-clip: text;
@@ -88,10 +90,34 @@
   line-height: 1.1;
 }
 
-.mem-stat-lbl {
+.mem-stat-box .lbl {
   font-size: 10px;
   color: var(--text3);
   font-weight: 700;
+  margin-top: 2px;
+}
+
+.mem-stat-box.warn {
+  background: linear-gradient(135deg, #f8f0d5, #f0e8c8);
+}
+
+.mem-stat-box.warn .num {
+  background: linear-gradient(135deg, #E17055, #E84393);
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+.mem-stat-box.danger {
+  background: linear-gradient(135deg, #f8c0c8, #f0a0b0);
+}
+
+.mem-stat-box.danger .num {
+  background: linear-gradient(135deg, #E84393, #FD79A8);
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+  animation: pulseSoft 0.8s ease-in-out infinite;
 }
 
 /* ---------- تخته ---------- */
@@ -100,21 +126,23 @@
   grid-template-columns: repeat(4, 1fr);
   gap: 10px;
   padding: 14px;
-  background: var(--card);
-  border-radius: 24px;
-  border: 1px solid var(--card-b);
-  box-shadow: var(--sd);
-  margin-bottom: 16px;
-  perspective: 800px;
+  background: linear-gradient(135deg, var(--pr), var(--pr2));
+  border-radius: 26px;
+  box-shadow: 0 12px 40px rgba(139, 92, 246, 0.3);
+  aspect-ratio: 1;
+  max-width: 420px;
+  width: 100%;
+  margin: 0 auto;
 }
 
+/* ---------- کارت ---------- */
 .mem-card {
   aspect-ratio: 1;
-  border-radius: 16px;
+  border-radius: 18px;
   cursor: pointer;
   position: relative;
   transform-style: preserve-3d;
-  transition: transform 0.5s cubic-bezier(0.34, 1.56, 0.64, 1);
+  transition: transform 0.55s cubic-bezier(0.34, 1.56, 0.64, 1);
   padding: 0;
   border: none;
   background: transparent;
@@ -127,17 +155,17 @@
 
 .mem-card.matched {
   pointer-events: none;
-  animation: matchPop 0.6s cubic-bezier(0.34, 1.56, 0.64, 1);
 }
 
 .mem-card.matched .mem-card-front {
   background: linear-gradient(135deg, #55EFC4, #00B894);
-  box-shadow: 0 0 0 3px rgba(0, 184, 148, 0.5), 0 8px 24px rgba(0, 184, 148, 0.4);
+  box-shadow: 0 0 0 4px rgba(0, 184, 148, 0.5), 0 8px 30px rgba(0, 184, 148, 0.5);
+  animation: matchPop 0.7s cubic-bezier(0.34, 1.56, 0.64, 1);
 }
 
 @keyframes matchPop {
   0%   { transform: rotateY(180deg) scale(1); }
-  50%  { transform: rotateY(180deg) scale(1.15); }
+  50%  { transform: rotateY(180deg) scale(1.2); }
   100% { transform: rotateY(180deg) scale(1); }
 }
 
@@ -151,7 +179,7 @@
 .mem-card-front {
   position: absolute;
   inset: 0;
-  border-radius: 16px;
+  border-radius: 18px;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -160,39 +188,60 @@
   transition: all 0.3s ease;
 }
 
+/* پشت کارت */
 .mem-card-back {
   background: linear-gradient(135deg, #a78bfa, #8b5cf6);
-  box-shadow: 0 4px 14px rgba(139, 92, 246, 0.35);
-  font-size: 36px;
-  color: rgba(255, 255, 255, 0.6);
+  box-shadow: 0 6px 18px rgba(139, 92, 246, 0.4);
+  position: relative;
+  overflow: hidden;
+}
+
+.mem-card-back::before {
+  content: '?';
+  font-size: 42px;
+  font-weight: 900;
+  color: rgba(255, 255, 255, 0.5);
 }
 
 .mem-card-back::after {
-  content: '?';
-  font-weight: 900;
+  content: '';
+  position: absolute;
+  top: -50%;
+  left: -50%;
+  width: 200%;
+  height: 200%;
+  background: radial-gradient(circle, rgba(255,255,255,0.15) 0%, transparent 60%);
+  animation: pulse 4s ease-in-out infinite;
+  pointer-events: none;
 }
 
+/* روی کارت */
 .mem-card-front {
-  background: var(--card2);
-  border: 2px solid var(--card-b);
+  background: linear-gradient(135deg, #ffffff, #f8f5ff);
+  border: 3px solid var(--pr);
   transform: rotateY(180deg);
-  font-size: 40px;
+  font-size: 46px;
   line-height: 1;
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.15);
 }
 
-/* ---------- دکمه بازی جدید ---------- */
+.mem-card:active:not(.flipped):not(.matched) {
+  transform: scale(0.93);
+}
+
+/* ---------- دکمهٔ بازی جدید ---------- */
 .mem-new-btn {
   padding: 14px 32px;
   background: linear-gradient(135deg, var(--pr), var(--pr2));
   border: none;
-  border-radius: 16px;
+  border-radius: 18px;
   color: white;
   font-family: inherit;
   font-size: 15px;
   font-weight: 800;
   cursor: pointer;
   box-shadow: 0 8px 24px var(--pr-soft);
-  transition: transform 0.2s ease;
+  transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
   width: 100%;
   display: flex;
   align-items: center;
@@ -204,12 +253,13 @@
   transform: scale(0.96);
 }
 
-/* ---------- مودال نتیجه ---------- */
+/* ---------- مودال ---------- */
 .mem-modal {
   position: fixed;
   inset: 0;
   background: rgba(45, 27, 78, 0.55);
   backdrop-filter: blur(6px);
+  -webkit-backdrop-filter: blur(6px);
   z-index: 500;
   display: flex;
   align-items: center;
@@ -229,7 +279,7 @@
   background: linear-gradient(160deg, #fff8e7, #fde8c8);
   border-radius: 28px;
   padding: 30px 24px;
-  max-width: 360px;
+  max-width: 340px;
   width: 100%;
   text-align: center;
   box-shadow: 0 20px 60px rgba(0, 0, 0, 0.35);
@@ -242,17 +292,20 @@
 }
 
 .mem-modal-icon {
-  font-size: 56px;
-  margin-bottom: 10px;
+  font-size: 64px;
+  margin-bottom: 12px;
   animation: bounce 1.5s ease-in-out infinite;
 }
 
 .mem-modal-title {
-  font-size: 26px;
+  font-size: 24px;
   font-weight: 900;
   color: #00B894;
   margin-bottom: 8px;
-  font-family: 'Vazirmatn', sans-serif;
+}
+
+.mem-modal-title.lose {
+  color: #E84393;
 }
 
 .mem-modal-desc {
@@ -267,26 +320,26 @@
   display: inline-flex;
   align-items: center;
   gap: 6px;
-  padding: 10px 20px;
-  background: rgba(253, 203, 110, 0.25);
+  padding: 10px 22px;
+  background: rgba(253, 203, 110, 0.3);
   border-radius: 999px;
-  font-size: 16px;
-  font-weight: 800;
+  font-size: 17px;
+  font-weight: 900;
   color: #E17055;
   margin-bottom: 18px;
 }
 
 .mem-modal-btn {
-  padding: 14px 32px;
-  background: linear-gradient(135deg, #00B894, #55EFC4);
+  padding: 14px 36px;
+  background: linear-gradient(135deg, var(--pr), var(--pr2));
   border: none;
   border-radius: 16px;
   color: white;
   font-family: inherit;
-  font-size: 16px;
+  font-size: 15px;
   font-weight: 800;
   cursor: pointer;
-  box-shadow: 0 8px 24px rgba(0, 184, 148, 0.4);
+  box-shadow: 0 8px 24px var(--pr-soft);
   transition: transform 0.2s ease;
 }
 
@@ -300,6 +353,6 @@
     gap: 8px;
     padding: 10px;
   }
-  .mem-card-front { font-size: 32px; }
-  .mem-card-back { font-size: 28px; }
-    }
+  .mem-card-front { font-size: 36px; }
+  .mem-card-back::before { font-size: 32px; }
+  }
