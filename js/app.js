@@ -20,6 +20,7 @@ var APP = {
     if (typeof SETTINGS !== 'undefined' && SETTINGS.init) SETTINGS.init();
     if (typeof PROFILE !== 'undefined' && PROFILE.init) PROFILE.init();
     if (typeof SHOP !== 'undefined' && SHOP.init) SHOP.init();
+    if (typeof WHEEL !== 'undefined' && WHEEL.init) WHEEL.init();
 
     if (typeof initAudio === 'function') {
       document.addEventListener('click', function once() {
@@ -120,46 +121,36 @@ var APP = {
     if (!c) return;
 
     var user = STATE.getUser();
-    var html = '';
+    var html = '<div class="home-page">';
 
-    // خوش‌آمد
-    html += '<div class="banner anim-slide-up">';
-    html += '<div style="font-size:42px">⭐</div>';
-    html += '<div style="flex:1">';
-    html += '<div style="font-weight:800;font-size:17px;margin-bottom:4px">' + t('welcome') + ' ' + (user.name || t('guest')) + '!</div>';
-    html += '<div style="font-size:13px;color:var(--text2)">' + t('welcome_sub') + '</div>';
+    // ۱. خوش‌آمد
+    html += '<div class="welcome-card">';
+    html += '<div class="welcome-icon">⭐</div>';
+    html += '<div class="welcome-text">';
+    html += '<div class="welcome-title">' + t('welcome') + ' ' + (user.name || t('guest')) + '!</div>';
+    html += '<div class="welcome-sub">' + t('welcome_sub') + '</div>';
     html += '</div>';
     html += '</div>';
 
-    // بخش شعر روز
-    html += this._renderPoemSection();
+    // ۲. شعر روز
+    html += this._renderHomePoem();
 
-    // بخش بازی‌ها
-    html += this._renderGamesSection();
+    // ۳. گردونهٔ شانس
+    if (typeof WHEEL !== 'undefined' && WHEEL.renderSection) {
+      html += WHEEL.renderSection();
+    }
 
-    // بخش ابزارها
-    html += this._renderToolsSection();
-
-    // بخش ماموریت‌ها
-    html += this._renderMissionsSection();
-
-    // بخش چیزهای من
-    html += this._renderMyThingsSection();
-
+    html += '</div>';
     c.innerHTML = html;
   },
 
-  // ============ بخش شعر روز ============
-  _renderPoemSection: function() {
+  // ============ شعر روز ============
+  _renderHomePoem: function() {
     var poem = this._getPoemOfDay();
-    var html = '<div class="section anim-slide-up delay-1">';
-    html += '<div class="section-header">';
-    html += '<div class="section-title"><span class="icon">📜</span><span>شعر روز</span></div>';
-    html += '</div>';
-    html += '<div class="card" style="background:linear-gradient(135deg, var(--card), var(--card2));text-align:center;padding:20px">';
-    html += '<div style="font-size:13px;color:var(--text3);margin-bottom:10px">' + (poem.poet || '') + '</div>';
-    html += '<div style="font-size:15px;line-height:2;font-weight:700;color:var(--text);white-space:pre-line">' + (poem.text || '') + '</div>';
-    html += '</div>';
+    var html = '<div class="poem-card">';
+    html += '<div class="poem-header"><span class="icon">📜</span><span class="title">شعر روز</span></div>';
+    html += '<div class="poem-poet">' + (poem.poet || '') + '</div>';
+    html += '<div class="poem-text">' + (poem.text || '') + '</div>';
     html += '</div>';
     return html;
   },
@@ -175,106 +166,6 @@ var APP = {
     var hours12 = Math.floor(Date.now() / (12 * 60 * 60 * 1000));
     var idx = hours12 % poems.length;
     return poems[idx];
-  },
-
-  // ============ بخش بازی‌ها ============
-  _renderGamesSection: function() {
-    var games = [
-      { id: 'rps',    icon: '✊', label: 'سنگ کاغذ قیچی', color: 'purple' },
-      { id: 'guess',  icon: '🔢', label: 'حدس عدد',      color: 'blue' },
-      { id: 'snake',  icon: '🐍', label: 'مارپله',        color: 'green' },
-      { id: 'ttt',    icon: '❌', label: 'دوز',          color: 'pink' },
-      { id: 'memory', icon: '🃏', label: 'حافظه',        color: 'orange' }
-    ];
-    var html = '<div class="section anim-slide-up delay-2">';
-    html += '<div class="section-header">';
-    html += '<div class="section-title"><span class="icon">🎮</span><span>' + t('games') + '</span></div>';
-    html += '<a class="section-more" onclick="ROUTER.go(\'games\')">‹</a>';
-    html += '</div>';
-    html += '<div class="section-scroll">';
-    for (var i = 0; i < games.length; i++) {
-      var g = games[i];
-      html += '<div class="tile color-' + g.color + ' press" onclick="APP.startGame(\'' + g.id + '\')">';
-      html += '<div class="tile-icon">' + g.icon + '</div>';
-      html += '<div class="tile-label">' + g.label + '</div>';
-      html += '</div>';
-    }
-    html += '</div></div>';
-    return html;
-  },
-
-  // ============ بخش ابزارها ============
-  _renderToolsSection: function() {
-    var tools = [
-      { id: 'calc',    icon: '🧮', label: 'ماشین‌حساب', color: 'yellow' },
-      { id: 'planner', icon: '📅', label: 'برنامه',     color: 'green' },
-      { id: 'qa',      icon: '❓', label: 'پرسش',        color: 'purple' }
-    ];
-    var html = '<div class="section anim-slide-up delay-3">';
-    html += '<div class="section-header">';
-    html += '<div class="section-title"><span class="icon">🧰</span><span>' + t('tools') + '</span></div>';
-    html += '<a class="section-more" onclick="ROUTER.go(\'tools\')">‹</a>';
-    html += '</div>';
-    html += '<div class="section-scroll">';
-    for (var i = 0; i < tools.length; i++) {
-      var tl = tools[i];
-      html += '<div class="tile color-' + tl.color + ' press" onclick="APP.openTool(\'' + tl.id + '\')">';
-      html += '<div class="tile-icon">' + tl.icon + '</div>';
-      html += '<div class="tile-label">' + tl.label + '</div>';
-      html += '</div>';
-    }
-    html += '</div></div>';
-    return html;
-  },
-
-  // ============ بخش ماموریت‌ها ============
-  _renderMissionsSection: function() {
-    var missions = [
-      { icon: '🎮', label: '۳ بازی انجام بده', reward: '۵ 💎', color: 'purple' },
-      { icon: '🏆', label: '۱ برد بگیر',      reward: '۲ 💎', color: 'yellow' },
-      { icon: '🛒', label: 'فروشگاه رو باز کن', reward: '۱ 💎', color: 'green' },
-      { icon: '📅', label: 'هر روز وارد شو',  reward: '۲ 💎', color: 'blue' }
-    ];
-    var html = '<div class="section anim-slide-up delay-4">';
-    html += '<div class="section-header">';
-    html += '<div class="section-title"><span class="icon">🏆</span><span>ماموریت‌های روزانه</span></div>';
-    html += '</div>';
-    html += '<div class="section-scroll">';
-    for (var i = 0; i < missions.length; i++) {
-      var m = missions[i];
-      html += '<div class="tile color-' + m.color + ' press" style="width:110px;height:110px">';
-      html += '<div class="tile-icon" style="font-size:30px">' + m.icon + '</div>';
-      html += '<div class="tile-label" style="font-size:11px">' + m.label + '</div>';
-      html += '<div style="font-size:11px;font-weight:800;color:var(--pr)">' + m.reward + '</div>';
-      html += '</div>';
-    }
-    html += '</div></div>';
-    return html;
-  },
-
-  // ============ بخش چیزهای من ============
-  _renderMyThingsSection: function() {
-    var user = STATE.getUser();
-    var things = [
-      { icon: '⭐', label: 'تیک‌ها',  go: 'profile', color: 'purple' },
-      { icon: '✨', label: 'نمادها',  go: 'shop',    color: 'yellow' },
-      { icon: '🎨', label: 'تم‌ها',   go: 'settings', color: 'pink' },
-      { icon: '🪙', label: 'سکه‌ها',  go: 'shop',    color: 'orange' }
-    ];
-    var html = '<div class="section anim-slide-up delay-5">';
-    html += '<div class="section-header">';
-    html += '<div class="section-title"><span class="icon">🎁</span><span>چیزهای من</span></div>';
-    html += '</div>';
-    html += '<div class="section-scroll">';
-    for (var i = 0; i < things.length; i++) {
-      var th = things[i];
-      html += '<div class="tile color-' + th.color + ' press" onclick="ROUTER.go(\'' + th.go + '\')">';
-      html += '<div class="tile-icon">' + th.icon + '</div>';
-      html += '<div class="tile-label">' + th.label + '</div>';
-      html += '</div>';
-    }
-    html += '</div></div>';
-    return html;
   },
 
   // ============ شروع بازی ============
