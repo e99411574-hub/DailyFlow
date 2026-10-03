@@ -42,7 +42,6 @@ var RPS = {
       if (r < 0.5 && this.userChoice) return this._getBeater(this.userChoice.id);
       return c[Math.floor(Math.random() * 3)];
     }
-    // hard
     if (r < 0.8 && this.userChoice) return this._getBeater(this.userChoice.id);
     return c[Math.floor(Math.random() * 3)];
   },
@@ -70,7 +69,6 @@ var RPS = {
 
     if (typeof playSnd === 'function') playSnd('tap');
 
-    // مرحله ۱: نمایش انتخاب کاربر
     this._updateBattle();
     this._updateChoices();
 
@@ -80,13 +78,11 @@ var RPS = {
       setTimeout(function() { pAvatar.classList.remove('reveal'); }, 700);
     }
 
-    // مرحله ۲: AI در حال فکر کردن
     setTimeout(function() {
       var aAvatar = document.getElementById('rpsAiAvatar');
       if (aAvatar) aAvatar.classList.add('thinking');
     }, 700);
 
-    // مرحله ۳: AI انتخاب می‌کنه
     setTimeout(function() {
       self.aiChoice = self._aiPick();
       var aAvatar = document.getElementById('rpsAiAvatar');
@@ -99,7 +95,6 @@ var RPS = {
       self._updateBattle();
     }, 1400);
 
-    // مرحله ۴: انیمیشن حمله
     setTimeout(function() {
       var pA = document.getElementById('rpsPlayerAvatar');
       var aA = document.getElementById('rpsAiAvatar');
@@ -112,7 +107,6 @@ var RPS = {
       if (typeof playSnd === 'function') playSnd('click');
     }, 2200);
 
-    // مرحله ۵: نتیجه
     setTimeout(function() {
       var result = self._checkResult(self.userChoice, self.aiChoice);
 
@@ -124,7 +118,6 @@ var RPS = {
       self.showResult = true;
       self.isPlaying = false;
 
-      // آپدیت فقط بخش‌های لازم
       self._updateBattle();
       self._updateResult();
       self._updateChoices();
@@ -146,7 +139,14 @@ var RPS = {
     return 'lose';
   },
 
+  // ========== جایزه + ماموریت ==========
   _giveReward: function(result) {
+    // ثبت رویداد ماموریت‌ها
+    if (typeof MISSIONS !== 'undefined') {
+      MISSIONS.trackGame();
+      if (result === 'win') MISSIONS.trackWin();
+    }
+
     if (result === 'win') {
       var coins = (this.level === 'easy') ? 5 : (this.level === 'medium') ? 10 : 20;
       var gems = 0;
@@ -280,21 +280,18 @@ var RPS = {
   render: function() {
     var html = '<div class="rps-page" id="rpsRoot">';
 
-    // نوار بالا
     html += '<div class="rps-topbar">';
     html += '<button class="rps-back" onclick="RPS.back()">›</button>';
     html += '<div class="rps-title">✊ سنگ کاغذ قیچی</div>';
     html += '<div class="rps-score-badge" id="rpsScore">' + fmtNum(this.wins) + ' / ' + fmtNum(this.losses) + '</div>';
     html += '</div>';
 
-    // سطوح
     html += '<div class="rps-levels">';
     html += '<div class="rps-level ' + (this.level === 'easy' ? 'active' : '') + '" onclick="RPS.setLevel(\'easy\')">' + this.levelLabels.easy + '</div>';
     html += '<div class="rps-level ' + (this.level === 'medium' ? 'active' : '') + '" onclick="RPS.setLevel(\'medium\')">' + this.levelLabels.medium + '</div>';
     html += '<div class="rps-level ' + (this.level === 'hard' ? 'active' : '') + '" onclick="RPS.setLevel(\'hard\')">' + this.levelLabels.hard + '</div>';
     html += '</div>';
 
-    // نبرد
     var pIcon = this.userChoice ? this.userChoice.icon : '❔';
     var aIcon = this.aiChoice ? this.aiChoice.icon : '❔';
     var pCls = 'rps-avatar player';
@@ -318,28 +315,8 @@ var RPS = {
     html += '</div>';
     html += '</div>';
 
-    // نتیجه (container)
-    html += '<div id="rpsResultContainer" style="' + (this.showResult ? '' : 'display:none') + '">';
-    if (this.showResult && this.userChoice && this.aiChoice) {
-      var res = this._checkResult(this.userChoice, this.aiChoice);
-      var icon = res === 'win' ? '🏆' : (res === 'lose' ? '💔' : '🤝');
-      var txt = res === 'win' ? '🎉 بردی!' : (res === 'lose' ? '😢 باختی' : '🤝 مساوی');
-      var cls = res === 'win' ? 'win' : (res === 'lose' ? 'lose' : 'draw');
+    html += '<div id="rpsResultContainer" style="' + (this.showResult ? '' : 'display:none') + '"></div>';
 
-      html += '<div class="rps-result">';
-      html += '<div class="rps-result-icon">' + icon + '</div>';
-      html += '<div class="rps-result-text ' + cls + '">' + txt + '</div>';
-      if (res === 'win' && this._lastReward) {
-        html += '<div class="rps-result-reward">🪙 ' + fmtNum(this._lastReward.coins);
-        if (this._lastReward.gems) html += '  💎 ' + fmtNum(this._lastReward.gems);
-        html += '</div>';
-      }
-      html += '<button class="rps-choice" style="margin-top:12px;width:100%;aspect-ratio:auto;padding:14px;background:linear-gradient(135deg,var(--pr),var(--pr2));color:white;font-size:15px;font-weight:800;border-radius:16px" onclick="RPS.reset()">🔄 بازی جدید</button>';
-      html += '</div>';
-    }
-    html += '</div>';
-
-    // دکمه‌های انتخاب
     html += '<div class="rps-choices" id="rpsChoicesContainer" style="' + (this.showResult ? 'display:none' : '') + '">';
     for (var i = 0; i < this.choices.length; i++) {
       var c = this.choices[i];
@@ -351,7 +328,6 @@ var RPS = {
     }
     html += '</div>';
 
-    // آمار
     html += '<div class="rps-stats">';
     html += '<div class="rps-stat"><div class="rps-stat-num" id="rpsWins">' + fmtNum(this.wins) + '</div><div class="rps-stat-lbl">🏆 برد</div></div>';
     html += '<div class="rps-stat"><div class="rps-stat-num" id="rpsDraws">' + fmtNum(this.draws) + '</div><div class="rps-stat-lbl">🤝 مساوی</div></div>';
@@ -375,18 +351,15 @@ var RPS = {
 
     var existing = document.getElementById('rpsRoot');
     if (!existing) {
-      // اگه هنوز رندر نشده، کل صفحه رو بساز
       c.innerHTML = this.render();
       return;
     }
 
-    // فقط بخش‌های لازم رو آپدیت کن
     this._updateBattle();
     this._updateResult();
     this._updateChoices();
     this._updateStats();
 
-    // آپدیت سطوح (چون ممکنه عوض شده باشه)
     var levels = document.querySelectorAll('.rps-level');
     if (levels && levels.length === 3) {
       levels[0].classList.toggle('active', this.level === 'easy');
