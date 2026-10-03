@@ -1,0 +1,398 @@
+/* ===== wheel.css - گردونهٔ شانس روزانه ===== */
+
+/* ---------- صفحهٔ خانه ---------- */
+.home-page {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  padding-bottom: 20px;
+  animation: fadeIn 0.4s ease;
+}
+
+/* ---------- خوش‌آمد ---------- */
+.welcome-card {
+  background: linear-gradient(135deg, var(--pr), var(--pr2));
+  color: white;
+  border-radius: 24px;
+  padding: 22px;
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  box-shadow: 0 8px 32px rgba(139, 92, 246, 0.3);
+  position: relative;
+  overflow: hidden;
+  animation: slideInUp 0.5s ease both;
+}
+
+.welcome-card::before {
+  content: '';
+  position: absolute;
+  top: -50%;
+  right: -30%;
+  width: 200%;
+  height: 200%;
+  background: radial-gradient(circle, rgba(255,255,255,0.15) 0%, transparent 60%);
+  animation: pulse 5s ease-in-out infinite;
+  pointer-events: none;
+}
+
+.welcome-icon {
+  font-size: 42px;
+  position: relative;
+  z-index: 2;
+  animation: float 3s ease-in-out infinite;
+}
+
+.welcome-text {
+  flex: 1;
+  position: relative;
+  z-index: 2;
+}
+
+.welcome-title {
+  font-size: 18px;
+  font-weight: 800;
+  margin-bottom: 4px;
+}
+
+.welcome-sub {
+  font-size: 13px;
+  opacity: 0.9;
+}
+
+/* ---------- شعر روز ---------- */
+.poem-card {
+  background: var(--card);
+  border: 1px solid var(--card-b);
+  border-radius: 24px;
+  padding: 20px;
+  box-shadow: var(--sd2);
+  position: relative;
+  overflow: hidden;
+  animation: slideInUp 0.5s ease both;
+  animation-delay: 0.1s;
+}
+
+.poem-card::before {
+  content: '';
+  position: absolute;
+  top: -40%;
+  left: -40%;
+  width: 200%;
+  height: 200%;
+  background: radial-gradient(circle, var(--pr-soft) 0%, transparent 70%);
+  pointer-events: none;
+  opacity: 0.4;
+}
+
+.poem-header {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 14px;
+  position: relative;
+  z-index: 2;
+}
+
+.poem-header .icon {
+  font-size: 20px;
+  animation: wiggle 3s ease-in-out infinite;
+}
+
+.poem-header .title {
+  font-size: 14px;
+  font-weight: 800;
+  color: var(--text);
+}
+
+.poem-poet {
+  font-size: 12px;
+  color: var(--text3);
+  margin-bottom: 10px;
+  font-weight: 700;
+  position: relative;
+  z-index: 2;
+}
+
+.poem-text {
+  font-size: 15px;
+  font-weight: 700;
+  color: var(--text);
+  line-height: 2.2;
+  text-align: center;
+  white-space: pre-line;
+  position: relative;
+  z-index: 2;
+}
+
+/* ---------- گردونه ---------- */
+.wheel-section {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 16px;
+  animation: slideInUp 0.5s ease both;
+  animation-delay: 0.2s;
+  position: relative;
+}
+
+.wheel-title {
+  font-size: 17px;
+  font-weight: 800;
+  color: var(--text);
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.wheel-container {
+  position: relative;
+  width: 280px;
+  height: 280px;
+  max-width: 90vw;
+  max-height: 90vw;
+}
+
+.wheel-bg {
+  position: absolute;
+  inset: 0;
+  border-radius: 50%;
+  background: linear-gradient(135deg, #FDCB6E, #E17055);
+  box-shadow: 0 12px 40px rgba(253, 203, 110, 0.4);
+  padding: 8px;
+}
+
+.wheel-svg {
+  width: 100%;
+  height: 100%;
+  display: block;
+  border-radius: 50%;
+  transition: transform 4s cubic-bezier(0.1, 0.6, 0.3, 1);
+  filter: drop-shadow(0 0 8px rgba(0,0,0,0.1));
+}
+
+.wheel-svg.spinning {
+  transition: transform 5s cubic-bezier(0.15, 0.8, 0.2, 1);
+}
+
+/* اشاره‌گر */
+.wheel-pointer {
+  position: absolute;
+  top: -12px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 0;
+  height: 0;
+  border-left: 16px solid transparent;
+  border-right: 16px solid transparent;
+  border-top: 26px solid #E84393;
+  filter: drop-shadow(0 4px 8px rgba(232, 67, 147, 0.5));
+  z-index: 10;
+  animation: bounce 1.5s ease-in-out infinite;
+}
+
+/* مرکز گردونه */
+.wheel-center {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 60px;
+  height: 60px;
+  border-radius: 50%;
+  background: white;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 28px;
+  box-shadow: 0 4px 16px rgba(0,0,0,0.15), inset 0 -4px 8px rgba(0,0,0,0.05);
+  z-index: 5;
+  cursor: pointer;
+  transition: transform 0.2s ease;
+}
+
+.wheel-center:active {
+  transform: translate(-50%, -50%) scale(0.9);
+}
+
+.wheel-center.disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+/* دکمهٔ چرخوندن */
+.wheel-spin-btn {
+  padding: 16px 44px;
+  background: linear-gradient(135deg, #E84393, #FD79A8);
+  color: white;
+  border: none;
+  border-radius: 20px;
+  font-family: inherit;
+  font-size: 16px;
+  font-weight: 800;
+  cursor: pointer;
+  box-shadow: 0 8px 24px rgba(232, 67, 147, 0.4);
+  transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.wheel-spin-btn:active {
+  transform: scale(0.94);
+}
+
+.wheel-spin-btn:disabled {
+  background: var(--card2);
+  color: var(--text3);
+  cursor: not-allowed;
+  box-shadow: none;
+  opacity: 0.7;
+}
+
+/* تایمر قفل */
+.wheel-lock {
+  padding: 14px 24px;
+  background: var(--card);
+  border: 1px solid var(--card-b);
+  border-radius: 18px;
+  box-shadow: var(--sd2);
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-size: 14px;
+  font-weight: 800;
+  color: var(--text);
+}
+
+.wheel-lock .icon {
+  font-size: 22px;
+  animation: pulseSoft 2s ease-in-out infinite;
+}
+
+.wheel-lock .time {
+  color: var(--pr);
+  font-weight: 900;
+  font-family: monospace, 'Vazirmatn';
+  letter-spacing: 1px;
+  direction: ltr;
+}
+
+/* ---------- مودال نتیجه ---------- */
+.wheel-modal {
+  position: fixed;
+  inset: 0;
+  background: rgba(45, 27, 78, 0.55);
+  backdrop-filter: blur(6px);
+  -webkit-backdrop-filter: blur(6px);
+  z-index: 500;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 24px;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.3s ease;
+}
+
+.wheel-modal.show {
+  opacity: 1;
+  pointer-events: auto;
+}
+
+.wheel-modal-box {
+  background: linear-gradient(160deg, #fff8e7, #fde8c8);
+  border-radius: 28px;
+  padding: 30px 24px;
+  max-width: 340px;
+  width: 100%;
+  text-align: center;
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.35);
+  transform: scale(0.5) rotate(-10deg);
+  transition: transform 0.5s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+.wheel-modal.show .wheel-modal-box {
+  transform: scale(1) rotate(0);
+}
+
+.wheel-modal-icon {
+  font-size: 64px;
+  margin-bottom: 12px;
+  animation: bounce 1.5s ease-in-out infinite;
+}
+
+.wheel-modal-title {
+  font-size: 24px;
+  font-weight: 900;
+  color: #00B894;
+  margin-bottom: 8px;
+}
+
+.wheel-modal-title.lose {
+  color: #E84393;
+}
+
+.wheel-modal-desc {
+  font-size: 14px;
+  color: #6b5b8a;
+  margin-bottom: 18px;
+  font-weight: 700;
+}
+
+.wheel-modal-reward {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 12px 24px;
+  background: rgba(253, 203, 110, 0.3);
+  border-radius: 999px;
+  font-size: 20px;
+  font-weight: 900;
+  color: #E17055;
+  margin-bottom: 18px;
+}
+
+.wheel-modal-btn {
+  padding: 14px 36px;
+  background: linear-gradient(135deg, var(--pr), var(--pr2));
+  border: none;
+  border-radius: 16px;
+  color: white;
+  font-family: inherit;
+  font-size: 15px;
+  font-weight: 800;
+  cursor: pointer;
+  box-shadow: 0 8px 24px var(--pr-soft);
+  transition: transform 0.2s ease;
+}
+
+.wheel-modal-btn:active {
+  transform: scale(0.94);
+}
+
+/* ---------- موبایل کوچیک ---------- */
+@media (max-width: 380px) {
+  .wheel-container {
+    width: 240px;
+    height: 240px;
+  }
+  .wheel-center {
+    width: 50px;
+    height: 50px;
+    font-size: 22px;
+  }
+  .wheel-spin-btn {
+    padding: 14px 32px;
+    font-size: 15px;
+  }
+  .welcome-icon {
+    font-size: 36px;
+  }
+  .welcome-title {
+    font-size: 16px;
+  }
+  .poem-text {
+    font-size: 14px;
+  }
+    }
