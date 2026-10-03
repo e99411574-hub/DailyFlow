@@ -1,16 +1,22 @@
-// ===== tools/qa.js - پرسش و پاسخ + پرسش هوشمند + OCR =====
+// ===== tools/qa.js - پرسش و پاسخ + هوشمند (AI) =====
+// دو تب: 📚 سؤالات | 🤖 هوشمند
+// هوشمند: چت + تولید عکس + آپلود عکس + کپی پیام
 
 var QA = {
   activeTab: 'questions',
   activeCat: 'all',
   searchQuery: '',
   currentQuestion: null,
-  ocrImage: null,
-  ocrText: '',
-  ocrStatus: 'idle',
-  ocrProgress: 0,
-  ocrError: '',
-  tesseractLoaded: false,
+
+  // ===== وضعیت AI =====
+  aiChats: [],
+  aiCurrentChatId: null,
+  aiView: 'list',
+  aiLoading: false,
+  aiPuterLoaded: false,
+  aiMenuOpen: false,
+  aiSelectedImage: null,
+  aiCopiedMsgId: null,
 
   categories: [
     { id: 'all',           name: 'همه',      icon: '📚' },
@@ -30,19 +36,11 @@ var QA = {
     this.activeCat = 'all';
     this.searchQuery = '';
     this.currentQuestion = null;
-    this.ocrImage = null;
-    this.ocrText = '';
-    this.ocrStatus = 'idle';
-
-    // اگه QA_AI هست، شروعش کن
-    try {
-      if (typeof QA_AI !== 'undefined' && QA_AI && typeof QA_AI.start === 'function') {
-        QA_AI.start();
-      }
-    } catch (e) {
-      console.warn('QA_AI start error:', e);
-    }
-
+    this._aiLoadChats();
+    this.aiView = 'list';
+    this.aiCurrentChatId = null;
+    this.aiLoading = false;
+    this.aiSelectedImage = null;
     this.refresh();
     if (typeof playSnd === 'function') playSnd('tap');
   },
@@ -135,8 +133,85 @@ var QA = {
     this.refresh();
   },
 
-  // ========== OCR ==========
-  handleImage: function(evt) {
+  // ============ بخش AI ============
+
+  _aiLoadChats: function() {
+    try {
+      var raw = localStorage.getItem('setareh_ai_chats_v2');
+      this.aiChats = raw ? JSON.parse(raw) : [];
+    } catch (e) { this.aiChats = []; }
+  },
+
+  _aiSaveChats: function() {
+    try {
+      var toSave = this.aiChats.map(function(c) {
+        return {
+          id: c.id,
+          title: c.title,
+          createdAt: c.createdAt,
+          updatedAt: c.updatedAt,
+          messages: c.messages.slice(-50).map(function(m) {
+            var copy = { role: m.role, text: m.text || '', type: m.type || 'text' };
+            if (m.imageUrl) copy.imageUrl = m.imageUrl;
+            return copy;
+          })
+        };
+      });
+      localStorage.setItem('setareh_ai_chats_v2', JSON.stringify(toSave));
+    } catch (e) { console.warn('localStorage full:', e); }
+  },
+
+  _aiGetCurrentChat: function() {
+    for (var i = 0; i < this.aiChats.length; i++) {
+      if (this.aiChats[i].id === this.aiCurrentChatId) return this.aiChats[i];
+    }
+    return null;
+  },
+
+  aiNewChat: function() {
+    var chat = {
+      id: Date.now() + Math.random(),
+      title: 'چت جدید',
+      messages: [{
+        role: 'ai',
+        text: 'سلام! 👋 من دستیار هوشمند ستاره هستم.\n\nمی‌تونم:\n💬 به سؤالاتت جواب بدم\n🎨 برات عکس بسازم (بگو «یه عکس از...»)\n📷 عکس‌هات رو ببینم و تحلیل کنم\n\nچطور می‌تونم کمکت کنم؟',
+        type: 'text'
+      }],
+      createdAt: Date.now(),
+      updatedAt: Date.now()
+    };
+    this.aiChats.unshift(chat);
+    this._aiSaveChats();
+    this.aiCurrentChatId = chat.id;
+    this.aiView = 'chat';
+    if (typeof playSnd === 'function') playSnd('tap');
+    this.refresh();
+  },
+
+  aiOpenChat: function(chatId) {
+    this.aiCurrentChatId = chatId;
+    this.aiView = 'chat';
+    this.aiMenuOpen = false;
+    if (typeof playSnd === 'function') playSnd('tap');
+    this.refresh();
+    this._aiScrollToBottom();
+  },
+
+  aiBackToList: function() {
+    this.aiView = 'list';
+    this.aiCurrentChatId = null;
+    this.aiMenuOpen = false;
+    this.aiSelectedImage = null;
+    if (typeof playSnd === 'function') playSnd('tap');
+    this.refresh();
+  },
+
+  aiPickImage: function() {
+    var inp = document.getElementById('aiImageInput');
+    if (inp) inp.click();
+  },
+
+  aiHandleImage: function(evt) {
     var file = evt.target.files[0];
     if (!file) return;
     if (file.size > 5000000) {
@@ -146,130 +221,409 @@ var QA = {
     var reader = new FileReader();
     var self = this;
     reader.onload = function(e) {
-      self.ocrImage = e.target.result;
-      self.ocrText = '';
-      self.ocrStatus = 'idle';
+      self.aiSelectedImage = e.target.result;
+      if (typeof playSnd === 'function') playSnd('success');
       self.refresh();
     };
     reader.readAsDataURL(file);
   },
 
-  removeImage: function() {
-    this.ocrImage = null;
-    this.ocrText = '';
-    this.ocrStatus = 'idle';
-    this.ocrProgress = 0;
+  aiRemoveSelectedImage: function() {
+    this.aiSelectedImage = null;
     if (typeof playSnd === 'function') playSnd('tap');
     this.refresh();
   },
 
-  startOCR: function() {
-    if (!this.ocrImage) return;
-    var self = this;
-    this.ocrStatus = 'downloading';
-    this.ocrProgress = 0;
-    this.ocrText = '';
-    this.refresh();
+  aiSendMessage: function() {
+    if (this.aiLoading) return;
+    var input = document.getElementById('aiInput');
+    if (!input) return;
+    var text = input.value.trim();
+    var hasImage = !!this.aiSelectedImage;
 
-    if (typeof Tesseract !== 'undefined') {
-      self._runTesseract();
-      return;
+    if (!text && !hasImage) return;
+
+    var chat = this._aiGetCurrentChat();
+    if (!chat) return;
+
+    var userMsg = {
+      role: 'user',
+      text: text || '📷 [عکس]',
+      type: hasImage ? 'image' : 'text'
+    };
+    if (hasImage) userMsg.uploadedImage = this.aiSelectedImage;
+    chat.messages.push(userMsg);
+    chat.updatedAt = Date.now();
+
+    if (chat.title === 'چت جدید' && text) {
+      chat.title = text.length > 30 ? text.substring(0, 30) + '...' : text;
+    } else if (chat.title === 'چت جدید' && hasImage) {
+      chat.title = '📷 تحلیل عکس';
     }
 
-    var script = document.createElement('script');
-    script.src = 'https://cdn.jsdelivr.net/npm/tesseract.js@5/dist/tesseract.min.js';
-    script.onload = function() {
-      self.tesseractLoaded = true;
-      self._runTesseract();
-    };
-    script.onerror = function() {
-      self.ocrStatus = 'error';
-      self.ocrError = 'اتصال به اینترنت برقرار نشد';
+    var imageData = this.aiSelectedImage;
+    input.value = '';
+    this.aiSelectedImage = null;
+    this._aiSaveChats();
+    this.refresh();
+    this._aiScrollToBottom();
+
+    this.aiLoading = true;
+    this.refresh();
+    this._aiScrollToBottom();
+
+    var self = this;
+    this._aiAsk(text, imageData).then(function(answer) {
+      if (answer.type === 'image') {
+        chat.messages.push({
+          role: 'ai',
+          text: answer.caption || '🎨 عکس ساخته شد:',
+          type: 'image',
+          imageUrl: answer.imageUrl
+        });
+      } else {
+        chat.messages.push({
+          role: 'ai',
+          text: answer.text,
+          type: 'text'
+        });
+      }
+      chat.updatedAt = Date.now();
+      self.aiLoading = false;
+      self._aiSaveChats();
       self.refresh();
-    };
-    document.head.appendChild(script);
+      self._aiScrollToBottom();
+      if (typeof playSnd === 'function') playSnd('success');
+    }).catch(function(err) {
+      console.error('AI error:', err);
+      var errMsg = '❌ خطا در ارتباط با هوش مصنوعی.';
+      if (err.message) errMsg += '\n' + err.message;
+      else errMsg += '\nدوباره تلاش کن.';
+      chat.messages.push({ role: 'ai', text: errMsg, type: 'text' });
+      self.aiLoading = false;
+      self._aiSaveChats();
+      self.refresh();
+      self._aiScrollToBottom();
+    });
   },
 
-  _runTesseract: function() {
+  _aiAsk: function(text, imageData) {
     var self = this;
-    this.ocrStatus = 'processing';
-    this.ocrProgress = 0;
-    this.refresh();
+    return new Promise(function(resolve, reject) {
+      self._aiLoadPuter().then(function() {
+        if (imageData) {
+          self._aiCallVision(text, imageData).then(resolve).catch(reject);
+          return;
+        }
+        if (self._aiIsImageRequest(text)) {
+          self._aiGenerateImage(text).then(resolve).catch(reject);
+          return;
+        }
+        self._aiCallChat(text).then(resolve).catch(reject);
+      }).catch(reject);
+    });
+  },
 
-    try {
-      Tesseract.recognize(
-        this.ocrImage,
-        'fas+eng',
-        {
-          logger: function(m) {
-            if (m.status === 'recognizing text') {
-              self.ocrProgress = Math.round(m.progress * 100);
-              var bar = document.getElementById('ocrProgressFill');
-              if (bar) bar.style.width = self.ocrProgress + '%';
-              var pct = document.getElementById('ocrPercent');
-              if (pct) pct.textContent = (typeof toFa === 'function' ? toFa(self.ocrProgress) : self.ocrProgress) + '٪';
-            } else if (m.status && m.status.indexOf('loading') >= 0) {
-              var st = document.getElementById('ocrStatusText');
-              if (st) st.textContent = '📦 دانلود مدل زبان...';
+  _aiIsImageRequest: function(text) {
+    if (!text) return false;
+    var lower = text.toLowerCase();
+    var keys = [
+      'عکس بساز', 'عکس بکش', 'تصویر بساز', 'تصویر بکش',
+      'نقاشی بکش', 'یه عکس از', 'یک عکس از',
+      'generate image', 'create image', 'draw '
+    ];
+    for (var i = 0; i < keys.length; i++) {
+      if (lower.indexOf(keys[i]) >= 0) return true;
+    }
+    return false;
+  },
+
+  _aiLoadPuter: function() {
+    var self = this;
+    return new Promise(function(resolve, reject) {
+      if (self.aiPuterLoaded || typeof puter !== 'undefined') {
+        self.aiPuterLoaded = true;
+        resolve();
+        return;
+      }
+      var script = document.createElement('script');
+      script.src = 'https://js.puter.com/v2/';
+      script.onload = function() {
+        self.aiPuterLoaded = true;
+        resolve();
+      };
+      script.onerror = function() { reject(new Error('اتصال به AI برقرار نشد')); };
+      document.head.appendChild(script);
+    });
+  },
+
+  _aiCallChat: function(prompt) {
+    var self = this;
+    return new Promise(function(resolve, reject) {
+      try {
+        var chat = self._aiGetCurrentChat();
+        var messages = [];
+        if (chat) {
+          for (var i = 0; i < chat.messages.length; i++) {
+            var m = chat.messages[i];
+            if (m.type === 'image') continue;
+            if (m.text && m.text.indexOf('❌') === 0) continue;
+            if (m.text && m.text.length > 0) {
+              messages.push({
+                role: m.role === 'user' ? 'user' : 'assistant',
+                content: m.text
+              });
             }
           }
         }
-      ).then(function(result) {
-        self.ocrText = (result.data.text || '').trim();
-        self.ocrStatus = 'done';
-        self.ocrProgress = 100;
-        if (typeof playSnd === 'function') playSnd('success');
-        self.refresh();
-      }).catch(function(err) {
-        console.error('OCR error:', err);
-        self.ocrStatus = 'error';
-        self.ocrError = 'خطا در استخراج متن';
-        self.refresh();
-      });
-    } catch (e) {
-      console.error(e);
-      this.ocrStatus = 'error';
-      this.ocrError = 'خطای نامشخص';
-      this.refresh();
-    }
+
+        puter.ai.chat(messages, { model: 'gpt-4o-mini' })
+          .then(function(response) {
+            var text = self._aiExtractText(response);
+            resolve({ type: 'text', text: text || 'متأسفانه جوابی دریافت نشد.' });
+          })
+          .catch(reject);
+      } catch (e) { reject(e); }
+    });
   },
 
-  copyText: function() {
-    if (!this.ocrText) return;
+  _aiCallVision: function(prompt, imageData) {
     var self = this;
+    return new Promise(function(resolve, reject) {
+      try {
+        var finalPrompt = prompt || 'این عکس چیه؟ توضیح بده.';
+        var askText = 'لطفاً این عکس رو تحلیل کن. اگه متن یا سؤالی توش هست، متن رو بخون و به سؤال جواب بده. به فارسی جواب بده.\n\nپیام کاربر: ' + finalPrompt;
+
+        puter.ai.chat(askText, imageData, { model: 'gpt-4o-mini' })
+          .then(function(response) {
+            var text = self._aiExtractText(response);
+            resolve({ type: 'text', text: text || 'نتونستم عکس رو تحلیل کنم.' });
+          })
+          .catch(function(err) {
+            reject(new Error('تحلیل عکس: ' + (err.message || 'خطا')));
+          });
+      } catch (e) { reject(e); }
+    });
+  },
+
+  _aiGenerateImage: function(prompt) {
+    var self = this;
+    return new Promise(function(resolve, reject) {
+      try {
+        var cleanPrompt = prompt
+          .replace(/عکس بساز/g, '').replace(/عکس بکش/g, '')
+          .replace(/تصویر بساز/g, '').replace(/تصویر بکش/g, '')
+          .replace(/نقاشی بکش/g, '')
+          .replace(/یه عکس از/g, '').replace(/یک عکس از/g, '')
+          .replace(/generate image/gi, '').replace(/create image/gi, '')
+          .replace(/draw/gi, '').trim();
+
+        if (!cleanPrompt) cleanPrompt = prompt;
+
+        var tempId = 'temp-' + Date.now();
+        var chat = self._aiGetCurrentChat();
+        if (chat) {
+          chat.messages.push({
+            role: 'ai',
+            text: '🎨 دارم عکس رو می‌سازم... (۱۰ تا ۳۰ ثانیه)',
+            type: 'text',
+            tempId: tempId
+          });
+          self.refresh();
+          self._aiScrollToBottom();
+        }
+
+        puter.ai.txt2img(cleanPrompt)
+          .then(function(result) {
+            var imgUrl = '';
+            if (typeof result === 'string') imgUrl = result;
+            else if (result && result.src) imgUrl = result.src;
+            else if (result && result.tagName === 'IMG') imgUrl = result.src;
+            else imgUrl = String(result);
+
+            if (chat) {
+              chat.messages = chat.messages.filter(function(m) {
+                return m.tempId !== tempId;
+              });
+            }
+
+            resolve({
+              type: 'image',
+              imageUrl: imgUrl,
+              caption: '🎨 این عکس رو برات ساختم:'
+            });
+          })
+          .catch(function(err) {
+            if (chat) {
+              chat.messages = chat.messages.filter(function(m) {
+                return m.tempId !== tempId;
+              });
+            }
+            reject(new Error('تولید عکس: ' + (err.message || 'خطا')));
+          });
+      } catch (e) { reject(e); }
+    });
+  },
+
+  _aiExtractText: function(response) {
+    if (typeof response === 'string') return response;
+    if (response && response.message && response.message.content) {
+      return this._aiCleanText(response.message.content);
+    }
+    if (response && response.text) return this._aiCleanText(response.text);
+    if (response && response.content) return this._aiCleanText(response.content);
+    return this._aiCleanText(String(response));
+  },
+
+  _aiCleanText: function(text) {
+    if (!text) return '';
+    return String(text).replace(/\*\*/g, '').replace(/##/g, '').replace(/^#+\s/gm, '').trim();
+  },
+
+  aiCopyMessage: function(msgIndex) {
+    var chat = this._aiGetCurrentChat();
+    if (!chat || !chat.messages[msgIndex]) return;
+    var text = chat.messages[msgIndex].text || '';
+    var self = this;
+
     if (navigator.clipboard && navigator.clipboard.writeText) {
-      navigator.clipboard.writeText(this.ocrText).then(function() {
-        if (typeof showToast === 'function') showToast('📋 متن کپی شد');
+      navigator.clipboard.writeText(text).then(function() {
+        if (typeof showToast === 'function') showToast('📋 کپی شد!');
         if (typeof playSnd === 'function') playSnd('success');
-      }).catch(function() { self._fallbackCopy(); });
+        self.aiCopiedMsgId = msgIndex;
+        self.refresh();
+        setTimeout(function() {
+          self.aiCopiedMsgId = null;
+          self.refresh();
+        }, 1500);
+      }).catch(function() { self._aiFallbackCopy(text); });
     } else {
-      this._fallbackCopy();
+      this._aiFallbackCopy(text);
     }
   },
 
-  _fallbackCopy: function() {
+  _aiFallbackCopy: function(text) {
     try {
       var ta = document.createElement('textarea');
-      ta.value = this.ocrText;
+      ta.value = text;
       ta.style.position = 'fixed';
       ta.style.opacity = '0';
       document.body.appendChild(ta);
       ta.select();
       document.execCommand('copy');
       document.body.removeChild(ta);
-      if (typeof showToast === 'function') showToast('📋 متن کپی شد');
+      if (typeof showToast === 'function') showToast('📋 کپی شد!');
     } catch (e) {
       if (typeof showToast === 'function') showToast('❌ کپی نشد');
     }
   },
 
-  clearOCR: function() {
-    this.ocrImage = null;
-    this.ocrText = '';
-    this.ocrStatus = 'idle';
-    this.ocrProgress = 0;
+  _aiStartLongPress: function(msgIndex) {
+    var self = this;
+    this._aiLongPressTimer = setTimeout(function() {
+      self.aiCopyMessage(msgIndex);
+      if (navigator.vibrate) navigator.vibrate(30);
+    }, 600);
+  },
+
+  _aiCancelLongPress: function() {
+    if (this._aiLongPressTimer) {
+      clearTimeout(this._aiLongPressTimer);
+      this._aiLongPressTimer = null;
+    }
+  },
+
+  aiDownloadImage: function(msgIndex) {
+    var chat = this._aiGetCurrentChat();
+    if (!chat || !chat.messages[msgIndex]) return;
+    var msg = chat.messages[msgIndex];
+    if (!msg.imageUrl) return;
+
+    var url = msg.imageUrl;
+    if (url.indexOf('data:') === 0) {
+      var a = document.createElement('a');
+      a.href = url;
+      a.download = 'setareh-' + Date.now() + '.png';
+      document.body.appendChild(a);
+      a.click();
+      document.body.removeChild(a);
+    } else {
+      fetch(url).then(function(r) { return r.blob(); }).then(function(blob) {
+        var a = document.createElement('a');
+        a.href = URL.createObjectURL(blob);
+        a.download = 'setareh-' + Date.now() + '.png';
+        document.body.appendChild(a);
+        a.click();
+        document.body.removeChild(a);
+        URL.revokeObjectURL(a.href);
+      }).catch(function() {
+        window.open(url, '_blank');
+      });
+    }
+    if (typeof playSnd === 'function') playSnd('success');
+    if (typeof showToast === 'function') showToast('📥 دانلود شد');
+  },
+
+  aiDeleteChat: function(chatId) {
+    if (!confirm('این چت حذف بشه؟')) return;
+    this.aiChats = this.aiChats.filter(function(c) { return c.id !== chatId; });
+    this._aiSaveChats();
+    if (this.aiCurrentChatId === chatId) {
+      this.aiCurrentChatId = null;
+      this.aiView = 'list';
+    }
     if (typeof playSnd === 'function') playSnd('tap');
     this.refresh();
+  },
+
+  aiRenameChat: function(chatId) {
+    var chat = null;
+    for (var i = 0; i < this.aiChats.length; i++) {
+      if (this.aiChats[i].id === chatId) chat = this.aiChats[i];
+    }
+    if (!chat) return;
+    var newName = prompt('نام جدید:', chat.title);
+    if (!newName || !newName.trim()) return;
+    chat.title = newName.trim();
+    this._aiSaveChats();
+    if (typeof playSnd === 'function') playSnd('tap');
+    this.refresh();
+  },
+
+  aiToggleMenu: function() {
+    this.aiMenuOpen = !this.aiMenuOpen;
+    this.refresh();
+  },
+
+  _aiScrollToBottom: function() {
+    setTimeout(function() {
+      var el = document.getElementById('aiMessages');
+      if (el) el.scrollTop = el.scrollHeight;
+    }, 150);
+  },
+
+  _aiFormatDate: function(ts) {
+    var d = new Date(ts);
+    var now = new Date();
+    var diff = now - d;
+    var day = 24 * 60 * 60 * 1000;
+    if (diff < 60 * 1000) return 'همین الان';
+    if (diff < 60 * 60 * 1000) {
+      var mins = Math.floor(diff / 60000);
+      return (typeof toFa === 'function' ? toFa(mins) : mins) + ' دقیقه پیش';
+    }
+    if (diff < day) {
+      var hrs = Math.floor(diff / 3600000);
+      return (typeof toFa === 'function' ? toFa(hrs) : hrs) + ' ساعت پیش';
+    }
+    if (diff < 2 * day) return 'دیروز';
+    if (diff < 7 * day) {
+      var days = Math.floor(diff / day);
+      return (typeof toFa === 'function' ? toFa(days) : days) + ' روز پیش';
+    }
+    var m = d.getMonth() + 1;
+    var dd = d.getDate();
+    return (typeof toFa === 'function' ? toFa(dd) : dd) + '/' + (typeof toFa === 'function' ? toFa(m) : m);
   },
 
   // ========== رندر ==========
@@ -281,43 +635,15 @@ var QA = {
     html += '<div class="qa-title">❓ پرسش</div>';
     html += '</div>';
 
-    // سه تب
-    html += '<div class="qa-tabs" style="overflow-x:auto">';
+    html += '<div class="qa-tabs">';
     html += '<button class="qa-tab ' + (this.activeTab === 'questions' ? 'active' : '') + '" onclick="QA.setTab(\'questions\')">📚 سؤالات</button>';
     html += '<button class="qa-tab ' + (this.activeTab === 'ai' ? 'active' : '') + '" onclick="QA.setTab(\'ai\')">🤖 هوشمند</button>';
-    html += '<button class="qa-tab ' + (this.activeTab === 'ocr' ? 'active' : '') + '" onclick="QA.setTab(\'ocr\')">📷 عکس</button>';
     html += '</div>';
 
     if (this.activeTab === 'questions') {
       html += this._renderQuestions();
-    } else if (this.activeTab === 'ai') {
-      html += '<div id="qaAiContent"></div>';
-      // رندر بعد از لود شدن QA_AI
-      setTimeout(function() {
-        var c = document.getElementById('qaAiContent');
-        if (!c) return;
-        try {
-          if (typeof QA_AI !== 'undefined' && QA_AI && typeof QA_AI.render === 'function') {
-            c.innerHTML = QA_AI.render();
-            if (QA_AI.view === 'chat') {
-              setTimeout(function() { QA_AI._scrollToBottom(); }, 100);
-            }
-          } else {
-            c.innerHTML = '<div style="text-align:center;padding:40px;color:#E84393;font-weight:700">' +
-              '⚠️ ماژول هوشمند لود نشد<br><br>' +
-              '<small style="opacity:0.7;font-size:11px">لطفاً صفحه رو رفرش کن</small>' +
-              '</div>';
-          }
-        } catch (e) {
-          console.error('QA_AI render error:', e);
-          c.innerHTML = '<div style="text-align:center;padding:40px;color:#E84393;font-weight:700">' +
-            '❌ خطا<br>' +
-            '<small style="opacity:0.7;font-size:11px">' + (e.message || '') + '</small>' +
-            '</div>';
-        }
-      }, 50);
     } else {
-      html += this._renderOCR();
+            html += this._renderAI();
     }
 
     html += '</div>';
@@ -348,10 +674,7 @@ var QA = {
   _renderQuestionList: function() {
     var filtered = this._getFiltered();
     if (filtered.length === 0) {
-      return '<div class="qa-empty">' +
-        '<div class="qa-empty-icon">🔍</div>' +
-        '<div class="qa-empty-text">سؤالی پیدا نشد<br>یه عبارت دیگه امتحان کن</div>' +
-        '</div>';
+      return '<div class="qa-empty"><div class="qa-empty-icon">🔍</div><div class="qa-empty-text">سؤالی پیدا نشد<br>یه عبارت دیگه امتحان کن</div></div>';
     }
     var html = '';
     var maxShow = 100;
@@ -366,9 +689,7 @@ var QA = {
       html += '</div>';
     }
     if (filtered.length > maxShow) {
-      html += '<div style="text-align:center;padding:16px;color:var(--text3);font-size:12px;font-weight:700">';
-      html += 'و ' + (typeof toFa === 'function' ? toFa(filtered.length - maxShow) : (filtered.length - maxShow)) + ' سؤال دیگه';
-      html += '</div>';
+      html += '<div style="text-align:center;padding:16px;color:var(--text3);font-size:12px;font-weight:700">و ' + (typeof toFa === 'function' ? toFa(filtered.length - maxShow) : (filtered.length - maxShow)) + ' سؤال دیگه</div>';
     }
     return html;
   },
@@ -402,70 +723,120 @@ var QA = {
     return { icon: '📚', name: 'عمومی' };
   },
 
-  _renderOCR: function() {
+  // ========== رندر AI ==========
+  _renderAI: function() {
+    if (this.aiView === 'chat') return this._renderAIChat();
+    return this._renderAIList();
+  },
+
+  _renderAIList: function() {
     var html = '';
 
-    if (!this.ocrImage) {
-      html += '<div class="ocr-upload-box" onclick="document.getElementById(\'ocrFileInput\').click()">';
-      html += '<div class="ocr-upload-icon">📷</div>';
-      html += '<div class="ocr-upload-title">آپلود عکس</div>';
-      html += '<div class="ocr-upload-hint">عکس رو انتخاب کن تا متنش استخراج بشه</div>';
-      html += '<input type="file" accept="image/*" id="ocrFileInput" style="display:none" onchange="QA.handleImage(event)">';
-      html += '</div>';
-      html += '<div class="ocr-download-notice">';
-      html += '<span class="icon">💡</span>';
-      html += '<span>بار اول که عکس آپلود می‌کنی، مدل تشخیص متن (فارسی + انگلیسی) حدود ۱۵ مگابایت دانلود می‌شه. بعدش آفلاین کار می‌کنه.</span>';
+    if (this.aiChats.length === 0) {
+      html += '<div class="ai-empty">';
+      html += '<div class="ai-empty-icon">🤖</div>';
+      html += '<div class="ai-empty-text">هنوز چتی نداری<br>یه سؤال بپرس تا شروع کنیم!</div>';
+      html += '<button class="ai-new-btn" style="margin:0 auto;padding:14px 28px;font-size:15px" onclick="QA.aiNewChat()">➕ چت جدید</button>';
       html += '</div>';
       return html;
     }
 
-    html += '<div class="ocr-preview">';
-    html += '<img src="' + this.ocrImage + '" alt="preview">';
-    if (this.ocrStatus === 'idle' || this.ocrStatus === 'error') {
-      html += '<button class="ocr-preview-remove" onclick="QA.removeImage()">✕</button>';
+    html += '<div class="ai-chats-header">';
+    html += '<div class="ai-chats-title">💬 چت‌های من (' + (typeof toFa === 'function' ? toFa(this.aiChats.length) : this.aiChats.length) + ')</div>';
+    html += '<button class="ai-new-btn" onclick="QA.aiNewChat()">➕ چت جدید</button>';
+    html += '</div>';
+
+    html += '<div>';
+    for (var i = 0; i < this.aiChats.length; i++) {
+      var chat = this.aiChats[i];
+      var lastMsg = '...';
+      for (var j = chat.messages.length - 1; j >= 0; j--) {
+        var m = chat.messages[j];
+        if (m.text) { lastMsg = m.text; break; }
+      }
+      if (lastMsg.length > 50) lastMsg = lastMsg.substring(0, 50) + '...';
+
+      html += '<div class="ai-chat-item" onclick="QA.aiOpenChat(' + chat.id + ')" style="animation-delay:' + (Math.min(i * 0.04, 0.3)) + 's">';
+      html += '<div class="ai-chat-item-icon">🤖</div>';
+      html += '<div class="ai-chat-item-info">';
+      html += '<div class="ai-chat-item-title">' + this._escape(chat.title) + '</div>';
+      html += '<div class="ai-chat-item-preview">' + this._escape(lastMsg) + ' • ' + this._aiFormatDate(chat.updatedAt) + '</div>';
+      html += '</div>';
+      html += '<div class="ai-chat-item-arrow">‹</div>';
+      html += '</div>';
+    }
+    html += '</div>';
+    return html;
+  },
+
+  _renderAIChat: function() {
+    var chat = this._aiGetCurrentChat();
+    if (!chat) { this.aiView = 'list'; return this._renderAIList(); }
+
+    var html = '<div class="ai-chat-page">';
+
+    html += '<div class="ai-chat-topbar" style="position:relative">';
+    html += '<button class="ai-chat-back" onclick="QA.aiBackToList()">›</button>';
+    html += '<div class="ai-chat-title">' + this._escape(chat.title) + '</div>';
+    html += '<button class="ai-chat-menu" onclick="QA.aiToggleMenu()">⋯</button>';
+    if (this.aiMenuOpen) {
+      html += '<div class="ai-menu-popup">';
+      html += '<div class="ai-menu-item" onclick="QA.aiRenameChat(' + chat.id + ')">✏️ تغییر نام</div>';
+      html += '<div class="ai-menu-item danger" onclick="QA.aiDeleteChat(' + chat.id + ')">🗑️ حذف چت</div>';
+      html += '</div>';
     }
     html += '</div>';
 
-    if (this.ocrStatus === 'idle') {
-      html += '<button class="ocr-btn copy" style="width:100%;padding:16px;font-size:15px" onclick="QA.startOCR()">🔍 استخراج متن</button>';
-    }
+    html += '<div class="ai-messages" id="aiMessages">';
+    for (var i = 0; i < chat.messages.length; i++) {
+      var m = chat.messages[i];
+      var cls = m.role === 'user' ? 'user' : 'ai';
 
-    if (this.ocrStatus === 'downloading' || this.ocrStatus === 'processing') {
-      html += '<div class="ocr-status">';
-      html += '<div class="ocr-status-icon">⏳</div>';
-      html += '<div class="ocr-status-text" id="ocrStatusText">' +
-        (this.ocrStatus === 'downloading' ? '📦 دانلود کتابخانه...' : '🔍 در حال استخراج متن...') +
-        '</div>';
-      html += '<div class="ocr-status-sub">لطفاً صبر کن</div>';
-      html += '<div class="ocr-progress"><div class="ocr-progress-fill" id="ocrProgressFill" style="width:' + this.ocrProgress + '%"></div></div>';
-      html += '<div style="text-align:center;margin-top:8px;font-size:12px;color:var(--text3);font-weight:800" id="ocrPercent">' + (typeof toFa === 'function' ? toFa(this.ocrProgress) : this.ocrProgress) + '٪</div>';
-      html += '</div>';
-    }
+      html += '<div class="ai-msg ' + cls + '"';
+      html += ' ontouchstart="QA._aiStartLongPress(' + i + ')" ontouchend="QA._aiCancelLongPress()" ontouchmove="QA._aiCancelLongPress()"';
+      html += ' onmousedown="QA._aiStartLongPress(' + i + ')" onmouseup="QA._aiCancelLongPress()" onmouseleave="QA._aiCancelLongPress()"';
+      html += '>';
 
-    if (this.ocrStatus === 'error') {
-      html += '<div class="ocr-status">';
-      html += '<div class="ocr-status-icon done">❌</div>';
-      html += '<div class="ocr-status-text">خطا</div>';
-      html += '<div class="ocr-status-sub">' + this._escape(this.ocrError) + '</div>';
-      html += '</div>';
-      html += '<button class="ocr-btn copy" style="width:100%;padding:14px;margin-top:10px" onclick="QA.startOCR()">🔄 دوباره تلاش کن</button>';
-    }
-
-    if (this.ocrStatus === 'done') {
-      html += '<div class="ocr-result">';
-      html += '<div class="ocr-result-label">📝 متن استخراج‌شده</div>';
-      html += '<div class="ocr-result-text">' + (this.ocrText ? this._escape(this.ocrText) : '<em style="opacity:.6">متنی تشخیص داده نشد</em>') + '</div>';
-      if (this.ocrText) {
-        html += '<div class="ocr-actions">';
-        html += '<button class="ocr-btn copy" onclick="QA.copyText()">📋 کپی متن</button>';
-        html += '<button class="ocr-btn clear" onclick="QA.clearOCR()">🗑️ پاک کردن</button>';
-        html += '</div>';
-      } else {
-        html += '<button class="ocr-btn clear" style="width:100%;margin-top:10px" onclick="QA.clearOCR()">🔄 عکس جدید</button>';
+      if (m.uploadedImage) {
+        html += '<img src="' + m.uploadedImage + '" style="max-width:100%;border-radius:12px;margin-bottom:8px;display:block" alt="uploaded">';
       }
+
+      if (m.text) {
+        html += '<div>' + this._escape(m.text) + '</div>';
+      }
+
+      if (m.imageUrl) {
+        html += '<img src="' + m.imageUrl + '" style="max-width:100%;border-radius:12px;margin-top:8px;display:block" alt="generated">';
+        html += '<button class="ai-download-btn" onclick="QA.aiDownloadImage(' + i + ')">📥 دانلود عکس</button>';
+      }
+
+      if (m.role === 'ai' && m.text && !m.imageUrl) {
+        var isCopied = (this.aiCopiedMsgId === i);
+        html += '<button class="ai-copy-btn" onclick="QA.aiCopyMessage(' + i + ')">' + (isCopied ? '✅ کپی شد' : '📋 کپی') + '</button>';
+      }
+
+      html += '</div>';
+    }
+    if (this.aiLoading) {
+      html += '<div class="ai-msg ai typing">در حال فکر کردن...</div>';
+    }
+    html += '</div>';
+
+    if (this.aiSelectedImage) {
+      html += '<div class="ai-selected-image-preview">';
+      html += '<img src="' + this.aiSelectedImage + '" alt="preview">';
+      html += '<button class="ai-selected-image-remove" onclick="QA.aiRemoveSelectedImage()">✕</button>';
       html += '</div>';
     }
 
+    html += '<div class="ai-input-box">';
+    html += '<button class="ai-image-btn" onclick="QA.aiPickImage()" ' + (this.aiLoading ? 'disabled' : '') + '>📷</button>';
+    html += '<textarea class="ai-input" id="aiInput" rows="1" placeholder="سؤالت رو بنویس..." ' + (this.aiLoading ? 'disabled' : '') + ' onkeydown="if(event.key===\'Enter\'&&!event.shiftKey){event.preventDefault();QA.aiSendMessage();}"></textarea>';
+    html += '<button class="ai-send-btn ' + (this.aiLoading ? 'loading' : '') + '" onclick="QA.aiSendMessage()" ' + (this.aiLoading ? 'disabled' : '') + '>📤</button>';
+    html += '<input type="file" accept="image/*" id="aiImageInput" style="display:none" onchange="QA.aiHandleImage(event)">';
+    html += '</div>';
+
+    html += '</div>';
     return html;
   },
 
