@@ -1,0 +1,399 @@
+/* ===== snake.css - بازی مارپله ===== */
+
+.snake-page {
+  padding-bottom: 20px;
+  animation: fadeIn 0.4s ease;
+}
+
+/* ---------- نوار بالا ---------- */
+.snake-topbar {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 6px 4px 16px;
+}
+
+.snake-back {
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+  background: var(--card);
+  border: 1px solid var(--card-b);
+  color: var(--text);
+  font-size: 22px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: var(--sd2);
+  transition: transform 0.2s ease;
+  font-weight: 300;
+  flex-shrink: 0;
+}
+
+.snake-back:active {
+  transform: scale(0.9);
+}
+
+.snake-title {
+  flex: 1;
+  font-size: 18px;
+  font-weight: 800;
+  color: var(--text);
+}
+
+.snake-turn-badge {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 8px 14px;
+  background: var(--card);
+  border: 1px solid var(--card-b);
+  border-radius: 999px;
+  font-size: 13px;
+  font-weight: 800;
+  color: var(--text);
+  box-shadow: var(--sd2);
+  transition: all 0.3s ease;
+}
+
+.snake-turn-badge.player {
+  background: linear-gradient(135deg, #d5e8f8, #c8dcf0);
+  color: #0984E3;
+}
+
+.snake-turn-badge.ai {
+  background: linear-gradient(135deg, #f8d5e8, #f0c8dd);
+  color: #E84393;
+}
+
+/* ---------- نوار بازیکن‌ها ---------- */
+.snake-players {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  padding: 12px 16px;
+  background: var(--card);
+  border-radius: 20px;
+  border: 1px solid var(--card-b);
+  box-shadow: var(--sd2);
+  margin-bottom: 12px;
+}
+
+.snake-player {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex: 1;
+  padding: 6px 10px;
+  border-radius: 14px;
+  transition: all 0.3s ease;
+}
+
+.snake-player.active {
+  background: var(--pr-soft);
+  box-shadow: 0 0 0 2px var(--pr);
+}
+
+.snake-player.player-side .avatar {
+  background: linear-gradient(135deg, #d5e8f8, #a8c8f0);
+}
+
+.snake-player.ai-side .avatar {
+  background: linear-gradient(135deg, #f8d5e8, #f0a8c8);
+}
+
+.snake-player .avatar {
+  width: 38px;
+  height: 38px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 22px;
+  flex-shrink: 0;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+}
+
+.snake-player .info {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  min-width: 0;
+}
+
+.snake-player .name {
+  font-size: 12px;
+  font-weight: 800;
+  color: var(--text);
+}
+
+.snake-player .pos {
+  font-size: 10px;
+  color: var(--text3);
+  font-weight: 700;
+}
+
+/* ---------- تختهٔ بازی ---------- */
+.snake-board {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  gap: 3px;
+  padding: 8px;
+  background: linear-gradient(135deg, #8b5cf6, #a78bfa);
+  border-radius: 22px;
+  box-shadow: 0 12px 40px rgba(139, 92, 246, 0.35);
+  margin-bottom: 14px;
+  position: relative;
+  overflow: hidden;
+}
+
+.snake-cell {
+  aspect-ratio: 1;
+  border-radius: 8px;
+  background: rgba(255, 255, 255, 0.15);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 11px;
+  font-weight: 800;
+  color: rgba(255, 255, 255, 0.85);
+  transition: all 0.3s ease;
+  position: relative;
+  overflow: hidden;
+}
+
+.snake-cell.even {
+  background: rgba(255, 255, 255, 0.1);
+}
+
+.snake-cell.odd {
+  background: rgba(255, 255, 255, 0.22);
+}
+
+.snake-cell.start {
+  background: linear-gradient(135deg, #55EFC4, #00B894);
+  color: white;
+}
+
+.snake-cell.end {
+  background: linear-gradient(135deg, #FDCB6E, #E17055);
+  color: white;
+}
+
+.snake-cell .cell-num {
+  position: absolute;
+  top: 3px;
+  right: 5px;
+  font-size: 9px;
+  opacity: 0.7;
+}
+
+.snake-cell .mover {
+  position: absolute;
+  font-size: 22px;
+  animation: popIn 0.35s cubic-bezier(0.34, 1.56, 0.64, 1);
+  z-index: 2;
+  filter: drop-shadow(0 3px 6px rgba(0, 0, 0, 0.3));
+}
+
+/* ---------- مار و نردبون ---------- */
+.snake-ladder, .snake-head {
+  position: absolute;
+  font-size: 22px;
+  z-index: 1;
+  pointer-events: none;
+}
+
+/* ---------- تاس ---------- */
+.snake-dice-box {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 16px;
+  margin-bottom: 14px;
+}
+
+.snake-dice {
+  width: 80px;
+  height: 80px;
+  border-radius: 20px;
+  background: linear-gradient(135deg, #ffffff, #f0e8ff);
+  border: 3px solid #8b5cf6;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 44px;
+  font-weight: 900;
+  color: #8b5cf6;
+  box-shadow: 0 8px 24px rgba(139, 92, 246, 0.3);
+  transition: all 0.3s ease;
+  cursor: pointer;
+}
+
+.snake-dice:active {
+  transform: scale(0.94);
+}
+
+.snake-dice.rolling {
+  animation: diceRoll 0.6s ease-in-out;
+}
+
+@keyframes diceRoll {
+  0%   { transform: rotate(0deg) scale(1); }
+  25%  { transform: rotate(90deg) scale(1.15); }
+  50%  { transform: rotate(180deg) scale(1); }
+  75%  { transform: rotate(270deg) scale(1.15); }
+  100% { transform: rotate(360deg) scale(1); }
+}
+
+.snake-dice.disabled {
+  opacity: 0.4;
+  pointer-events: none;
+}
+
+/* ---------- دکمه تاس ---------- */
+.snake-roll-btn {
+  padding: 16px 32px;
+  background: linear-gradient(135deg, var(--pr), var(--pr2));
+  border: none;
+  border-radius: 18px;
+  color: white;
+  font-family: inherit;
+  font-size: 16px;
+  font-weight: 800;
+  cursor: pointer;
+  box-shadow: 0 8px 24px var(--pr-soft);
+  transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  width: 100%;
+  margin-bottom: 12px;
+}
+
+.snake-roll-btn:active {
+  transform: scale(0.96);
+}
+
+.snake-roll-btn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+  transform: none;
+}
+
+/* ---------- مودال نتیجه ---------- */
+.snake-modal {
+  position: fixed;
+  inset: 0;
+  background: rgba(45, 27, 78, 0.55);
+  backdrop-filter: blur(6px);
+  z-index: 500;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 24px;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.3s ease;
+}
+
+.snake-modal.show {
+  opacity: 1;
+  pointer-events: auto;
+}
+
+.snake-modal-box {
+  background: linear-gradient(160deg, #fff8e7, #fde8c8);
+  border-radius: 28px;
+  padding: 30px 24px;
+  max-width: 360px;
+  width: 100%;
+  text-align: center;
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.35);
+  transform: scale(0.5) rotate(-10deg);
+  transition: transform 0.5s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+.snake-modal.show .snake-modal-box {
+  transform: scale(1) rotate(0);
+}
+
+.snake-modal-icon {
+  font-size: 56px;
+  margin-bottom: 10px;
+  animation: bounce 1.5s ease-in-out infinite;
+}
+
+.snake-modal-title {
+  font-size: 26px;
+  font-weight: 900;
+  color: #00B894;
+  margin-bottom: 8px;
+  font-family: 'Vazirmatn', sans-serif;
+}
+
+.snake-modal-title.lose {
+  color: #E84393;
+}
+
+.snake-modal-desc {
+  font-size: 14px;
+  color: #6b5b8a;
+  margin-bottom: 18px;
+  font-weight: 700;
+}
+
+.snake-modal-reward {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 10px 20px;
+  background: rgba(253, 203, 110, 0.25);
+  border-radius: 999px;
+  font-size: 16px;
+  font-weight: 800;
+  color: #E17055;
+  margin-bottom: 18px;
+}
+
+.snake-modal-btn {
+  padding: 14px 32px;
+  background: linear-gradient(135deg, #00B894, #55EFC4);
+  border: none;
+  border-radius: 16px;
+  color: white;
+  font-family: inherit;
+  font-size: 16px;
+  font-weight: 800;
+  cursor: pointer;
+  box-shadow: 0 8px 24px rgba(0, 184, 148, 0.4);
+  transition: transform 0.2s ease;
+}
+
+.snake-modal-btn:active {
+  transform: scale(0.94);
+}
+
+.snake-modal-btn.pink {
+  background: linear-gradient(135deg, #E84393, #FD79A8);
+  box-shadow: 0 8px 24px rgba(232, 67, 147, 0.4);
+}
+
+/* ---------- موبایل کوچیک ---------- */
+@media (max-width: 380px) {
+  .snake-cell {
+    font-size: 9px;
+    border-radius: 6px;
+  }
+  .snake-cell .mover {
+    font-size: 18px;
+  }
+  .snake-dice {
+    width: 68px;
+    height: 68px;
+    font-size: 36px;
+  }
+  }
