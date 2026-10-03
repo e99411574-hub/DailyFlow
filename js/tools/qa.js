@@ -1,7 +1,7 @@
 // ===== tools/qa.js - پرسش و پاسخ + پرسش هوشمند + OCR =====
 
 var QA = {
-  activeTab: 'questions',   // 'questions' | 'ai' | 'ocr'
+  activeTab: 'questions',
   activeCat: 'all',
   searchQuery: '',
   currentQuestion: null,
@@ -33,7 +33,16 @@ var QA = {
     this.ocrImage = null;
     this.ocrText = '';
     this.ocrStatus = 'idle';
-    if (typeof QA_AI !== 'undefined' && QA_AI.start) QA_AI.start();
+
+    // اگه QA_AI هست، شروعش کن
+    try {
+      if (typeof QA_AI !== 'undefined' && QA_AI && typeof QA_AI.start === 'function') {
+        QA_AI.start();
+      }
+    } catch (e) {
+      console.warn('QA_AI start error:', e);
+    }
+
     this.refresh();
     if (typeof playSnd === 'function') playSnd('tap');
   },
@@ -60,7 +69,7 @@ var QA = {
     this._updateQuestionList();
   },
 
-  // ========== گرفتن همه سؤالات ==========
+  // ========== گرفتن سؤالات ==========
   _getAllQuestions: function() {
     var all = [];
     var sources = {
@@ -282,7 +291,31 @@ var QA = {
     if (this.activeTab === 'questions') {
       html += this._renderQuestions();
     } else if (this.activeTab === 'ai') {
-      html += '<div id="qaAiContent">' + (typeof QA_AI !== 'undefined' ? QA_AI.render() : '<div style="text-align:center;padding:40px">در حال بارگذاری...</div>') + '</div>';
+      html += '<div id="qaAiContent"></div>';
+      // رندر بعد از لود شدن QA_AI
+      setTimeout(function() {
+        var c = document.getElementById('qaAiContent');
+        if (!c) return;
+        try {
+          if (typeof QA_AI !== 'undefined' && QA_AI && typeof QA_AI.render === 'function') {
+            c.innerHTML = QA_AI.render();
+            if (QA_AI.view === 'chat') {
+              setTimeout(function() { QA_AI._scrollToBottom(); }, 100);
+            }
+          } else {
+            c.innerHTML = '<div style="text-align:center;padding:40px;color:#E84393;font-weight:700">' +
+              '⚠️ ماژول هوشمند لود نشد<br><br>' +
+              '<small style="opacity:0.7;font-size:11px">لطفاً صفحه رو رفرش کن</small>' +
+              '</div>';
+          }
+        } catch (e) {
+          console.error('QA_AI render error:', e);
+          c.innerHTML = '<div style="text-align:center;padding:40px;color:#E84393;font-weight:700">' +
+            '❌ خطا<br>' +
+            '<small style="opacity:0.7;font-size:11px">' + (e.message || '') + '</small>' +
+            '</div>';
+        }
+      }, 50);
     } else {
       html += this._renderOCR();
     }
