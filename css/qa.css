@@ -559,3 +559,357 @@
     font-size: 46px;
   }
 }
+
+/* ===== بخش پرسش هوشمند (AI) ===== */
+
+/* ---------- لیست چت‌ها ---------- */
+.ai-chats-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 14px;
+  padding: 0 4px;
+}
+
+.ai-chats-title {
+  font-size: 15px;
+  font-weight: 800;
+  color: var(--text);
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.ai-new-btn {
+  padding: 10px 16px;
+  background: linear-gradient(135deg, var(--pr), var(--pr2));
+  color: white;
+  border: none;
+  border-radius: 14px;
+  font-family: inherit;
+  font-size: 13px;
+  font-weight: 800;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  box-shadow: 0 4px 14px var(--pr-soft);
+  transition: transform 0.2s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+.ai-new-btn:active {
+  transform: scale(0.94);
+}
+
+/* ---------- کارت چت ---------- */
+.ai-chat-item {
+  background: var(--card);
+  border-radius: 18px;
+  border: 1px solid var(--card-b);
+  padding: 14px 16px;
+  margin-bottom: 10px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  transition: all 0.25s cubic-bezier(0.34, 1.56, 0.64, 1);
+  animation: slideInUp 0.4s ease both;
+}
+
+.ai-chat-item:active {
+  transform: scale(0.97);
+  background: var(--pr-soft);
+}
+
+.ai-chat-item-icon {
+  width: 44px;
+  height: 44px;
+  border-radius: 14px;
+  background: linear-gradient(135deg, var(--pr), var(--pr2));
+  color: white;
+  font-size: 20px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  box-shadow: 0 4px 12px var(--pr-soft);
+}
+
+.ai-chat-item-info {
+  flex: 1;
+  min-width: 0;
+}
+
+.ai-chat-item-title {
+  font-size: 14px;
+  font-weight: 800;
+  color: var(--text);
+  margin-bottom: 4px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.ai-chat-item-preview {
+  font-size: 12px;
+  color: var(--text3);
+  font-weight: 600;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.ai-chat-item-arrow {
+  color: var(--text3);
+  font-size: 22px;
+  font-weight: 300;
+  flex-shrink: 0;
+  opacity: 0.6;
+}
+
+/* ---------- حالت خالی ---------- */
+.ai-empty {
+  text-align: center;
+  padding: 50px 20px;
+  color: var(--text3);
+}
+
+.ai-empty-icon {
+  font-size: 64px;
+  margin-bottom: 14px;
+  opacity: 0.5;
+  animation: float 3s ease-in-out infinite;
+}
+
+.ai-empty-text {
+  font-size: 14px;
+  font-weight: 700;
+  line-height: 1.8;
+  margin-bottom: 20px;
+}
+
+/* ---------- صفحهٔ چت ---------- */
+.ai-chat-page {
+  display: flex;
+  flex-direction: column;
+  min-height: calc(100vh - 200px);
+}
+
+.ai-chat-topbar {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 6px 4px 16px;
+}
+
+.ai-chat-back {
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+  background: var(--card);
+  border: 1px solid var(--card-b);
+  color: var(--text);
+  font-size: 22px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: var(--sd2);
+  transition: transform 0.2s ease;
+  font-weight: 300;
+  flex-shrink: 0;
+}
+
+.ai-chat-back:active {
+  transform: scale(0.9);
+}
+
+.ai-chat-title {
+  flex: 1;
+  font-size: 16px;
+  font-weight: 800;
+  color: var(--text);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.ai-chat-menu {
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+  background: var(--card);
+  border: 1px solid var(--card-b);
+  color: var(--text);
+  font-size: 22px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: var(--sd2);
+  transition: transform 0.2s ease;
+  flex-shrink: 0;
+}
+
+.ai-chat-menu:active {
+  transform: scale(0.9);
+}
+
+/* ---------- پیام‌ها ---------- */
+.ai-messages {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  padding: 8px 2px 16px;
+  margin-bottom: 12px;
+}
+
+.ai-msg {
+  max-width: 85%;
+  padding: 12px 16px;
+  border-radius: 20px;
+  font-size: 14px;
+  line-height: 1.8;
+  font-weight: 600;
+  white-space: pre-wrap;
+  word-wrap: break-word;
+  animation: slideInUp 0.3s ease;
+}
+
+.ai-msg.user {
+  align-self: flex-end;
+  background: linear-gradient(135deg, var(--pr), var(--pr2));
+  color: white;
+  border-bottom-left-radius: 6px;
+  box-shadow: 0 6px 18px var(--pr-soft);
+}
+
+.ai-msg.ai {
+  align-self: flex-start;
+  background: var(--card);
+  color: var(--text);
+  border: 1px solid var(--card-b);
+  border-bottom-right-radius: 6px;
+  box-shadow: var(--sd2);
+}
+
+.ai-msg.typing {
+  color: var(--text3);
+  font-style: italic;
+}
+
+/* ---------- input ---------- */
+.ai-input-box {
+  display: flex;
+  align-items: flex-end;
+  gap: 8px;
+  padding: 8px;
+  background: var(--card);
+  border-radius: 22px;
+  border: 1px solid var(--card-b);
+  box-shadow: var(--sd2);
+  position: sticky;
+  bottom: 90px;
+  margin-bottom: 4px;
+}
+
+.ai-input {
+  flex: 1;
+  padding: 10px 14px;
+  background: transparent;
+  border: none;
+  color: var(--text);
+  font-family: inherit;
+  font-size: 14px;
+  font-weight: 600;
+  outline: none;
+  resize: none;
+  max-height: 120px;
+  min-height: 24px;
+  line-height: 1.5;
+}
+
+.ai-input::placeholder {
+  color: var(--text3);
+}
+
+.ai-send-btn {
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, var(--pr), var(--pr2));
+  color: white;
+  border: none;
+  font-size: 20px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  box-shadow: 0 4px 14px var(--pr-soft);
+  transition: transform 0.2s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+.ai-send-btn:active {
+  transform: scale(0.9);
+}
+
+.ai-send-btn:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+}
+
+.ai-send-btn.loading {
+  animation: pulseSoft 1s ease-in-out infinite;
+}
+
+/* ---------- منوی چت (⋮) ---------- */
+.ai-menu-popup {
+  position: absolute;
+  top: 60px;
+  right: 16px;
+  background: var(--card);
+  border-radius: 16px;
+  border: 1px solid var(--card-b);
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2);
+  padding: 8px;
+  z-index: 100;
+  min-width: 200px;
+  animation: slideInDown 0.2s ease;
+}
+
+.ai-menu-item {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 12px 14px;
+  border-radius: 12px;
+  font-size: 14px;
+  font-weight: 700;
+  color: var(--text);
+  cursor: pointer;
+  transition: background 0.15s ease;
+}
+
+.ai-menu-item:active {
+  background: var(--pr-soft);
+}
+
+.ai-menu-item.danger {
+  color: #E84393;
+}
+
+/* ---------- لودینگ اولیه ---------- */
+.ai-loading-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 6px 12px;
+  background: linear-gradient(135deg, #f8f0d5, #f0e8c8);
+  color: #E17055;
+  border-radius: 999px;
+  font-size: 11px;
+  font-weight: 800;
+  margin-bottom: 10px;
+  }
