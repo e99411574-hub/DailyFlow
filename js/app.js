@@ -193,7 +193,6 @@ var APP = {
     var games = [
       { id: 'rps',    icon: '✊', label: 'سنگ کاغذ قیچی', color: 'purple' },
       { id: 'guess',  icon: '🔢', label: 'حدس عدد',      color: 'blue' },
-      { id: 'snake',  icon: '🐍', label: 'مارپله',        color: 'green' },
       { id: 'ttt',    icon: '❌', label: 'دوز',          color: 'pink' },
       { id: 'memory', icon: '🃏', label: 'حافظه',        color: 'orange' }
     ];
