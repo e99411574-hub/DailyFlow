@@ -99,7 +99,7 @@ var ROUTER = {
     }
   },
 
-  // ✅ اصلاح‌شده: صدا زدن APP به‌جای توابع گلوبال
+  // ========== ورود به صفحات ==========
   _enterHome: function() {
     if (typeof APP !== 'undefined' && APP.renderHome) APP.renderHome();
   },
@@ -118,6 +118,8 @@ var ROUTER = {
       c.innerHTML = SHOP.render();
       if (typeof SHOP.bindEvents === 'function') SHOP.bindEvents(c);
     }
+    // ثبت رویداد ماموریت — فروشگاه باز شد
+    if (typeof MISSIONS !== 'undefined') MISSIONS.trackShop();
   },
 
   _enterProfile: function() {
