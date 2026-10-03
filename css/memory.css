@@ -1,0 +1,305 @@
+/* ===== memory.css - بازی حافظه ===== */
+
+.mem-page {
+  padding-bottom: 20px;
+  animation: fadeIn 0.4s ease;
+}
+
+/* ---------- نوار بالا ---------- */
+.mem-topbar {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 6px 4px 16px;
+}
+
+.mem-back {
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+  background: var(--card);
+  border: 1px solid var(--card-b);
+  color: var(--text);
+  font-size: 22px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: var(--sd2);
+  transition: transform 0.2s ease;
+  font-weight: 300;
+  flex-shrink: 0;
+}
+
+.mem-back:active {
+  transform: scale(0.9);
+}
+
+.mem-title {
+  flex: 1;
+  font-size: 18px;
+  font-weight: 800;
+  color: var(--text);
+}
+
+.mem-info {
+  display: flex;
+  gap: 6px;
+  padding: 8px 12px;
+  background: var(--card);
+  border: 1px solid var(--card-b);
+  border-radius: 999px;
+  font-size: 13px;
+  font-weight: 800;
+  color: var(--text);
+  box-shadow: var(--sd2);
+}
+
+.mem-info .pairs { color: #8b5cf6; }
+.mem-info .moves { color: #E84393; }
+
+/* ---------- نوار آمار ---------- */
+.mem-stats {
+  display: flex;
+  align-items: center;
+  justify-content: space-around;
+  padding: 12px;
+  background: var(--card);
+  border-radius: 20px;
+  border: 1px solid var(--card-b);
+  box-shadow: var(--sd2);
+  margin-bottom: 16px;
+}
+
+.mem-stat {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 2px;
+}
+
+.mem-stat-num {
+  font-size: 20px;
+  font-weight: 900;
+  background: linear-gradient(135deg, var(--pr), var(--pr2));
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+  line-height: 1.1;
+}
+
+.mem-stat-lbl {
+  font-size: 10px;
+  color: var(--text3);
+  font-weight: 700;
+}
+
+/* ---------- تخته ---------- */
+.mem-board {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 10px;
+  padding: 14px;
+  background: var(--card);
+  border-radius: 24px;
+  border: 1px solid var(--card-b);
+  box-shadow: var(--sd);
+  margin-bottom: 16px;
+  perspective: 800px;
+}
+
+.mem-card {
+  aspect-ratio: 1;
+  border-radius: 16px;
+  cursor: pointer;
+  position: relative;
+  transform-style: preserve-3d;
+  transition: transform 0.5s cubic-bezier(0.34, 1.56, 0.64, 1);
+  padding: 0;
+  border: none;
+  background: transparent;
+  font-family: inherit;
+}
+
+.mem-card.flipped {
+  transform: rotateY(180deg);
+}
+
+.mem-card.matched {
+  pointer-events: none;
+  animation: matchPop 0.6s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+.mem-card.matched .mem-card-front {
+  background: linear-gradient(135deg, #55EFC4, #00B894);
+  box-shadow: 0 0 0 3px rgba(0, 184, 148, 0.5), 0 8px 24px rgba(0, 184, 148, 0.4);
+}
+
+@keyframes matchPop {
+  0%   { transform: rotateY(180deg) scale(1); }
+  50%  { transform: rotateY(180deg) scale(1.15); }
+  100% { transform: rotateY(180deg) scale(1); }
+}
+
+.mem-card-inner {
+  position: absolute;
+  inset: 0;
+  transform-style: preserve-3d;
+}
+
+.mem-card-back,
+.mem-card-front {
+  position: absolute;
+  inset: 0;
+  border-radius: 16px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  backface-visibility: hidden;
+  -webkit-backface-visibility: hidden;
+  transition: all 0.3s ease;
+}
+
+.mem-card-back {
+  background: linear-gradient(135deg, #a78bfa, #8b5cf6);
+  box-shadow: 0 4px 14px rgba(139, 92, 246, 0.35);
+  font-size: 36px;
+  color: rgba(255, 255, 255, 0.6);
+}
+
+.mem-card-back::after {
+  content: '?';
+  font-weight: 900;
+}
+
+.mem-card-front {
+  background: var(--card2);
+  border: 2px solid var(--card-b);
+  transform: rotateY(180deg);
+  font-size: 40px;
+  line-height: 1;
+}
+
+/* ---------- دکمه بازی جدید ---------- */
+.mem-new-btn {
+  padding: 14px 32px;
+  background: linear-gradient(135deg, var(--pr), var(--pr2));
+  border: none;
+  border-radius: 16px;
+  color: white;
+  font-family: inherit;
+  font-size: 15px;
+  font-weight: 800;
+  cursor: pointer;
+  box-shadow: 0 8px 24px var(--pr-soft);
+  transition: transform 0.2s ease;
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+}
+
+.mem-new-btn:active {
+  transform: scale(0.96);
+}
+
+/* ---------- مودال نتیجه ---------- */
+.mem-modal {
+  position: fixed;
+  inset: 0;
+  background: rgba(45, 27, 78, 0.55);
+  backdrop-filter: blur(6px);
+  z-index: 500;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 24px;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.3s ease;
+}
+
+.mem-modal.show {
+  opacity: 1;
+  pointer-events: auto;
+}
+
+.mem-modal-box {
+  background: linear-gradient(160deg, #fff8e7, #fde8c8);
+  border-radius: 28px;
+  padding: 30px 24px;
+  max-width: 360px;
+  width: 100%;
+  text-align: center;
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.35);
+  transform: scale(0.5) rotate(-10deg);
+  transition: transform 0.5s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+.mem-modal.show .mem-modal-box {
+  transform: scale(1) rotate(0);
+}
+
+.mem-modal-icon {
+  font-size: 56px;
+  margin-bottom: 10px;
+  animation: bounce 1.5s ease-in-out infinite;
+}
+
+.mem-modal-title {
+  font-size: 26px;
+  font-weight: 900;
+  color: #00B894;
+  margin-bottom: 8px;
+  font-family: 'Vazirmatn', sans-serif;
+}
+
+.mem-modal-desc {
+  font-size: 14px;
+  color: #6b5b8a;
+  margin-bottom: 18px;
+  font-weight: 700;
+  line-height: 1.8;
+}
+
+.mem-modal-reward {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 10px 20px;
+  background: rgba(253, 203, 110, 0.25);
+  border-radius: 999px;
+  font-size: 16px;
+  font-weight: 800;
+  color: #E17055;
+  margin-bottom: 18px;
+}
+
+.mem-modal-btn {
+  padding: 14px 32px;
+  background: linear-gradient(135deg, #00B894, #55EFC4);
+  border: none;
+  border-radius: 16px;
+  color: white;
+  font-family: inherit;
+  font-size: 16px;
+  font-weight: 800;
+  cursor: pointer;
+  box-shadow: 0 8px 24px rgba(0, 184, 148, 0.4);
+  transition: transform 0.2s ease;
+}
+
+.mem-modal-btn:active {
+  transform: scale(0.94);
+}
+
+/* ---------- موبایل کوچیک ---------- */
+@media (max-width: 380px) {
+  .mem-board {
+    gap: 8px;
+    padding: 10px;
+  }
+  .mem-card-front { font-size: 32px; }
+  .mem-card-back { font-size: 28px; }
+    }
