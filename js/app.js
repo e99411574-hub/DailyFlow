@@ -206,11 +206,9 @@ var APP = {
   // ============ بخش ابزارها ============
   _renderToolsSection: function() {
     var tools = [
-      { id: 'calc',      icon: '🧮', label: 'ماشین‌حساب', color: 'yellow' },
-      { id: 'stopwatch', icon: '⏱️', label: 'کرنومتر',   color: 'blue' },
-      { id: 'planner',   icon: '📅', label: 'برنامه',     color: 'green' },
-      { id: 'notes',     icon: '📝', label: 'یادداشت',   color: 'pink' },
-      { id: 'todo',      icon: '✅', label: 'کارها',      color: 'orange' }
+      { id: 'calc',    icon: '🧮', label: 'ماشین‌حساب', color: 'yellow' },
+      { id: 'planner', icon: '📅', label: 'برنامه',     color: 'green' },
+      { id: 'qa',      icon: '❓', label: 'پرسش',        color: 'purple' }
     ];
     var html = '<div class="section anim-slide-up delay-3">';
     html += '<div class="section-header">';
@@ -326,11 +324,9 @@ var APP = {
     var html = '<div class="section-title" style="margin:10px 0 16px"><span class="icon">🧰</span><span>' + t('tools') + '</span></div>';
     html += '<div style="display:grid;grid-template-columns:1fr 1fr;gap:12px">';
     var tools = [
-      { id: 'calc',      icon: '🧮', label: 'ماشین‌حساب', color: 'yellow' },
-      { id: 'stopwatch', icon: '⏱️', label: 'کرنومتر',   color: 'blue' },
-      { id: 'planner',   icon: '📅', label: 'برنامه',     color: 'green' },
-      { id: 'notes',     icon: '📝', label: 'یادداشت',   color: 'pink' },
-      { id: 'todo',      icon: '✅', label: 'کارها',      color: 'orange' }
+      { id: 'calc',    icon: '🧮', label: 'ماشین‌حساب', color: 'yellow' },
+      { id: 'planner', icon: '📅', label: 'برنامه',     color: 'green' },
+      { id: 'qa',      icon: '❓', label: 'پرسش',        color: 'purple' }
     ];
     for (var i = 0; i < tools.length; i++) {
       var tl = tools[i];
