@@ -1,18 +1,17 @@
-// ===== tools/qa.js - پرسش و پاسخ + تبدیل عکس به متن =====
+// ===== tools/qa.js - پرسش و پاسخ + پرسش هوشمند + OCR =====
 
 var QA = {
-  activeTab: 'questions',   // 'questions' یا 'ocr'
-  activeCat: 'all',         // دستهٔ فعال
-  searchQuery: '',          // متن جستجو
-  currentQuestion: null,    // سؤال باز شده
-  ocrImage: null,           // عکس آپلودشده
-  ocrText: '',              // متن استخراج‌شده
-  ocrStatus: 'idle',        // 'idle', 'downloading', 'processing', 'done', 'error'
+  activeTab: 'questions',   // 'questions' | 'ai' | 'ocr'
+  activeCat: 'all',
+  searchQuery: '',
+  currentQuestion: null,
+  ocrImage: null,
+  ocrText: '',
+  ocrStatus: 'idle',
   ocrProgress: 0,
   ocrError: '',
   tesseractLoaded: false,
 
-  // ========== دسته‌بندی‌ها ==========
   categories: [
     { id: 'all',           name: 'همه',      icon: '📚' },
     { id: 'history',       name: 'تاریخ',    icon: '📖' },
@@ -34,6 +33,7 @@ var QA = {
     this.ocrImage = null;
     this.ocrText = '';
     this.ocrStatus = 'idle';
+    if (typeof QA_AI !== 'undefined' && QA_AI.start) QA_AI.start();
     this.refresh();
     if (typeof playSnd === 'function') playSnd('tap');
   },
@@ -57,11 +57,10 @@ var QA = {
   // ========== جستجو ==========
   setSearch: function(q) {
     this.searchQuery = q;
-    // فقط متن رو آپدیت کن (بدون rerender کامل، برای حفظ فوکوس)
     this._updateQuestionList();
   },
 
-  // ========== گرفتن همهٔ سؤالات ==========
+  // ========== گرفتن همه سؤالات ==========
   _getAllQuestions: function() {
     var all = [];
     var sources = {
@@ -76,11 +75,7 @@ var QA = {
     };
     for (var key in sources) {
       for (var i = 0; i < sources[key].length; i++) {
-        all.push({
-          cat: key,
-          q: sources[key][i].q,
-          a: sources[key][i].a
-        });
+        all.push({ cat: key, q: sources[key][i].q, a: sources[key][i].a });
       }
     }
     return all;
@@ -115,7 +110,6 @@ var QA = {
     });
   },
 
-  // ========== باز کردن سؤال ==========
   openQuestion: function(idx) {
     var filtered = this._getFiltered();
     if (filtered[idx]) {
@@ -132,7 +126,7 @@ var QA = {
     this.refresh();
   },
 
-  // ========== OCR: آپلود عکس ==========
+  // ========== OCR ==========
   handleImage: function(evt) {
     var file = evt.target.files[0];
     if (!file) return;
@@ -160,23 +154,19 @@ var QA = {
     this.refresh();
   },
 
-  // ========== OCR: شروع استخراج ==========
   startOCR: function() {
     if (!this.ocrImage) return;
-
     var self = this;
     this.ocrStatus = 'downloading';
     this.ocrProgress = 0;
     this.ocrText = '';
     this.refresh();
 
-    // بررسی اگه Tesseract لود شده
     if (typeof Tesseract !== 'undefined') {
       self._runTesseract();
       return;
     }
 
-    // لود Tesseract از CDN
     var script = document.createElement('script');
     script.src = 'https://cdn.jsdelivr.net/npm/tesseract.js@5/dist/tesseract.min.js';
     script.onload = function() {
@@ -200,7 +190,7 @@ var QA = {
     try {
       Tesseract.recognize(
         this.ocrImage,
-        'fas+eng',   // فارسی + انگلیسی
+        'fas+eng',
         {
           logger: function(m) {
             if (m.status === 'recognizing text') {
@@ -235,7 +225,6 @@ var QA = {
     }
   },
 
-  // ========== کپی متن ==========
   copyText: function() {
     if (!this.ocrText) return;
     var self = this;
@@ -243,9 +232,7 @@ var QA = {
       navigator.clipboard.writeText(this.ocrText).then(function() {
         if (typeof showToast === 'function') showToast('📋 متن کپی شد');
         if (typeof playSnd === 'function') playSnd('success');
-      }).catch(function() {
-        self._fallbackCopy();
-      });
+      }).catch(function() { self._fallbackCopy(); });
     } else {
       this._fallbackCopy();
     }
@@ -267,7 +254,6 @@ var QA = {
     }
   },
 
-  // ========== پاک کردن ==========
   clearOCR: function() {
     this.ocrImage = null;
     this.ocrText = '';
@@ -281,21 +267,22 @@ var QA = {
   render: function() {
     var html = '<div class="qa-page">';
 
-    // نوار بالا
     html += '<div class="qa-topbar">';
     html += '<button class="qa-back" onclick="QA.back()">›</button>';
     html += '<div class="qa-title">❓ پرسش</div>';
     html += '</div>';
 
-    // تب‌ها
-    html += '<div class="qa-tabs">';
+    // سه تب
+    html += '<div class="qa-tabs" style="overflow-x:auto">';
     html += '<button class="qa-tab ' + (this.activeTab === 'questions' ? 'active' : '') + '" onclick="QA.setTab(\'questions\')">📚 سؤالات</button>';
-    html += '<button class="qa-tab ' + (this.activeTab === 'ocr' ? 'active' : '') + '" onclick="QA.setTab(\'ocr\')">📷 عکس به متن</button>';
+    html += '<button class="qa-tab ' + (this.activeTab === 'ai' ? 'active' : '') + '" onclick="QA.setTab(\'ai\')">🤖 هوشمند</button>';
+    html += '<button class="qa-tab ' + (this.activeTab === 'ocr' ? 'active' : '') + '" onclick="QA.setTab(\'ocr\')">📷 عکس</button>';
     html += '</div>';
 
-    // محتوا
     if (this.activeTab === 'questions') {
       html += this._renderQuestions();
+    } else if (this.activeTab === 'ai') {
+      html += '<div id="qaAiContent">' + (typeof QA_AI !== 'undefined' ? QA_AI.render() : '<div style="text-align:center;padding:40px">در حال بارگذاری...</div>') + '</div>';
     } else {
       html += this._renderOCR();
     }
@@ -304,22 +291,15 @@ var QA = {
     return html;
   },
 
-  // ========== رندر سؤالات ==========
   _renderQuestions: function() {
-    // اگه سؤال باز شده
-    if (this.currentQuestion) {
-      return this._renderQuestionView();
-    }
+    if (this.currentQuestion) return this._renderQuestionView();
 
     var html = '';
-
-    // جستجو
     html += '<div class="qa-search">';
     html += '<input class="qa-search-input" type="text" placeholder="جستجو در سؤالات..." value="' + this._escape(this.searchQuery) + '" oninput="QA.setSearch(this.value)" id="qaSearchInput">';
     html += '<span class="qa-search-icon">🔍</span>';
     html += '</div>';
 
-    // دسته‌بندی‌ها
     html += '<div class="qa-cats">';
     for (var c = 0; c < this.categories.length; c++) {
       var cat = this.categories[c];
@@ -328,9 +308,7 @@ var QA = {
     }
     html += '</div>';
 
-    // لیست سؤالات
     html += '<div class="qa-list" id="qaList">' + this._renderQuestionList() + '</div>';
-
     return html;
   },
 
@@ -342,11 +320,9 @@ var QA = {
         '<div class="qa-empty-text">سؤالی پیدا نشد<br>یه عبارت دیگه امتحان کن</div>' +
         '</div>';
     }
-
     var html = '';
-    var maxShow = 100; // فقط ۱۰۰ سؤال اول رو نشون بده (سرعت)
+    var maxShow = 100;
     var count = Math.min(filtered.length, maxShow);
-
     for (var i = 0; i < count; i++) {
       var item = filtered[i];
       var catInfo = this._getCatInfo(item.cat);
@@ -356,13 +332,11 @@ var QA = {
       html += '<div class="qa-item-arrow">‹</div>';
       html += '</div>';
     }
-
     if (filtered.length > maxShow) {
       html += '<div style="text-align:center;padding:16px;color:var(--text3);font-size:12px;font-weight:700">';
-      html += 'و ' + (typeof toFa === 'function' ? toFa(filtered.length - maxShow) : (filtered.length - maxShow)) + ' سؤال دیگه — جستجو رو محدود کن';
+      html += 'و ' + (typeof toFa === 'function' ? toFa(filtered.length - maxShow) : (filtered.length - maxShow)) + ' سؤال دیگه';
       html += '</div>';
     }
-
     return html;
   },
 
@@ -375,19 +349,16 @@ var QA = {
     var item = this.currentQuestion;
     var catInfo = this._getCatInfo(item.cat);
     var html = '';
-
     html += '<div class="qa-question">';
     html += '<div class="qa-question-card">';
     html += '<div class="qa-question-label">' + catInfo.icon + ' ' + catInfo.name + '</div>';
     html += '<div class="qa-question-text">' + this._escape(item.q) + '</div>';
     html += '</div>';
-
     html += '<div class="qa-answer-card">';
     html += '<div class="qa-answer-label">📖 پاسخ</div>';
     html += '<div class="qa-answer-text">' + this._escape(item.a) + '</div>';
     html += '</div>';
     html += '</div>';
-
     return html;
   },
 
@@ -398,12 +369,9 @@ var QA = {
     return { icon: '📚', name: 'عمومی' };
   },
 
-  // ========== رندر OCR ==========
   _renderOCR: function() {
     var html = '';
-    var self = this;
 
-    // اگه عکس نداریم
     if (!this.ocrImage) {
       html += '<div class="ocr-upload-box" onclick="document.getElementById(\'ocrFileInput\').click()">';
       html += '<div class="ocr-upload-icon">📷</div>';
@@ -411,16 +379,13 @@ var QA = {
       html += '<div class="ocr-upload-hint">عکس رو انتخاب کن تا متنش استخراج بشه</div>';
       html += '<input type="file" accept="image/*" id="ocrFileInput" style="display:none" onchange="QA.handleImage(event)">';
       html += '</div>';
-
       html += '<div class="ocr-download-notice">';
       html += '<span class="icon">💡</span>';
-      html += '<span>بار اول که عکس آپلود می‌کنی، مدل تشخیص متن (فارسی + انگلیسی) حدود ۱۵ مگابایت دانلود می‌شه. بعدش دیگه آفلاین کار می‌کنه.</span>';
+      html += '<span>بار اول که عکس آپلود می‌کنی، مدل تشخیص متن (فارسی + انگلیسی) حدود ۱۵ مگابایت دانلود می‌شه. بعدش آفلاین کار می‌کنه.</span>';
       html += '</div>';
-
       return html;
     }
 
-    // پیش‌نمایش عکس
     html += '<div class="ocr-preview">';
     html += '<img src="' + this.ocrImage + '" alt="preview">';
     if (this.ocrStatus === 'idle' || this.ocrStatus === 'error') {
@@ -428,12 +393,10 @@ var QA = {
     }
     html += '</div>';
 
-    // دکمهٔ شروع (اگه هنوز شروع نکرده)
     if (this.ocrStatus === 'idle') {
       html += '<button class="ocr-btn copy" style="width:100%;padding:16px;font-size:15px" onclick="QA.startOCR()">🔍 استخراج متن</button>';
     }
 
-    // در حال دانلود یا پردازش
     if (this.ocrStatus === 'downloading' || this.ocrStatus === 'processing') {
       html += '<div class="ocr-status">';
       html += '<div class="ocr-status-icon">⏳</div>';
@@ -446,7 +409,6 @@ var QA = {
       html += '</div>';
     }
 
-    // خطا
     if (this.ocrStatus === 'error') {
       html += '<div class="ocr-status">';
       html += '<div class="ocr-status-icon done">❌</div>';
@@ -456,12 +418,10 @@ var QA = {
       html += '<button class="ocr-btn copy" style="width:100%;padding:14px;margin-top:10px" onclick="QA.startOCR()">🔄 دوباره تلاش کن</button>';
     }
 
-    // نتیجه
     if (this.ocrStatus === 'done') {
       html += '<div class="ocr-result">';
       html += '<div class="ocr-result-label">📝 متن استخراج‌شده</div>';
       html += '<div class="ocr-result-text">' + (this.ocrText ? this._escape(this.ocrText) : '<em style="opacity:.6">متنی تشخیص داده نشد</em>') + '</div>';
-
       if (this.ocrText) {
         html += '<div class="ocr-actions">';
         html += '<button class="ocr-btn copy" onclick="QA.copyText()">📋 کپی متن</button>';
@@ -470,14 +430,12 @@ var QA = {
       } else {
         html += '<button class="ocr-btn clear" style="width:100%;margin-top:10px" onclick="QA.clearOCR()">🔄 عکس جدید</button>';
       }
-
       html += '</div>';
     }
 
     return html;
   },
 
-  // ========== امن‌سازی ==========
   _escape: function(str) {
     if (!str) return '';
     return String(str)
@@ -487,13 +445,11 @@ var QA = {
       .replace(/"/g, '&quot;');
   },
 
-  // ========== بازگشت ==========
   back: function() {
     if (typeof playSnd === 'function') playSnd('tap');
     if (typeof ROUTER !== 'undefined') ROUTER.go('tools');
   },
 
-  // ========== بروزرسانی ==========
   refresh: function() {
     var c = document.getElementById('toolsContent');
     if (c) c.innerHTML = this.render();
